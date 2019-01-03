@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:clickable="true"
+    android:focusable="true"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+    <include layout="@layout/app_bar"/>
+
+    <LinearLayout
+        android:id="@+id/balanceRow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceHeadline4"
+            android:textColor="?android:attr/textColorPrimary"
+            tools:text="3.1415927"/>
+
+        <TextView
+            android:id="@+id/currency"
+            android:layout_marginStart="@dimen/spacer_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceHeadline5"
+            android:textColor="?attr/colorOnPrimary"
+            tools:text="BTC"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balanceRow"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceCaption"
+        tools:text="1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX"/>
+
+    <Button
+        android:id="@+id/deposit"
+        app:layout_constraintEnd_toStartOf="@+id/withdraw"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_marginStart="@dimen/spacer_s"
+        android:layout_marginEnd="@dimen/spacer_xs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:text="@string/action_deposit"/>
+
+    <Button
+        android:id="@+id/withdraw"
+        app:layout_constraintStart_toEndOf="@+id/deposit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_marginStart="@dimen/spacer_xs"
+        android:layout_marginEnd="@dimen/spacer_s"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:text="@string/action_withdraw"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHoz"
+        app:layout_constraintGuide_percent=".4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Light"
+        android:background="@android:color/background_light">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/loading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="@dimen/spacer_m"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/load_more_background"
+        android:elevation="@dimen/spacer_xs"
+        android:alpha=".75">
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/loadingProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:progressBarStyleSmall"/>
+
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacer_xs"
+            android:gravity="center"
+            android:textColor="?attr/colorOnPrimary"
+            tools:text="@string/label_loading_more"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

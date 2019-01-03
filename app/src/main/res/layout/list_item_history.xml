@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeightLarge"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/spacer_m"
+    android:paddingEnd="@dimen/spacer_m"
+    android:paddingTop="@dimen/spacer_s"
+    android:paddingBottom="@dimen/spacer_s"
+    android:background="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHoz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5"/>
+
+    <TextView
+        android:id="@+id/operation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/amount"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textAllCaps="true"
+        android:background="@drawable/tx_op_background"
+        android:textColor="?attr/colorOnPrimary"
+        tools:text="Withdraw"/>
+
+    <TextView
+        android:id="@+id/amount"
+        app:layout_constraintStart_toEndOf="@+id/operation"
+        app:layout_constraintEnd_toStartOf="@+id/arrow"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="3.14159271415927141592714159271415927"/>
+
+    <TextView
+        android:id="@+id/time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txid"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?attr/colorPrimary"
+        tools:text="2018/08/08"/>
+
+    <TextView
+        android:id="@+id/txid"
+        app:layout_constraintStart_toEndOf="@+id/time"
+        app:layout_constraintEnd_toStartOf="@+id/arrow"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        app:layout_constraintWidth_percent=".5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?android:attr/textColorSecondary"
+        tools:text="0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295"/>
+
+    <ImageView
+        android:id="@+id/arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingStart="@dimen/spacer_s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_arrow_right"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

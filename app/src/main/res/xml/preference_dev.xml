@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:key="category_dev"
+        android:title="@string/title_settings_dev">
+        <EditTextPreference
+            android:key="pref_endpoint"
+            android:icon="@drawable/ic_endpoint"
+            android:title="@string/desc_endpoint"
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="@string/default_endpoint"
+            android:dialogTitle="@string/desc_endpoint"/>
+        <Preference
+            android:key="pref_sdk_version"
+            android:title="@string/title_sdk_version"
+            android:icon="@drawable/ic_sdk_version"/>
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

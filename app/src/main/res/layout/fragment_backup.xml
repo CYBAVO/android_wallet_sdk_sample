@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:clipToPadding="false"
+    android:background="?android:colorBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHoz"
+        app:layout_constraintGuide_percent=".3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+    <TextView
+        android:id="@+id/message"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="?attr/colorPrimary"
+        android:text="@string/message_setup_backup"/>
+
+    <!-- Q&A #1 -->
+    <TextView
+        android:id="@+id/step1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        android:layout_marginTop="@dimen/spacer_xl"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:gravity="center"
+        android:background="@drawable/step_icon_background"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?colorOnPrimary"
+        android:text="@string/label_1"/>
+
+    <Spinner
+        android:id="@+id/question1"
+        app:layout_constraintStart_toEndOf="@+id/step1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step1"
+        app:layout_constraintBottom_toBottomOf="@+id/step1"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"/>
+
+    <EditText
+        android:id="@+id/answer1"
+        app:layout_constraintStart_toStartOf="@+id/question1"
+        app:layout_constraintEnd_toEndOf="@+id/question1"
+        app:layout_constraintTop_toBottomOf="@+id/question1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionNext"
+        android:maxLength="@integer/backup_answer_max_length"
+        android:hint="@string/hint_answer"/>
+
+    <!-- Q&A #2 -->
+    <TextView
+        android:id="@+id/step2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer1"
+        android:layout_marginTop="@dimen/spacer_l"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:gravity="center"
+        android:background="@drawable/step_icon_background"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?colorOnPrimary"
+        android:text="@string/label_2"/>
+
+    <Spinner
+        android:id="@+id/question2"
+        app:layout_constraintStart_toEndOf="@+id/step2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step2"
+        app:layout_constraintBottom_toBottomOf="@+id/step2"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"/>
+
+    <EditText
+        android:id="@+id/answer2"
+        app:layout_constraintStart_toStartOf="@+id/question2"
+        app:layout_constraintEnd_toEndOf="@+id/question2"
+        app:layout_constraintTop_toBottomOf="@+id/question2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionNext"
+        android:maxLength="@integer/backup_answer_max_length"
+        android:hint="@string/hint_answer"/>
+
+    <!-- Q&A #3 -->
+    <TextView
+        android:id="@+id/step3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer2"
+        android:layout_marginTop="@dimen/spacer_l"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:gravity="center"
+        android:background="@drawable/step_icon_background"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?colorOnPrimary"
+        android:text="@string/label_3"/>
+
+    <Spinner
+        android:id="@+id/question3"
+        app:layout_constraintStart_toEndOf="@+id/step3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step3"
+        app:layout_constraintBottom_toBottomOf="@+id/step3"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"/>
+
+    <EditText
+        android:id="@+id/answer3"
+        app:layout_constraintStart_toStartOf="@+id/question3"
+        app:layout_constraintEnd_toEndOf="@+id/question3"
+        app:layout_constraintTop_toBottomOf="@+id/question3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionDone"
+        android:maxLength="@integer/backup_answer_max_length"
+        android:hint="@string/hint_answer"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

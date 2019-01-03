@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:clickable="true"
+    android:focusable="true"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuide"
+        app:layout_constraintGuide_percent=".5"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/app_bar"
+        android:id="@+id/appBar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/currency"
+        app:layout_constraintTop_toBottomOf="@+id/appBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacer_m"
+        android:drawablePadding="@dimen/spacer_xs"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:gravity="center_vertical"
+        tools:drawableLeft="@drawable/btc"
+        tools:text="Bitcoin"/>
+
+    <TextView
+        android:id="@+id/balance"
+        app:layout_constraintTop_toBottomOf="@+id/currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:gravity="center"
+        tools:text="3.1415926 BTC"/>
+
+    <TextView
+        android:id="@+id/usage"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuide"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balance"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_margin="@dimen/spacer_s"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="2.78"/>
+
+    <TextView
+        android:id="@+id/quota"
+        app:layout_constraintStart_toEndOf="@+id/verticalGuide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balance"
+        app:layout_constraintHorizontal_bias="1"
+        android:layout_margin="@dimen/spacer_s"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="3.1415926"/>
+
+    <View
+        android:id="@+id/divider"
+        app:layout_constraintStart_toEndOf="@+id/quota"
+        app:layout_constraintEnd_toStartOf="@+id/usage"
+        app:layout_constraintTop_toTopOf="@+id/quota"
+        app:layout_constraintBottom_toBottomOf="@+id/quota"
+        android:layout_width="1.3dp"
+        android:layout_height="0dp"
+        android:alpha=".5"
+        android:background="?attr/colorOnPrimary"/>
+
+    <TextView
+        android:id="@+id/addressLabel"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintBottom_toTopOf="@+id/address"
+        app:layout_constraintVertical_bias="0"
+        android:layout_marginTop="@dimen/spacer_xl"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:text="@string/label_address"/>
+
+    <EditText
+        android:id="@+id/address"
+        app:layout_constraintTop_toBottomOf="@+id/addressLabel"
+        app:layout_constraintBottom_toTopOf="@+id/amountLabel"
+        app:layout_constraintEnd_toStartOf="@+id/scanAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_xs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:hint="@string/hint_withdraw_address"/>
+
+    <ImageView
+        android:id="@+id/scanAddress"
+        app:layout_constraintTop_toTopOf="@+id/address"
+        app:layout_constraintBottom_toBottomOf="@id/address"
+        app:layout_constraintStart_toEndOf="@+id/address"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_qr_code_scan"/>
+
+    <TextView
+        android:id="@+id/amountLabel"
+        app:layout_constraintTop_toBottomOf="@+id/address"
+        app:layout_constraintBottom_toTopOf="@+id/amount"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:text="@string/label_amount"/>
+
+    <EditText
+        android:id="@+id/amount"
+        app:layout_constraintTop_toBottomOf="@+id/amountLabel"
+        app:layout_constraintBottom_toTopOf="@+id/feeLabel"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="numberDecimal"
+        android:hint="@string/hint_withdraw_amount"/>
+
+    <TextView
+        android:id="@+id/feeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/amount"
+        app:layout_constraintBottom_toTopOf="@+id/fee"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:text="@string/label_fee"/>
+
+    <Spinner
+        android:id="@+id/fee"
+        app:layout_constraintTop_toBottomOf="@+id/feeLabel"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:popupTheme="@style/Base.Theme.MaterialComponents.Light"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent=".5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacer_m"
+        android:textColor="?attr/colorOnPrimary"
+        app:rippleColor="?attr/colorOnPrimary"
+        app:strokeColor="?attr/colorOnPrimary"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="@string/action_send"/>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progress"
+        app:layout_constraintStart_toEndOf="@+id/submit"
+        app:layout_constraintTop_toTopOf="@+id/submit"
+        app:layout_constraintBottom_toBottomOf="@+id/submit"
+        android:layout_marginStart="@dimen/spacer_s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        style="?android:progressBarStyleSmall"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

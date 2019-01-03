@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_endpoint">https://mvault.cybavo.com/v1/mw/</string>
+    <integer name="backup_answer_max_length">20</integer>
+    <integer name="qr_code_image_size">480</integer>
+</resources>

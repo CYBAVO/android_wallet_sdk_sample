@@ -1,0 +1,68 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.cybavo.example.wallet"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+
+        debug {
+            buildConfigField 'String', 'GOOGLE_SIGN_IN_CLI_ID', '"992053546599-smilqh1008u2g89cpht3behvrkijp771.apps.googleusercontent.com"'
+        }
+        release {
+            minifyEnabled false
+            buildConfigField 'String', 'GOOGLE_SIGN_IN_CLI_ID', '"992053546599-smilqh1008u2g89cpht3behvrkijp771.apps.googleusercontent.com"'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    signingConfigs {
+        debug {
+            storeFile file('keystore/android-debug')
+            storePassword 'android'
+            keyAlias 'android-debug'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file('keystore/android-release')
+            storePassword 'android'
+            keyAlias 'android-release'
+            keyPassword 'android'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Wallet SDK
+    implementation project(':com.cybavo.wallet.service-release')
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    // Android & AppCompat
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.preference:preference:1.1.0-alpha02'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    // ZXing for QR Code scanning
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // Google sign in
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+}

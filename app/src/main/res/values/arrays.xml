@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="backup_questions">
+        <item>What was your childhood nickname?</item>
+        <item>What is the name of your favorite childhood friend?</item>
+        <item>In what city or town did your mother and father meet?</item>
+        <item>What is the middle name of your oldest child?</item>
+        <item>What is your favorite team?</item>
+        <item>What is your favorite movie?</item>
+        <item>What was your favorite sport in high school?</item>
+        <item>What was your favorite food as a child?</item>
+        <item>What is the first name of the boy or girl that you first kissed?</item>
+        <item>What was the make and model of your first car?</item>
+        <item>What was the name of the hospital where you were born?</item>
+        <item>Who is your childhood sports hero?</item>
+        <item>What school did you attend for sixth grade?</item>
+        <item>What was the last name of your third grade teacher?</item>
+        <item>In what town was your first job?</item>
+        <item>What was the name of the company where you had your first job?</item>
+    </string-array>
+</resources>

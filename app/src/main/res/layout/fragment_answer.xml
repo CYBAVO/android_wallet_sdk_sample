@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/message"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/spacer_xl"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="?attr/colorPrimary"
+        android:text="@string/message_restore"/>
+
+    <!-- Q&A #1 -->
+    <TextView
+        android:id="@+id/step1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message"
+        android:layout_marginTop="@dimen/spacer_xl"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:gravity="center"
+        android:background="@drawable/step_icon_background"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?colorOnPrimary"
+        android:text="@string/label_1"/>
+
+    <TextView
+        android:id="@+id/question1"
+        app:layout_constraintStart_toEndOf="@+id/step1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step1"
+        app:layout_constraintBottom_toBottomOf="@+id/step1"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="What is the first name of the boy or girl that you first kissed?"/>
+
+    <EditText
+        android:id="@+id/answer1"
+        app:layout_constraintStart_toStartOf="@+id/question1"
+        app:layout_constraintEnd_toEndOf="@+id/question1"
+        app:layout_constraintTop_toBottomOf="@+id/question1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionNext"
+        android:maxLength="@integer/backup_answer_max_length"
+        android:hint="@string/hint_answer"/>
+
+    <!-- Q&A #2 -->
+    <TextView
+        android:id="@+id/step2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer1"
+        android:layout_marginTop="@dimen/spacer_l"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:gravity="center"
+        android:background="@drawable/step_icon_background"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?colorOnPrimary"
+        android:text="@string/label_2"/>
+
+    <TextView
+        android:id="@+id/question2"
+        app:layout_constraintStart_toEndOf="@+id/step2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step2"
+        app:layout_constraintBottom_toBottomOf="@+id/step2"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="What is the first name of the boy or girl that you first kissed?"/>
+
+    <EditText
+        android:id="@+id/answer2"
+        app:layout_constraintStart_toStartOf="@+id/question2"
+        app:layout_constraintEnd_toEndOf="@+id/question2"
+        app:layout_constraintTop_toBottomOf="@+id/question2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionNext"
+        android:maxLength="@integer/backup_answer_max_length"
+        android:hint="@string/hint_answer"/>
+
+    <!-- Q&A #3 -->
+    <TextView
+        android:id="@+id/step3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer2"
+        android:layout_marginTop="@dimen/spacer_l"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:gravity="center"
+        android:background="@drawable/step_icon_background"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?colorOnPrimary"
+        android:text="@string/label_3"/>
+
+    <TextView
+        android:id="@+id/question3"
+        app:layout_constraintStart_toEndOf="@+id/step3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step3"
+        app:layout_constraintBottom_toBottomOf="@+id/step3"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="What is the first name of the boy or girl that you first kissed?"/>
+
+    <EditText
+        android:id="@+id/answer3"
+        app:layout_constraintStart_toStartOf="@+id/question3"
+        app:layout_constraintEnd_toEndOf="@+id/question3"
+        app:layout_constraintTop_toBottomOf="@+id/question3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionNext"
+        android:maxLength="@integer/backup_answer_max_length"
+        android:hint="@string/hint_answer"/>
+
+    <!-- Forgot answers -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action_recover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/answer3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textColor="@android:color/holo_red_light"
+        android:text="@string/message_forgot_answers"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

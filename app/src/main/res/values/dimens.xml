@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacer_xs">4dp</dimen>
+    <dimen name="spacer_s">8dp</dimen>
+    <dimen name="spacer_m">16dp</dimen>
+    <dimen name="spacer_l">24dp</dimen>
+    <dimen name="spacer_xl">32dp</dimen>
+
+    <dimen name="activity_horizontal_margin">@dimen/spacer_m</dimen>
+    <dimen name="activity_vertical_margin">@dimen/spacer_m</dimen>
+
+    <dimen name="icon_m">24dp</dimen>
+    <dimen name="icon_l">36dp</dimen>
+
+    <dimen name="deposit_qr_code_size">160dp</dimen>
+</resources>

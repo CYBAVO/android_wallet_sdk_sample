@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:clickable="true"
+    android:focusable="true"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+    <include android:id="@+id/appBar"
+        layout="@layout/app_bar"/>
+
+    <TextView
+        android:id="@+id/currency"
+        app:layout_constraintTop_toBottomOf="@+id/appBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacer_m"
+        android:drawablePadding="@dimen/spacer_xs"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:gravity="center_vertical"
+        tools:drawableLeft="@drawable/btc"
+        tools:text="Bitcoin"/>
+
+    <TextView
+        android:id="@+id/warning"
+        app:layout_constraintTop_toBottomOf="@+id/currency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacer_m"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:gravity="center"
+        tools:text="@string/warning_withdraw"/>
+
+    <ImageView
+        android:id="@+id/qrCode"
+        app:layout_constraintTop_toBottomOf="@+id/warning"
+        app:layout_constraintBottom_toTopOf="@+id/address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:background="@android:color/background_light"
+        android:layout_width="@dimen/deposit_qr_code_size"
+        android:layout_height="@dimen/deposit_qr_code_size"/>
+
+    <TextView
+        android:id="@+id/address"
+        app:layout_constraintTop_toBottomOf="@+id/qrCode"
+        app:layout_constraintBottom_toTopOf="@+id/copyAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacer_m"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:gravity="center"
+        tools:text="0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/copyAddress"
+        app:layout_constraintBottom_toTopOf="@+id/saveQrCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent=".5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacer_s"
+        android:textColor="?attr/colorOnPrimary"
+        app:rippleColor="?attr/colorOnPrimary"
+        app:strokeColor="?attr/colorOnPrimary"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="@string/action_copy_address"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveQrCode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent=".5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacer_m"
+        android:textColor="?attr/colorOnPrimary"
+        app:rippleColor="?attr/colorOnPrimary"
+        app:strokeColor="?attr/colorOnPrimary"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="@string/action_save_qr_code"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

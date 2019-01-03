@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:clipToPadding="false"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHoz"
+        app:layout_constraintGuide_percent=".3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+    <TextView
+        android:id="@+id/message"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceHeadline4"
+        android:textColor="?attr/colorPrimary"
+        android:text="@string/message_request_recover"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action_forgot"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_forgot"
+        app:backgroundTint="@android:color/holo_red_light"/>
+
+    <TextView
+        android:id="@+id/message2"
+        app:layout_constraintTop_toBottomOf="@+id/action_forgot"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textColor="?attr/colorPrimary"
+        android:text="@string/message_input_verify_code"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/verifyCodeWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/message2"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_verify_code">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/verifyCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="numberPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
