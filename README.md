@@ -25,3 +25,12 @@ Leverage CYBAVO Wallet App SDK infrastructure and avoid maintaining a full node 
 
 Feel free to contact us for product inquiries or mail us:
 info@cybavo.com
+
+
+# CYBAVO
+
+Who we are
+
+A group of cybersecurity experts making crypto-currency wallet secure and usable for your daily business operation.
+
+We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exchanges and stable-coin ico teams, please feel free to contact us when your company or business need any help in cryptocurrency operation.
