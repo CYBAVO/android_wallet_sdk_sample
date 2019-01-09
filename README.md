@@ -2,6 +2,8 @@
 
 Sample app for integrating Cybavo Wallet App SDK, https://www.cybavo.com/wallet-app-sdk/
 
+![image](https://github.com/CYBAVO/android_wallet_sdk_sample/raw/master/image/sc_wallet_list.png)
+![image](https://github.com/CYBAVO/android_wallet_sdk_sample/raw/master/image/sc_wallet_detail.png)
 
 ## Institutional-grade security for your customers
 
