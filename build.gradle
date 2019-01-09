@@ -19,6 +19,17 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        maven {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream()) // load local.properties
+
+            url properties.getProperty('walletsdk.maven.url')
+            credentials {
+                username = properties.getProperty('walletsdk.maven.username')
+                password = properties.getProperty('walletsdk.maven.password')
+            }
+        }
     }
 }
 

@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('com.cybavo.wallet.service-1.0.357-release.aar'))

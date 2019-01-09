@@ -8,7 +8,7 @@ public class BalanceKey {
     public final String tokenAddress;
     public final String address;
 
-    BalanceKey(int currency, String tokenAddress, String address) {
+    public BalanceKey(int currency, String tokenAddress, String address) {
         this.currency = currency;
         this.tokenAddress = tokenAddress;
         this.address = address;

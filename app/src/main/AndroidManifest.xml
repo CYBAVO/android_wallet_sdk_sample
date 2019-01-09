@@ -10,9 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait">
+        <!-- Main -->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +22,16 @@
             </intent-filter>
         </activity>
 
-        <!-- Override screen orientation -->
+        <!-- Pay -->
+        <activity android:name=".pay.PayActivity">
+            <intent-filter>
+                <action android:name="com.cybavo.example.wallet.action.PAY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Scan: Override screen orientation -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"

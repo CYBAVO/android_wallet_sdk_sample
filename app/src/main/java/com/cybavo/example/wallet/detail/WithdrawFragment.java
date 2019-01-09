@@ -1,12 +1,10 @@
 package com.cybavo.example.wallet.detail;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -39,35 +37,6 @@ import androidx.lifecycle.ViewModelProviders;
 public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnPinCodeInputListener {
 
     private static final String ARG_WALLET = "wallet";
-
-    class FeeAdapter extends ArrayAdapter<Fee> {
-
-        public FeeAdapter(@NonNull Context context) {
-            super(context, R.layout.dropdown_item_fee);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.dropdown_item_fee, parent, false);
-            }
-
-            TextView amount = convertView.findViewById(R.id.amount);
-            TextView description = convertView.findViewById(R.id.description);
-
-            Fee fee = getItem(position);
-            amount.setText(fee.amount);
-            description.setText(fee.description);
-
-            return convertView;
-        }
-
-        @Override
-        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            return getView(position, convertView, parent);
-        }
-    }
 
     private Wallets mService;
     private Wallet mWallet;

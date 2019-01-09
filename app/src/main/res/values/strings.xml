@@ -104,9 +104,12 @@
     <string name="message_renew_session">Restoring session, just a moment…</string>
     <string name="message_renew_session_success">Session restored</string>
 
+    <string name="title_pay">Pay</string>
+
     <!-- dev -->
     <string name="title_settings_dev">Development</string>
     <string name="desc_endpoint">Wallet service endpoint</string>
     <string name="message_change_endpoint">The endpoint changing will take effect the next time you restart the app</string>
     <string name="title_sdk_version">Wallet SDK Version</string>
+
 </resources>

@@ -1,1 +1,1 @@
-include ':app', ':com.cybavo.wallet.service-release'
+include ':app'

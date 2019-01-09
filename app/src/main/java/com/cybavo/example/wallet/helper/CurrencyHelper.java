@@ -57,10 +57,14 @@ public class CurrencyHelper {
 
     // find currency by type & token addr
     public static Currency findCurrency(List<Currency> currencies, Wallet wallet) {
+        return findCurrency(currencies, wallet.currency, wallet.tokenAddress);
+    }
+
+    public static Currency findCurrency(List<Currency> currencies, int currency, String tokenAddress) {
         if (currencies != null) {
             for (Currency c : currencies) { // find currency matches wallet
-                if (c.currency == wallet.currency &&
-                        c.tokenAddress.equals(wallet.tokenAddress)) {
+                if (c.currency == currency &&
+                        c.tokenAddress.equals(tokenAddress)) {
                     return c;
                 }
             }

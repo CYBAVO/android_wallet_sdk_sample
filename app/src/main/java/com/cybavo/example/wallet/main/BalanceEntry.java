@@ -8,7 +8,7 @@ public class BalanceEntry {
     public final long updatedAt;
     public final boolean init;
 
-    BalanceEntry(Balance balance, long updatedAt, boolean init) {
+    public BalanceEntry(Balance balance, long updatedAt, boolean init) {
         this.balance = balance;
         this.updatedAt = updatedAt;
         this.init = init;
