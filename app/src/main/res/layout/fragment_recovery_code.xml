@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="@dimen/activity_horizontal_margin"
@@ -36,6 +37,19 @@
         app:backgroundTint="@android:color/holo_red_light"/>
 
     <TextView
+        android:id="@+id/handleNum"
+        app:layout_constraintTop_toTopOf="@+id/action_forgot"
+        app:layout_constraintBottom_toBottomOf="@+id/action_forgot"
+        app:layout_constraintStart_toEndOf="@+id/action_forgot"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textColor="?attr/colorAccent"
+        tools:text="@string/message_recovery_handle_num"/>
+
+    <TextView
         android:id="@+id/message2"
         app:layout_constraintTop_toBottomOf="@+id/action_forgot"
         android:layout_marginTop="@dimen/spacer_m"
@@ -43,7 +57,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceSubtitle1"
         android:textColor="?attr/colorPrimary"
-        android:text="@string/message_input_verify_code"/>
+        android:text="@string/message_input_recovery_code"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/verifyCodeWrapper"
@@ -51,10 +65,10 @@
         android:layout_marginTop="@dimen/spacer_s"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/label_verify_code">
+        android:hint="@string/label_recovery_code">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/verifyCode"
+            android:id="@+id/recoveryCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"

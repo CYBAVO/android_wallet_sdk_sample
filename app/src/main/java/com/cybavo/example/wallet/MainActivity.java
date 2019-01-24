@@ -103,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements SignInStateListen
             case SESSION_EXPIRED:
                 renewSession();
                 break;
+            case SESSION_INVALID:
+                signOut();
+                break;
         }
     }
 

@@ -13,11 +13,13 @@ android {
 
         debug {
             buildConfigField 'String', 'GOOGLE_SIGN_IN_CLI_ID', '"992053546599-smilqh1008u2g89cpht3behvrkijp771.apps.googleusercontent.com"'
+            manifestPlaceholders = [usesCleartextTraffic:"true"] // allow HTTP
         }
         release {
             minifyEnabled false
             buildConfigField 'String', 'GOOGLE_SIGN_IN_CLI_ID', '"992053546599-smilqh1008u2g89cpht3behvrkijp771.apps.googleusercontent.com"'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [usesCleartextTraffic:"false"] // allow HTTPS only
         }
     }
     compileOptions {

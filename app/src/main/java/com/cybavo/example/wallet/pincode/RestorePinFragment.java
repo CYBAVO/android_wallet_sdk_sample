@@ -16,7 +16,7 @@ import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.BackupChallenge;
-import com.cybavo.wallet.service.auth.results.ChangePinCodeResult;
+import com.cybavo.wallet.service.auth.results.RestorePinCodeResult;
 import com.cybavo.wallet.service.auth.results.VerifyRestoreQuestionsResult;
 
 import androidx.annotation.NonNull;
@@ -179,11 +179,11 @@ public class RestorePinFragment extends Fragment {
             return;
         }
 
-        mAuth.changePinCode(pinCode,
+        mAuth.restorePinCode(pinCode,
                 BackupChallenge.make(question1, answer1),
                 BackupChallenge.make(question2, answer2),
                 BackupChallenge.make(question3, answer3),
-                new Callback<ChangePinCodeResult>() {
+                new Callback<RestorePinCodeResult>() {
                     @Override
                     public void onError(Throwable error) {
                         Log.w(TAG, "changePinCode failed", error);
@@ -192,7 +192,7 @@ public class RestorePinFragment extends Fragment {
                     }
 
                     @Override
-                    public void onResult(ChangePinCodeResult result) {
+                    public void onResult(RestorePinCodeResult result) {
                         setInProgress(false);
                         Helpers.showToast(getContext(), getString(R.string.message_restore_success));
                         quit();

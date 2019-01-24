@@ -16,6 +16,7 @@ import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.BackupChallenge;
 import com.cybavo.wallet.service.auth.results.RecoverPinCodeResult;
+import com.cybavo.wallet.service.auth.results.VerifyRecoveryCodeResult;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class RecoverPinFragment extends Fragment {
         return fragment;
     }
 
+    private Auth mAuth;
     private Step mStep = Step.VERIFY_CODE;
     private SetupViewModel mSetupViewModel;
     private Button mSubmit;
@@ -60,6 +62,8 @@ public class RecoverPinFragment extends Fragment {
                 .onBack(v -> quit())
                 .done();
 
+        mAuth = Auth.getInstance();
+
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> next());
     }
@@ -76,8 +80,8 @@ public class RecoverPinFragment extends Fragment {
     private void showStep(Step step) {
         switch (step) {
             case VERIFY_CODE:
-                if (!fragmentExists(VerifyCodeFragment.class)) {
-                    showFragment(VerifyCodeFragment.newInstance());
+                if (!fragmentExists(RecoveryCodeFragment.class)) {
+                    showFragment(RecoveryCodeFragment.newInstance());
                     mSubmit.setText(R.string.action_next);
                 }
                 break;
@@ -114,10 +118,7 @@ public class RecoverPinFragment extends Fragment {
     private void next() {
         switch (mStep) {
             case VERIFY_CODE:
-                if (mSetupViewModel.getVerifyCode().getValue().isEmpty()) {
-                    return;
-                }
-                showStep(Step.PIN);
+                verifyCode(mSetupViewModel.getVerifyCode().getValue());
                 break;
             case PIN:
                 if (!Helpers.isPinCodeValid(mSetupViewModel.getPinCode().getValue())) {
@@ -129,6 +130,35 @@ public class RecoverPinFragment extends Fragment {
             case BACKUP:
                 recoverPin();
         }
+    }
+
+    private void setInProgress(boolean inProgress) {
+        mSubmit.setEnabled(!inProgress);
+    }
+
+    private void verifyCode(String code) {
+        if (mSetupViewModel.getVerifyCode().getValue().isEmpty()) {
+            return;
+        }
+
+        setInProgress(true);
+        mAuth.verifyRecoveryCode(code, new Callback<VerifyRecoveryCodeResult>() {
+            @Override
+            public void onError(Throwable error) {
+                setInProgress(false);
+                if (error instanceof Error && ((Error) error).getCode() == Error.Code.ErrInvalidRestoreCode) {
+                    Helpers.showToast(getContext(), getString(R.string.message_incorrect_recovery_code));
+                } else {
+                    Helpers.showToast(getContext(), "verifyRecoveryCode failed: " + error.getMessage());
+                }
+            }
+
+            @Override
+            public void onResult(VerifyRecoveryCodeResult verifyRecoveryCodeResult) {
+                setInProgress(false);
+                showStep(Step.PIN);
+            }
+        });
     }
 
     private void recoverPin() {
@@ -151,8 +181,8 @@ public class RecoverPinFragment extends Fragment {
             return;
         }
 
-        mSubmit.setEnabled(false);
-        Auth.getInstance().recoverPinCode(pinCode,
+        setInProgress(true);
+        mAuth.recoverPinCode(pinCode,
                 BackupChallenge.make(question1, answer1),
                 BackupChallenge.make(question2, answer2),
                 BackupChallenge.make(question3, answer3),
@@ -161,13 +191,13 @@ public class RecoverPinFragment extends Fragment {
             @Override
             public void onError(Throwable error) {
                 Log.w(TAG, "recoverPinCode failed", error);
-                mSubmit.setEnabled(true);
+                setInProgress(false);
                 Helpers.showToast(getContext(), "recoverPinCode failed: " + error.getMessage());
             }
 
             @Override
             public void onResult(RecoverPinCodeResult result) {
-                mSubmit.setEnabled(true);
+                setInProgress(false);
                 Helpers.showToast(getContext(), getString(R.string.message_recover_pin_success));
                 quit();
             }

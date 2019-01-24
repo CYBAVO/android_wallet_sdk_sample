@@ -128,7 +128,7 @@ public class SetupViewModel extends AndroidViewModel {
         return mVerifyCode;
     }
 
-    public void setVerifyCode(String verifyCode) {
+    public void setRecoveryCode(String verifyCode) {
         mVerifyCode.setValue(verifyCode);
     }
 }

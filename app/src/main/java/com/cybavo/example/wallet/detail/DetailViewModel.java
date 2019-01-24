@@ -70,7 +70,6 @@ public class DetailViewModel extends AndroidViewModel {
         updateHistory(true, null);
 
         final int count = HISTORY_BATCH_COUNT;
-//        mService.getHistory(60, "", "0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295",
         mService.getHistory(mWallet.currency, mWallet.tokenAddress, mWallet.address,
                 start, count, new Callback<GetHistoryResult>() {
                     @Override

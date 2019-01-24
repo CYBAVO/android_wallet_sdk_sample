@@ -97,10 +97,12 @@
 
     <string name="message_request_recover">Contact us to start the recovery process</string>
     <string name="action_forgot">Forgot PIN code!</string>
-    <string name="message_got_verify_code">Forgot PIN code</string>
-    <string name="message_input_verify_code">I\'v got the verification code</string>
-    <string name="label_verify_code">Verification code</string>
+    <string name="message_input_recovery_code">I\'v got the recovery code</string>
+    <string name="label_recovery_code">Recovery code</string>
+    <string name="message_incorrect_recovery_code">You have entered wrong recovery code.</string>
     <string name="message_recover_pin_success">Your PIN code has been recovered successfully</string>
+    <string name="message_recovery_handle_num">Handle number: %d</string>
+
     <string name="message_renew_session">Restoring session, just a moment…</string>
     <string name="message_renew_session_success">Session restored</string>
 

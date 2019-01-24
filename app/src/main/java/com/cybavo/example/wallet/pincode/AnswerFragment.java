@@ -125,8 +125,8 @@ public class AnswerFragment extends Fragment {
             @Override
             public void onResult(GetRestoreQuestionsResult result) {
                 mSetupViewModel.setQuestion(0, result.question1);
-                mSetupViewModel.setQuestion(1, result.question1);
-                mSetupViewModel.setQuestion(2, result.question1);
+                mSetupViewModel.setQuestion(1, result.question2);
+                mSetupViewModel.setQuestion(2, result.question3);
                 setInProgress(false);
             }
         });

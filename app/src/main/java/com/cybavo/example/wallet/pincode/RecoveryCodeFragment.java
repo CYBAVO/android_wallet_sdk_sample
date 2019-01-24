@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.Helpers;
@@ -24,22 +25,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class VerifyCodeFragment extends Fragment {
+public class RecoveryCodeFragment extends Fragment {
 
-    private static final String TAG = VerifyCodeFragment.class.getSimpleName();
+    private static final String TAG = RecoveryCodeFragment.class.getSimpleName();
 
-    public VerifyCodeFragment() {
+    public RecoveryCodeFragment() {
         // Required empty public constructor
     }
 
-    public static VerifyCodeFragment newInstance() {
-        VerifyCodeFragment fragment = new VerifyCodeFragment();
+    public static RecoveryCodeFragment newInstance() {
+        RecoveryCodeFragment fragment = new RecoveryCodeFragment();
         return fragment;
     }
 
     private SetupViewModel mSetupViewModel;
     private Button mForgot;
-    private EditText mVerifyCodeEdit;
+    private TextView mHandleNum;
+    private EditText mRecoveryCodeEdit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class VerifyCodeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_verify_code, container, false);
+        return inflater.inflate(R.layout.fragment_recovery_code, container, false);
     }
 
     @Override
@@ -60,13 +62,15 @@ public class VerifyCodeFragment extends Fragment {
         mForgot = view.findViewById(R.id.action_forgot);
         mForgot.setOnClickListener(v -> forgotPinCode());
 
-        mVerifyCodeEdit = view.findViewById(R.id.verifyCode);
-        mVerifyCodeEdit.addTextChangedListener(new TextWatcher() {
+        mHandleNum = view.findViewById(R.id.handleNum);
+
+        mRecoveryCodeEdit = view.findViewById(R.id.recoveryCode);
+        mRecoveryCodeEdit.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
             public void afterTextChanged(Editable s) {
-                mSetupViewModel.setVerifyCode(s.toString());
+                mSetupViewModel.setRecoveryCode(s.toString());
             }
         });
     }
@@ -93,6 +97,7 @@ public class VerifyCodeFragment extends Fragment {
             public void onResult(ForgotPinCodeResult forgotPinCodeResult) {
                 mForgot.setEnabled(false);
                 mForgot.setText(String.format(Locale.getDefault(), "%s %s", getString(R.string.action_forgot), "✓"));
+                mHandleNum.setText(getString(R.string.message_recovery_handle_num, forgotPinCodeResult.handleNum));
             }
         });
     }
