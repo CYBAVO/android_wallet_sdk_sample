@@ -36,8 +36,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 public class CreateWalletFragment extends Fragment implements InputPinCodeDialog.OnPinCodeInputListener {
@@ -47,10 +45,8 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
         return fragment;
     }
 
+    private CreateWalletViewModel mCreateWalletViewModel;
     private MainViewModel mViewModel;
-    private MutableLiveData<Currency> mSelectedCurrency = new MutableLiveData<>();
-    private MutableLiveData<Long> mParentWallet = new MutableLiveData<>();
-    private MediatorLiveData<List<Wallet>> mParentWallets = new MediatorLiveData<>();
 
     private String mAccount = "";
     private String mName = "";
@@ -67,9 +63,6 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
     private Button mSubmit;
 
     public CreateWalletFragment() {
-        mParentWallet.setValue(0L);
-        mSelectedCurrency.setValue(Currency.Unknown);
-        mParentWallets.setValue(new ArrayList<>());
     }
 
     @Override
@@ -99,7 +92,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Currency item = (Currency) parent.getAdapter().getItem(position);
-                mSelectedCurrency.setValue(item);
+                mCreateWalletViewModel.setSelectedCurrency(item);
             }
         });
 
@@ -115,7 +108,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Wallet item = (Wallet) parent.getAdapter().getItem(position);
-                mParentWallet.setValue(item.walletId);
+                mCreateWalletViewModel.setSelectedParent(item.walletId);
             }
         });
 
@@ -157,11 +150,15 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
             mCurrencyAdapter.addAll(currencies);
         });
 
-        mSelectedCurrency.observe(this, currency -> {
+        mCreateWalletViewModel = ViewModelProviders.of(this,
+                new CreateWalletViewModel.Factory(getActivity().getApplication(), mViewModel.getWallets()))
+                .get(CreateWalletViewModel.class);
+
+        mCreateWalletViewModel.getSelectedCurrency().observe(this, currency -> {
             if (currency.tokenAddress.isEmpty()) { // has no parent
                 mParentLabel.setVisibility(View.GONE);
                 mParentSpinner.setVisibility(View.GONE);
-                mParentWallet.setValue(0L);
+                mCreateWalletViewModel.setSelectedParent(0L);
             } else {
                 mParentLabel.setVisibility(View.VISIBLE);
                 mParentSpinner.setVisibility(View.VISIBLE);
@@ -174,26 +171,10 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
             }
         });
 
-        mParentWallets.addSource(mViewModel.getWallets(), wallets -> {
-            mParentWallets.setValue(calcParentWallets(wallets, mSelectedCurrency.getValue()));
-        });
-        mParentWallets.addSource(mSelectedCurrency, currency -> {
-            mParentWallets.setValue(calcParentWallets(mViewModel.getWallets().getValue(), currency));
-        });
-        mParentWallets.observe(this, wallets -> {
+        mCreateWalletViewModel.getAvailableParents().observe(this, wallets -> {
             mParentAdapter.clear();
             mParentAdapter.addAll(wallets);
         });
-    }
-
-    private List<Wallet> calcParentWallets(List<Wallet> wallets, Currency currency) {
-        List<Wallet> parents = new ArrayList<>();
-        for (Wallet w : wallets) {
-            if (currency.currency ==  w.currency && w.tokenAddress.isEmpty()) {
-                parents.add(w);
-            }
-        }
-        return parents;
     }
 
     private void setInProgress(boolean inProgress) {
@@ -221,8 +202,8 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
 
     private void createWallet(String pinCode) {
 
-        final Currency currency = mSelectedCurrency.getValue();
-        final long parent = mParentWallet.getValue();
+        final Currency currency = mCreateWalletViewModel.getSelectedCurrency().getValue();
+        final long parent = mCreateWalletViewModel.getSelectedParent().getValue();
 
         if (currency == null || pinCode.isEmpty())
             return;
