@@ -17,6 +17,7 @@ import com.cybavo.example.wallet.helper.CurrencyHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
+import com.cybavo.example.wallet.pay.PayViewModel;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Currency;
@@ -41,6 +42,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     private Wallets mService;
     private Wallet mWallet;
     private MainViewModel mViewModel;
+    private WithdrawViewModel mWithdrawViewModel;
 
     private TextView mCurrency;
     private TextView mBalance;
@@ -125,6 +127,25 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mWithdrawViewModel = ViewModelProviders.of(this,
+                new WithdrawViewModel.Factory(getActivity().getApplication(), mWallet))
+                .get(WithdrawViewModel.class);
+
+        mWithdrawViewModel.getUsage().observe(this, usage -> {
+            if (usage == null) { // fetching
+                mQuota.setText(getString(R.string.template_quota, "…", mWallet.currencySymbol));
+                mUsage.setText(getString(R.string.template_usage, "…", mWallet.currencySymbol));
+            } else {
+                mQuota.setText(getString(R.string.template_quota, usage.dailyTransactionAmountQuota, mWallet.currencySymbol));
+                mUsage.setText(getString(R.string.template_usage, usage.dailyTransactionAmountUsage, mWallet.currencySymbol));
+            }
+        });
+
+        mWithdrawViewModel.getTransactionFee().observe(this, fees -> {
+            mFeeAdapter.clear();
+            mFeeAdapter.addAll(fees);
+        });
+
         mViewModel = ViewModelProviders.of(getParentFragment(),
                 new MainViewModel.Factory(getActivity().getApplication()))
                 .get(MainViewModel.class);
@@ -143,48 +164,48 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
                 mCurrency.setText(mWallet.currencySymbol);
             }
         });
-
-        fetchUsage();
-        fetchTransactionFee();
+//
+//        fetchUsage();
+//        fetchTransactionFee();
     }
 
-    private void fetchUsage() {
-        mQuota.setText(getString(R.string.template_quota, "…", mWallet.currencySymbol));
-        mUsage.setText(getString(R.string.template_usage, "…", mWallet.currencySymbol));
-        mService.getWalletUsage(mWallet.walletId, new Callback<GetWalletUsageResult>() {
-            @Override
-            public void onError(Throwable error) {
-                Helpers.showToast(getContext(), "getWalletUsage failed: " + error.getMessage());
-            }
+//    private void fetchUsage() {
+//        mQuota.setText(getString(R.string.template_quota, "…", mWallet.currencySymbol));
+//        mUsage.setText(getString(R.string.template_usage, "…", mWallet.currencySymbol));
+//        mService.getWalletUsage(mWallet.walletId, new Callback<GetWalletUsageResult>() {
+//            @Override
+//            public void onError(Throwable error) {
+//                Helpers.showToast(getContext(), "getWalletUsage failed: " + error.getMessage());
+//            }
+//
+//            @Override
+//            public void onResult(GetWalletUsageResult result) {
+//                mQuota.setText(getString(R.string.template_quota,
+//                        result.dailyTransactionAmountQuota, mWallet.currencySymbol));
+//                mUsage.setText(getString(R.string.template_usage,
+//                        result.dailyTransactionAmountUsage, mWallet.currencySymbol));
+//            }
+//        });
+//    }
 
-            @Override
-            public void onResult(GetWalletUsageResult result) {
-                mQuota.setText(getString(R.string.template_quota,
-                        result.dailyTransactionAmountQuota, mWallet.currencySymbol));
-                mUsage.setText(getString(R.string.template_usage,
-                        result.dailyTransactionAmountUsage, mWallet.currencySymbol));
-            }
-        });
-    }
-
-    private void fetchTransactionFee() {
-        mFeeSpinner.setEnabled(false);
-        mService.getTransactionFee(mWallet.currency, new Callback<GetTransactionFeeResult>() {
-            @Override
-            public void onError(Throwable error) {
-                Helpers.showToast(getContext(), "getTransactionFee failed: " + error.getMessage());
-            }
-
-            @Override
-            public void onResult(GetTransactionFeeResult result) {
-                mFeeAdapter.clear();
-                mFeeAdapter.add(result.low);
-                mFeeAdapter.add(result.medium);
-                mFeeAdapter.add(result.high);
-                mFeeSpinner.setEnabled(true);
-            }
-        });
-    }
+//    private void fetchTransactionFee() {
+//        mFeeSpinner.setEnabled(false);
+//        mService.getTransactionFee(mWallet.currency, new Callback<GetTransactionFeeResult>() {
+//            @Override
+//            public void onError(Throwable error) {
+//                Helpers.showToast(getContext(), "getTransactionFee failed: " + error.getMessage());
+//            }
+//
+//            @Override
+//            public void onResult(GetTransactionFeeResult result) {
+//                mFeeAdapter.clear();
+//                mFeeAdapter.add(result.low);
+//                mFeeAdapter.add(result.medium);
+//                mFeeAdapter.add(result.high);
+//                mFeeSpinner.setEnabled(true);
+//            }
+//        });
+//    }
 
     private void scanAddress() {
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);

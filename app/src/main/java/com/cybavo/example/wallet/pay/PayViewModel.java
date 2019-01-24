@@ -8,17 +8,20 @@ import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.main.BalanceEntry;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Balance;
+import com.cybavo.wallet.service.wallet.BalanceAddress;
 import com.cybavo.wallet.service.wallet.Fee;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
-import com.cybavo.wallet.service.wallet.results.GetBalanceResult;
+import com.cybavo.wallet.service.wallet.results.GetBalancesResult;
 import com.cybavo.wallet.service.wallet.results.GetTransactionFeeResult;
 import com.cybavo.wallet.service.wallet.results.GetWalletUsageResult;
 import com.cybavo.wallet.service.wallet.results.GetWalletsResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -156,15 +159,25 @@ public class PayViewModel extends AndroidViewModel {
     }
 
     private void fetchBalance(Wallet wallet, MutableLiveData<BalanceEntry> entry) {
-        mService.getBalance(wallet.currency, wallet.tokenAddress, wallet.address, new Callback<GetBalanceResult>() {
+
+        final Map<Integer, BalanceAddress> addresses = new HashMap<>();
+        final BalanceAddress address = new BalanceAddress();
+        address.currency = wallet.currency;
+        address.tokenAddress = wallet.tokenAddress;
+        address.address = wallet.address;
+        addresses.put(0, address);
+
+        mService.getBalances(addresses, new Callback<GetBalancesResult>() {
             @Override
             public void onError(Throwable error) {
                 Helpers.showToast(getApplication(), "getBalance failed: " + error.getMessage());
             }
 
             @Override
-            public void onResult(GetBalanceResult result) {
-                entry.setValue(new BalanceEntry(result.balance, SystemClock.uptimeMillis(), true));
+            public void onResult(GetBalancesResult result) {
+                if (result.balance.get(0) != null) {
+                    entry.setValue(new BalanceEntry(result.balance.get(0), SystemClock.uptimeMillis(), true));
+                }
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.cybavo.example.wallet.main;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -10,11 +12,12 @@ import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.UserState;
 import com.cybavo.wallet.service.auth.results.GetUserStateResult;
+import com.cybavo.wallet.service.wallet.Balance;
+import com.cybavo.wallet.service.wallet.BalanceAddress;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
-import com.cybavo.wallet.service.wallet.Balance;
-import com.cybavo.wallet.service.wallet.results.GetBalanceResult;
+import com.cybavo.wallet.service.wallet.results.GetBalancesResult;
 import com.cybavo.wallet.service.wallet.results.GetCurrenciesResult;
 import com.cybavo.wallet.service.wallet.results.GetWalletsResult;
 
@@ -145,24 +148,75 @@ public class MainViewModel extends AndroidViewModel {
         }
 
         if (refresh || SystemClock.uptimeMillis() - entry.getValue().updatedAt > BALANCE_THROTTLE) { // skip in throttle
-            fetchBalance(wallet, entry);
+            fetchBalance(wallet);
         }
         return entry;
     }
 
-    private void fetchBalance(Wallet wallet, MutableLiveData<BalanceEntry> entry) {
+    private Handler mMainHandler = new Handler(Looper.getMainLooper());
+    private FetchBalanceBatch mFetchBalanceBatch;
+    class FetchBalanceBatch implements Runnable {
 
-        mService.getBalance(wallet.currency, wallet.tokenAddress, wallet.address, new Callback<GetBalanceResult>() {
-            @Override
-            public void onError(Throwable error) {
-                Helpers.showToast(getApplication(), "getBalance failed: " + error.getMessage());
+        final private List<BalanceAddress> mBatch = new ArrayList<>();
+
+        void add(Wallet wallet) {
+            // skip exists
+            for (BalanceAddress address : mBatch) {
+                if (address.currency == wallet.currency &&
+                        address.tokenAddress.equals(wallet.tokenAddress) &&
+                        address.address.equals(wallet.address)) {
+                    return;
+                }
             }
 
-            @Override
-            public void onResult(GetBalanceResult result) {
-                entry.setValue(new BalanceEntry(result.balance, SystemClock.uptimeMillis(), true));
+            final BalanceAddress address = new BalanceAddress();
+            address.currency = wallet.currency;
+            address.tokenAddress = wallet.tokenAddress;
+            address.address = wallet.address;
+            mBatch.add(address);
+        }
+
+        @Override
+        public void run() {
+            mFetchBalanceBatch = null;
+
+            final Map<Integer, BalanceAddress> request = new HashMap<>();
+            for (int i = 0; i < mBatch.size(); i++) {
+                request.put(i, mBatch.get(i));
             }
-        });
+
+            mService.getBalances(request, new Callback<GetBalancesResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    Helpers.showToast(getApplication(), "getBalance failed: " + error.getMessage());
+                }
+
+                @Override
+                public void onResult(GetBalancesResult result) {
+                    for (Map.Entry<Integer, Balance> balance : result.balance.entrySet()) {
+                        final Integer key = balance.getKey();
+                        final Balance value = balance.getValue();
+                        final BalanceAddress address = request.get(key);
+
+                        MutableLiveData<BalanceEntry> entry = mBalances.get(
+                                new BalanceKey(address.currency, address.tokenAddress, address.address));
+                        if (entry != null) {
+                            entry.setValue(new BalanceEntry(value, SystemClock.uptimeMillis(), true));
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private void fetchBalance(Wallet wallet) {
+
+        if (mFetchBalanceBatch == null) {
+            mFetchBalanceBatch = new FetchBalanceBatch();
+            mMainHandler.postDelayed(mFetchBalanceBatch, 500);
+        }
+
+        mFetchBalanceBatch.add(wallet);
     }
 
     public LiveData<UserState> getUserState() {
