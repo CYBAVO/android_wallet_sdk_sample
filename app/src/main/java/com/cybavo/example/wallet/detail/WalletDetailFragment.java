@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cybavo.example.wallet.NavFragment;
 import com.cybavo.example.wallet.R;
+import com.cybavo.example.wallet.helper.CurrencyHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
@@ -146,7 +147,7 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
                 .get(MainViewModel.class);
 
         mViewModel.getBalance(mWallet).observe(this, entry -> {
-            mBalance.setText(entry.init ? entry.balance.balance : "…");
+            mBalance.setText(entry.init ? CurrencyHelper.getEffectiveBalance(entry.balance) : "…");
         });
 
         // detail ViewModel

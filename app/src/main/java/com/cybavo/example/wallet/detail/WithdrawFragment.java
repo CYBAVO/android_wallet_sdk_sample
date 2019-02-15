@@ -148,7 +148,8 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
                 .get(MainViewModel.class);
         mViewModel.getBalance(mWallet).observe(this, entry -> {
             if (entry.init) {
-                mBalance.setText(getString(R.string.template_amount, entry.balance.balance, mWallet.currencySymbol));
+                mBalance.setText(getString(R.string.template_amount,
+                        CurrencyHelper.getEffectiveBalance(entry.balance), mWallet.currencySymbol));
             } else {
                 mBalance.setText(getString(R.string.template_amount, "…", mWallet.currencySymbol));
             }

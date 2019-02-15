@@ -71,7 +71,7 @@ public class WalletListAdapter extends RecyclerView.Adapter<WalletListAdapter.Vi
         TextView balance;
         TextView name;
 
-        private Wallet mItem;
+        private Wallet mWallet;
 
 
         ViewHolder(View view) {
@@ -82,43 +82,43 @@ public class WalletListAdapter extends RecyclerView.Adapter<WalletListAdapter.Vi
             currency = view.findViewById(R.id.currency);
         }
 
-        void bind(Wallet item) {
-            if (mItem != null) {
-                mViewModel.getBalance(mItem).removeObserver(this);
+        void bind(Wallet wallet) {
+            if (mWallet != null) {
+                mViewModel.getBalance(mWallet).removeObserver(this);
             }
-            this.mItem = item;
+            this.mWallet = wallet;
 
             // coin icon
             icon.setImageResource(CurrencyHelper.getCoinIconResource(
-                    itemView.getContext(), item.currencySymbol));
-            currency.setText(item.currencySymbol);
+                    itemView.getContext(), wallet.currencySymbol));
+            currency.setText(wallet.currencySymbol);
 
             // wallet name
-            if (item.name.isEmpty()) {
+            if (wallet.name.isEmpty()) {
                 name.setText(R.string.label_unnamed_wallet);
                 name.setAlpha(.33f);
             } else {
-                name.setText(item.name);
+                name.setText(wallet.name);
                 name.setAlpha(1f);
             }
 
-            final Currency c = CurrencyHelper.findCurrency(mCurrencies, item);
-            currency.setText(c != null ? c.displayName : item.currencySymbol);
+            final Currency c = CurrencyHelper.findCurrency(mCurrencies, wallet);
+            currency.setText(c != null ? c.displayName : wallet.currencySymbol);
 
             // observe balance
-            mViewModel.getBalance(item).observe(mLifecycleOwner, this);
+            mViewModel.getBalance(wallet).observe(mLifecycleOwner, this);
 
             // onClick event
             itemView.setOnClickListener(v -> {
                 if (null != mListener) {
-                    mListener.onClickWallet(mItem);
+                    mListener.onClickWallet(mWallet);
                 }
             });
         }
 
         @Override
         public void onChanged(BalanceEntry entry) {
-            this.balance.setText(entry.init ? entry.balance.balance : "…");
+            balance.setText(entry.init ? CurrencyHelper.getEffectiveBalance(entry.balance) : "…");
         }
     }
 }

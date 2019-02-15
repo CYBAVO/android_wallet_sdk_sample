@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.create.WalletDropdownAdapter;
 import com.cybavo.example.wallet.detail.FeeAdapter;
+import com.cybavo.example.wallet.helper.CurrencyHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
@@ -153,7 +154,7 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
         mViewModel.getBalance().observe(this, entry -> {
             final String symbol = mViewModel.getSelectedWallet().getValue() != null ? mViewModel.getSelectedWallet().getValue().currencySymbol : "";
             if (entry.init) {
-                mBalance.setText(getString(R.string.template_amount, entry.balance.balance, symbol));
+                mBalance.setText(getString(R.string.template_amount, CurrencyHelper.getEffectiveBalance(entry.balance), symbol));
             } else {
                 mBalance.setText(getString(R.string.template_amount, "…", symbol));
             }

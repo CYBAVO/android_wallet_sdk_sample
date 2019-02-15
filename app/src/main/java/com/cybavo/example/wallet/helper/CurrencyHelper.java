@@ -2,6 +2,7 @@ package com.cybavo.example.wallet.helper;
 
 import android.content.Context;
 
+import com.cybavo.wallet.service.wallet.Balance;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Wallet;
 
@@ -70,5 +71,12 @@ public class CurrencyHelper {
             }
         }
         return null;
+    }
+
+    public static String getEffectiveBalance(Balance balance) {
+        if (balance.tokenBalance.isEmpty()) { // if no token balance, use balance
+            return balance.balance;
+        }
+        return balance.tokenBalance; // or take token balance
     }
 }
