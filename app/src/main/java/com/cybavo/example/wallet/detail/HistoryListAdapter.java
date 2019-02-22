@@ -4,6 +4,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cybavo.example.wallet.R;
@@ -61,6 +62,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         TextView amount;
         TextView time;
         TextView txid;
+        ImageView failed;
 
         private Transaction mItem;
 
@@ -70,6 +72,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             amount = view.findViewById(R.id.amount);
             time = view.findViewById(R.id.time);
             txid = view.findViewById(R.id.txid);
+            failed = view.findViewById(R.id.failed);
         }
 
         void bind(Transaction item) {
@@ -89,6 +92,8 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             time.setText(DateFormat.getDateFormat(itemView.getContext()).format(new Date(item.timestamp * 1000)));
 
             itemView.setAlpha(item.pending ? .5f : 1f);
+
+            failed.setVisibility(!item.success ? View.VISIBLE : View.GONE);
 
             // onClick event
             itemView.setOnClickListener(v -> {

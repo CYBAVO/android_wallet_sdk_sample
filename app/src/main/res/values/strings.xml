@@ -52,6 +52,7 @@
     <string name="label_txid">TXID</string>
     <string name="label_time">Time</string>
     <string name="label_pending">Pending</string>
+    <string name="label_failed">Failed</string>
     <string name="action_explore">Explore</string>
 
     <string name="action_withdraw">Withdraw</string>

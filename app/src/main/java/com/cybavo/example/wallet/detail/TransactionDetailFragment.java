@@ -46,6 +46,7 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mTxid;
     private TextView mTime;
     private TextView mPending;
+    private TextView mFailed;
     private Button mExplorer;
 
     public TransactionDetailFragment() {
@@ -119,6 +120,9 @@ public class TransactionDetailFragment extends Fragment {
 
         mPending = view.findViewById(R.id.pending);
         mPending.setVisibility(mTransaction.pending ? View.VISIBLE : View.GONE);
+
+        mFailed = view.findViewById(R.id.failed);
+        mFailed.setVisibility(!mTransaction.success ? View.VISIBLE : View.GONE);
 
         mExplorer = view.findViewById(R.id.explorer);
         final String uri = CurrencyHelper.getBlockExplorerUri(mWallet.currency, mWallet.tokenAddress, mTransaction.txid);

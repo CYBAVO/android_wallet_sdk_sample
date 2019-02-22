@@ -19,9 +19,25 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".5"/>
 
+    <ImageView
+        android:id="@+id/failed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/operation"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHoz"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineHoz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacer_s"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textAllCaps="true"
+        android:textColor="?attr/colorOnPrimary"
+        app:srcCompat="@drawable/ic_alert"
+        app:tint="@android:color/holo_red_dark"/>
+
     <TextView
         android:id="@+id/operation"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/failed"
         app:layout_constraintEnd_toStartOf="@+id/amount"
         app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
         android:layout_width="wrap_content"
@@ -49,12 +65,13 @@
 
     <TextView
         android:id="@+id/time"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/operation"
         app:layout_constraintEnd_toStartOf="@+id/txid"
         app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_xs"
         android:textAppearance="?attr/textAppearanceCaption"
         android:textColor="?attr/colorPrimary"
         tools:text="2018/08/08"/>
