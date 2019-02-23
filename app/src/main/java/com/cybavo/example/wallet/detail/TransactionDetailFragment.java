@@ -122,7 +122,7 @@ public class TransactionDetailFragment extends Fragment {
         mPending.setVisibility(mTransaction.pending ? View.VISIBLE : View.GONE);
 
         mFailed = view.findViewById(R.id.failed);
-        mFailed.setVisibility(!mTransaction.success ? View.VISIBLE : View.GONE);
+        mFailed.setVisibility(mTransaction.pending || mTransaction.success ? View.GONE : View.VISIBLE);
 
         mExplorer = view.findViewById(R.id.explorer);
         final String uri = CurrencyHelper.getBlockExplorerUri(mWallet.currency, mWallet.tokenAddress, mTransaction.txid);

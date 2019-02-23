@@ -93,7 +93,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
 
             itemView.setAlpha(item.pending ? .5f : 1f);
 
-            failed.setVisibility(!item.success ? View.VISIBLE : View.GONE);
+            failed.setVisibility(item.pending || item.success ? View.GONE : View.VISIBLE);
 
             // onClick event
             itemView.setOnClickListener(v -> {
