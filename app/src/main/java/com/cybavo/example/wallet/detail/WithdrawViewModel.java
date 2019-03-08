@@ -1,33 +1,23 @@
 package com.cybavo.example.wallet.detail;
 
 import android.app.Application;
-import android.os.SystemClock;
-import android.util.Log;
 
 import com.cybavo.example.wallet.helper.Helpers;
-import com.cybavo.example.wallet.main.BalanceEntry;
 import com.cybavo.wallet.service.api.Callback;
-import com.cybavo.wallet.service.wallet.Balance;
-import com.cybavo.wallet.service.wallet.BalanceAddress;
 import com.cybavo.wallet.service.wallet.Fee;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
-import com.cybavo.wallet.service.wallet.results.GetBalancesResult;
 import com.cybavo.wallet.service.wallet.results.GetTransactionFeeResult;
 import com.cybavo.wallet.service.wallet.results.GetWalletUsageResult;
-import com.cybavo.wallet.service.wallet.results.GetWalletsResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
