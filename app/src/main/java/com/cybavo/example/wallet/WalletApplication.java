@@ -16,8 +16,9 @@ public class WalletApplication extends Application {
 
         // initialize Wallets SDK
         final String endpoint = Config.getEndpoint(this);
+        final String apiCode = Config.getApiCode(this);
         WalletSdk.init(getApplicationContext(), new WalletSdk.Configuration(
-                endpoint
+                endpoint, apiCode
         ));
         Log.d(TAG, "Wallet SDK endpoint: " + endpoint);
     }

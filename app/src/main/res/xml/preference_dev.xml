@@ -11,6 +11,13 @@
             app:useSimpleSummaryProvider="true"
             android:defaultValue="@string/default_endpoint"
             android:dialogTitle="@string/desc_endpoint"/>
+        <EditTextPreference
+            android:key="pref_api_code"
+            android:icon="@drawable/ic_api_code"
+            android:title="@string/desc_api_code"
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="@string/default_api_code"
+            android:dialogTitle="@string/desc_api_code"/>
         <Preference
             android:key="pref_sdk_version"
             android:title="@string/title_sdk_version"

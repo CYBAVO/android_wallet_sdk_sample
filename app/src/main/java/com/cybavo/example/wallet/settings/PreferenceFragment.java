@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -144,10 +145,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         return super.onPreferenceTreeClick(preference);
     }
 
+    final String[] RESTART = new String[]{ Config.PREFKEY_ENDPOINT, Config.PREFKEY_API_CODE };
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (Config.PREFKEY_ENDPOINT.equals(key)) {
-            Helpers.showToast(getContext(), getString(R.string.message_change_endpoint));
+        if (Arrays.asList(RESTART).contains(key)) {
+            Helpers.showToast(getContext(), getString(R.string.message_change_restart));
         }
     }
 

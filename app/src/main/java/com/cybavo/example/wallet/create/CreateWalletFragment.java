@@ -18,19 +18,16 @@ import com.cybavo.example.wallet.NavFragment;
 import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.CurrencyHelper.Coin;
 import com.cybavo.example.wallet.helper.Helpers;
-import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
+import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Currency;
-import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateWalletResult;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -107,8 +104,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final Wallet item = (Wallet) parent.getAdapter().getItem(position);
-                mCreateWalletViewModel.setSelectedParent(item.walletId);
+                updateSelectedParent();
             }
         });
 
@@ -174,7 +170,12 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
         mCreateWalletViewModel.getAvailableParents().observe(this, wallets -> {
             mParentAdapter.clear();
             mParentAdapter.addAll(wallets);
+            updateSelectedParent();
         });
+    }
+
+    private void updateSelectedParent() {
+        mCreateWalletViewModel.setSelectedParent(mParentSpinner.getSelectedItemId());
     }
 
     private void setInProgress(boolean inProgress) {

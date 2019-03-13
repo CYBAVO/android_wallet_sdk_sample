@@ -113,7 +113,7 @@ public class GoogleSignInFragment extends Fragment {
 
     private void signInWithGoogle(GoogleSignInAccount account) {
         setInProgress(true);
-        mAuth.signIn(account.getIdToken(), new Callback<SignInResult>() {
+        mAuth.signIn(account.getIdToken(), "Google", new Callback<SignInResult>() {
             @Override
             public void onError(Throwable error) {
                 if (error instanceof Error && ((Error)error).getCode() == Error.Code.ErrRegistrationRequired) { // registration required
@@ -132,7 +132,7 @@ public class GoogleSignInFragment extends Fragment {
 
     private void registerWithGoogle(GoogleSignInAccount account) {
         setInProgress(true);
-        mAuth.signUp(account.getIdToken(), new Callback<SignUpResult>() {
+        mAuth.signUp(account.getIdToken(), "Google", new Callback<SignUpResult>() {
             @Override
             public void onError(Throwable error) {
                 onSignInFailed(error);

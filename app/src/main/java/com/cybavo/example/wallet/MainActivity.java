@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements SignInStateListen
     }
 
     private void signIn(GoogleSignInAccount account) {
-        mAuth.signIn(account.getIdToken(), new Callback<SignInResult>() {
+        mAuth.signIn(account.getIdToken(), "Google", new Callback<SignInResult>() {
             @Override
             public void onError(Throwable error) {
                 Log.e(TAG, "signIn failed", error);

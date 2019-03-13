@@ -112,7 +112,8 @@
     <!-- dev -->
     <string name="title_settings_dev">Development</string>
     <string name="desc_endpoint">Wallet service endpoint</string>
-    <string name="message_change_endpoint">The endpoint changing will take effect the next time you restart the app</string>
+    <string name="desc_api_code">Wallet service API code</string>
+    <string name="message_change_restart">This changing will take effect the next time you restart the app</string>
     <string name="title_sdk_version">Wallet SDK Version</string>
 
 </resources>

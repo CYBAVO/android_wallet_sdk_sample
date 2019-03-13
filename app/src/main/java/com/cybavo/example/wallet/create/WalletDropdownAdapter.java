@@ -50,4 +50,10 @@ public class WalletDropdownAdapter extends ArrayAdapter<Wallet> {
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         return getView(position, convertView, parent, true);
     }
+
+    @Override
+    public long getItemId(int position) {
+        final Wallet wallet = getItem(position);
+        return wallet != null ? wallet.walletId : 0;
+    }
 }
