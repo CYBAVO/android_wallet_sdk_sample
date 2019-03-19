@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 
 import com.cybavo.example.wallet.NavFragment;
 import com.cybavo.example.wallet.R;
+import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
+import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Wallet;
+import com.cybavo.wallet.service.wallet.Wallets;
+import com.cybavo.wallet.service.wallet.results.ClearSecureTokenResult;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -103,6 +107,22 @@ public class MainFragment extends Fragment implements WalletListAdapter.WalletLi
     public void onResume() {
         super.onResume();
         refresh();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Wallets.getInstance().clearSecureToken(new Callback<ClearSecureTokenResult>() {
+            @Override
+            public void onError(Throwable error) {
+                Helpers.showToast(getContext(), "clearSecureToken failed: " + error.getMessage());
+            }
+
+            @Override
+            public void onResult(ClearSecureTokenResult clearSecureTokenResult) {
+                Helpers.showToast(getContext(), "Secure Token revoked");
+            }
+        });
     }
 
     @Override

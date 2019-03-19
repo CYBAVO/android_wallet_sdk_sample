@@ -179,23 +179,6 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        Wallets.getInstance().clearSecureToken(new Callback<ClearSecureTokenResult>() {
-            @Override
-            public void onError(Throwable error) {
-                mViewModel.getBalance(mWallet, true);
-                Helpers.showToast(getContext(), "clearSecureToken failed: " + error.getMessage());
-            }
-
-            @Override
-            public void onResult(ClearSecureTokenResult clearSecureTokenResult) {
-                Helpers.showToast(getContext(), "Secure Token revoked");
-            }
-        });
-    }
-
-    @Override
     public void onRename(String name) {
         Wallets.getInstance().renameWallet(mWallet.walletId, name, new Callback<RenameWalletResult>() {
             @Override
