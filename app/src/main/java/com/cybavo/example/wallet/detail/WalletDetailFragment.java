@@ -2,6 +2,7 @@ package com.cybavo.example.wallet.detail;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Transaction;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
+import com.cybavo.wallet.service.wallet.results.ClearSecureTokenResult;
 import com.cybavo.wallet.service.wallet.results.RenameWalletResult;
 
 import androidx.annotation.NonNull;
@@ -173,6 +175,23 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
                 mSwipeRefresh.setRefreshing(false);
             }
             mHistoryAdapter.updateTransactions(history.history);
+        });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Wallets.getInstance().clearSecureToken(new Callback<ClearSecureTokenResult>() {
+            @Override
+            public void onError(Throwable error) {
+                mViewModel.getBalance(mWallet, true);
+                Helpers.showToast(getContext(), "clearSecureToken failed: " + error.getMessage());
+            }
+
+            @Override
+            public void onResult(ClearSecureTokenResult clearSecureTokenResult) {
+                Helpers.showToast(getContext(), "Secure Token revoked");
+            }
         });
     }
 

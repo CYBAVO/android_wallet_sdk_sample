@@ -2,6 +2,7 @@ package com.cybavo.example.wallet.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,13 @@ import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Fee;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateTransactionResult;
+import com.cybavo.wallet.service.wallet.results.RequestSecureTokenResult;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -50,9 +53,11 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     private EditText mAddress;
     private EditText mAmount;
     private Button mSubmit;
+    private Button mSubmitWithToken;
     private ProgressBar mLoading;
 
     private FeeAdapter mFeeAdapter;
+    private boolean mPinForToken = false;
 
     public WithdrawFragment() {
     }
@@ -114,7 +119,16 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
 
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> {
-            inputPinCode();
+            inputPinCode(false);
+        });
+
+        mSubmitWithToken = view.findViewById(R.id.submitWithToken);
+        mSubmitWithToken.setOnClickListener(v -> {
+            final String toAddress = mAddress.getText().toString();
+            final String amount = mAmount.getText().toString();
+            final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
+            createTransactionWithSecureToken(toAddress, amount, fee, true);
+
         });
 
         mLoading = view.findViewById(R.id.progress);
@@ -164,11 +178,6 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         });
     }
 
-    private void scanAddress() {
-        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.initiateScan();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -180,22 +189,33 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         }
     }
 
-    private void inputPinCode() {
-        InputPinCodeDialog dialog = InputPinCodeDialog.newInstance();
-        dialog.show(getChildFragmentManager(), "pinCode");
-    }
-
     @Override
     public void onPinCodeInput(String pinCode) {
-        final String toAddress = mAddress.getText().toString();
-        final String amount = mAmount.getText().toString();
-        final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-        createTransaction(toAddress, amount, fee, pinCode);
+        if (mPinForToken) {
+            requestSecureToken(pinCode);
+        } else {
+            final String toAddress = mAddress.getText().toString();
+            final String amount = mAmount.getText().toString();
+            final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
+            createTransaction(toAddress, amount, fee, pinCode);
+        }
     }
 
     @Override
     public void onForgotPinCode() {
         NavFragment.find(this).goRestore();
+    }
+
+    private void inputPinCode(boolean forToken) {
+        mPinForToken = forToken;
+        InputPinCodeDialog dialog = InputPinCodeDialog.newInstance();
+        dialog.show(getChildFragmentManager(), "pinCode");
+    }
+
+    private void scanAddress() {
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        integrator.initiateScan();
     }
 
     private void setInProgress(boolean inProgress) {
@@ -228,7 +248,58 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
                 setInProgress(false);
             }
         });
+    }
 
+    private void createTransactionWithSecureToken(String toAddress, String amount, Fee fee, boolean requestToken) {
+        if (toAddress.isEmpty() || amount.isEmpty() || fee == null) {
+            return;
+        }
+
+        setInProgress(true);
+        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, "", new Callback<CreateTransactionResult>() {
+            @Override
+            public void onError(Throwable error) {
+                if (requestToken && error instanceof Error && ((Error) error).getCode() == Error.Code.ErrUserSecureTokenNotReady) { // Secure token not ready
+                    Helpers.showToast(getContext(), "Secure Token invalid/expired, input PIN code to request a new one");
+                    onRequestSecureToken();
+                } else {
+                    mViewModel.getBalance(mWallet, true);
+                    Helpers.showToast(getContext(), "createTransaction failed: " + error.getMessage());
+                    setInProgress(false);
+                }
+            }
+
+            @Override
+            public void onResult(CreateTransactionResult result) {
+                getFragmentManager().popBackStack();
+                refreshDetailHistory();
+                setInProgress(false);
+            }
+        });
+    }
+
+    private void onRequestSecureToken() {
+        inputPinCode(true);
+    }
+
+    private void requestSecureToken(String pinCode) {
+        final String toAddress = mAddress.getText().toString();
+        final String amount = mAmount.getText().toString();
+        final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
+
+        setInProgress(true);
+        mService.requestSecureToken(pinCode, new Callback<RequestSecureTokenResult>() {
+            @Override
+            public void onError(Throwable error) {
+                Helpers.showToast(getContext(), "requestSecureToken failed: " + error.getMessage());
+                setInProgress(false);
+            }
+
+            @Override
+            public void onResult(RequestSecureTokenResult requestSecureTokenResult) { // retry transaction
+                createTransactionWithSecureToken(toAddress, amount, fee, false);
+            }
+        });
     }
 
     private void refreshDetailHistory() {

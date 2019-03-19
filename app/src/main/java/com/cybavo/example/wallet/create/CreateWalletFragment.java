@@ -204,7 +204,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
     private void createWallet(String pinCode) {
 
         final Currency currency = mCreateWalletViewModel.getSelectedCurrency().getValue();
-        final long parent = mCreateWalletViewModel.getSelectedParent().getValue();
+        final long parent = currency.tokenAddress.isEmpty() ? 0L : mCreateWalletViewModel.getSelectedParent().getValue();
 
         if (currency == null || pinCode.isEmpty())
             return;

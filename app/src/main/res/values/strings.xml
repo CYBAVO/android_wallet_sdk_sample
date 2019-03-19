@@ -73,6 +73,7 @@
     <string name="hint_withdraw_address">Address to deposit…</string>
     <string name="hint_withdraw_amount">Amount to withdraw…</string>
     <string name="action_send">Send</string>
+    <string name="action_send_with_token">Send w. token</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_settings">Settings</string>

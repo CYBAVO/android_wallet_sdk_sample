@@ -172,13 +172,30 @@
         app:popupTheme="@style/Base.Theme.MaterialComponents.Light"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/submit"
+        android:id="@+id/submitWithToken"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent=".5"
+        app:layout_constraintEnd_toStartOf="@+id/submit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_s"
+        android:layout_marginBottom="@dimen/spacer_m"
+        android:textColor="?attr/colorOnPrimary"
+        app:rippleColor="?attr/colorOnPrimary"
+        app:strokeColor="?attr/colorOnPrimary"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="@string/action_send_with_token"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/submitWithToken"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_s"
+        android:layout_marginEnd="@dimen/spacer_m"
         android:layout_marginBottom="@dimen/spacer_m"
         android:textColor="?attr/colorOnPrimary"
         app:rippleColor="?attr/colorOnPrimary"
