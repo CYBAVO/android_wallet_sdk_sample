@@ -1,5 +1,6 @@
 package com.cybavo.example.wallet.main;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -110,19 +111,9 @@ public class MainFragment extends Fragment implements WalletListAdapter.WalletLi
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        Wallets.getInstance().clearSecureToken(new Callback<ClearSecureTokenResult>() {
-            @Override
-            public void onError(Throwable error) {
-                Helpers.showToast(getContext(), "clearSecureToken failed: " + error.getMessage());
-            }
-
-            @Override
-            public void onResult(ClearSecureTokenResult clearSecureTokenResult) {
-                Helpers.showToast(getContext(), "Secure Token revoked");
-            }
-        });
+    public void onDestroyView() {
+        super.onDestroyView();
+        clearSecureToken();
     }
 
     @Override
@@ -144,5 +135,20 @@ public class MainFragment extends Fragment implements WalletListAdapter.WalletLi
 
     private void goSettings() {
         NavFragment.find(this).goSettings();
+    }
+
+    private void clearSecureToken() {
+        final Context context = getContext().getApplicationContext();
+        Wallets.getInstance().clearSecureToken(new Callback<ClearSecureTokenResult>() {
+            @Override
+            public void onError(Throwable error) {
+                Helpers.showToast(context, "clearSecureToken failed: " + error.getMessage());
+            }
+
+            @Override
+            public void onResult(ClearSecureTokenResult clearSecureTokenResult) {
+                Helpers.showToast(context, "Secure Token revoked");
+            }
+        });
     }
 }
