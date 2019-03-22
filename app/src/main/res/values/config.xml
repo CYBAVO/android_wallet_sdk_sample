@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="default_endpoint">https://mvault.cybavo.com/v1/mw/</string>
-    <string name="default_api_code">abcdefg1234567890</string>
+    <string name="default_api_code">KnpjIKMftyKrvzRWXsM5vQ</string>
     <integer name="backup_answer_max_length">20</integer>
     <integer name="qr_code_image_size">480</integer>
 </resources>
