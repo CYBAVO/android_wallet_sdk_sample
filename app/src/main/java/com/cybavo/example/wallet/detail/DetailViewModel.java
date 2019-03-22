@@ -67,7 +67,7 @@ public class DetailViewModel extends AndroidViewModel {
         if (!mHistory.getValue().hasMore) {
             return;
         }
-        updateHistory(true, null);
+        updateHistory(true, null, true);
 
         final int count = HISTORY_BATCH_COUNT;
         mService.getHistory(mWallet.currency, mWallet.tokenAddress, mWallet.address,
@@ -79,7 +79,7 @@ public class DetailViewModel extends AndroidViewModel {
 
                     @Override
                     public void onResult(GetHistoryResult result) {
-                        updateHistory(false, result);
+                        updateHistory(false, result, result.transactions.length >= count);
                     }
                 });
     }
@@ -89,7 +89,7 @@ public class DetailViewModel extends AndroidViewModel {
         fetchHistory(0);
     }
 
-    private void updateHistory(boolean loading, GetHistoryResult result) {
+    private void updateHistory(boolean loading, GetHistoryResult result, boolean hasMore) {
         HistoryList newHistory = new HistoryList();
         newHistory.loading = loading;
 
@@ -100,9 +100,7 @@ public class DetailViewModel extends AndroidViewModel {
         }
         if (result != null) {
             newHistory.history.addAll(Arrays.asList(result.transactions));
-            if (newHistory.history.size() >= result.totalCount) {
-                newHistory.hasMore = false;
-            }
+            newHistory.hasMore = hasMore;
             newHistory.init = true;
         }
 

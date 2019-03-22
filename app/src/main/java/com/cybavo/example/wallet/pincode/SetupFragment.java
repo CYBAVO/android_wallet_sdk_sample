@@ -13,10 +13,10 @@ import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.wallet.service.api.Callback;
-import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.BackupChallenge;
-import com.cybavo.wallet.service.auth.results.SetPinCodeResult;
+import com.cybavo.wallet.service.auth.results.SetupBackupChallengeResult;
+import com.cybavo.wallet.service.auth.results.SetupPinCodeResult;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,7 +70,7 @@ public class SetupFragment extends Fragment {
                 new MainViewModel.Factory(getActivity().getApplication()))
                 .get(MainViewModel.class);
         mMainViewModel.getUserState().observe(this, userState -> {
-            if (userState != null && userState.setPin) {
+            if (userState != null && userState.setPin && userState.setSecurityQuestions) {
                 quit();
             }
         });
@@ -119,14 +119,36 @@ public class SetupFragment extends Fragment {
                     Helpers.showToast(getContext(), getString(R.string.message_invalid_pin));
                     return;
                 }
-                showStep(Step.BACKUP);
+                setupPin();
                 break;
             case BACKUP:
-                setupPin();
+                setupBackupChallenge();
         }
     }
 
     private void setupPin() {
+        final String pinCode = mSetupViewModel.getPinCode().getValue();
+
+        mSubmit.setEnabled(false);
+        Auth.getInstance().setupPinCode(pinCode,
+                new Callback<SetupPinCodeResult>() {
+            @Override
+            public void onError(Throwable error) {
+                Log.w(TAG, "setupPinCode failed", error);
+                mSubmit.setEnabled(true);
+                Helpers.showToast(getContext(), "setupPinCode failed: " + error.getMessage());
+            }
+
+            @Override
+            public void onResult(SetupPinCodeResult result) {
+                mSubmit.setEnabled(true);
+                showStep(Step.BACKUP);
+            }
+        });
+    }
+
+    private void setupBackupChallenge() {
+
         final String pinCode = mSetupViewModel.getPinCode().getValue();
         final String question1 = mSetupViewModel.getQuestion(0).getValue(),
                 question2 = mSetupViewModel.getQuestion(1).getValue(),
@@ -143,24 +165,24 @@ public class SetupFragment extends Fragment {
         }
 
         mSubmit.setEnabled(false);
-        Auth.getInstance().setupPinCode(pinCode,
+        Auth.getInstance().setupBackupChallenge(pinCode,
                 BackupChallenge.make(question1, answer1),
                 BackupChallenge.make(question2, answer2),
                 BackupChallenge.make(question3, answer3),
-                new Callback<SetPinCodeResult>() {
-            @Override
-            public void onError(Throwable error) {
-                Log.w(TAG, "setupPinCode failed", error);
-                mSubmit.setEnabled(true);
-                Helpers.showToast(getContext(), "setupPinCode failed: " + error.getMessage());
-            }
+                new Callback<SetupBackupChallengeResult>() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.w(TAG, "setupBackupChallenge failed", error);
+                        mSubmit.setEnabled(true);
+                        Helpers.showToast(getContext(), "setupBackupChallenge failed: " + error.getMessage());
+                    }
 
-            @Override
-            public void onResult(SetPinCodeResult result) {
-                mSubmit.setEnabled(true);
-                mMainViewModel.fetchUserState();
-            }
-        });
+                    @Override
+                    public void onResult(SetupBackupChallengeResult result) {
+                        mSubmit.setEnabled(true);
+                        mMainViewModel.fetchUserState();
+                    }
+                });
     }
 
     private void quit() {
