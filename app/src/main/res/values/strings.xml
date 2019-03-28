@@ -7,7 +7,7 @@
     <string name="headline_sign_in_google">Sign In\nWith\nGoogle Account</string>
 
     <string name="message_setup_pin">Please\nsetup your PIN code</string>
-    <string name="message_invalid_pin">PIN Code is invalid (8 digits required)</string>
+    <string name="message_invalid_pin">PIN Code is invalid (6 digits required)</string>
     <string name="message_setup_backup">Setup security questions and answers for PIN restoration</string>
     <string name="action_next">Next</string>
     <string name="label_1">1</string>

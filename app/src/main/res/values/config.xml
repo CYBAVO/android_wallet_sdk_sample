@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_endpoint">https://mvault.cybavo.com/v1/mw/</string>
-    <string name="default_api_code">KnpjIKMftyKrvzRWXsM5vQ</string>
+    <string name="default_endpoint">MY_SERVICE_ENDPOINT</string>
+    <string name="default_api_code">MY_SERVICE_API_CODE</string>
+    <string name="google_sign_in_web_cli_id">MY_GOOGLE_SIGN_IN_WEB_CLI_ID</string>
     <integer name="backup_answer_max_length">20</integer>
     <integer name="qr_code_image_size">480</integer>
 </resources>

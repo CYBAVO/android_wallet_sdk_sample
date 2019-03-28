@@ -182,11 +182,7 @@ public class RecoverPinFragment extends Fragment {
         }
 
         setInProgress(true);
-        mAuth.recoverPinCode(pinCode,
-                BackupChallenge.make(question1, answer1),
-                BackupChallenge.make(question2, answer2),
-                BackupChallenge.make(question3, answer3),
-                verifyCode,
+        mAuth.recoverPinCode(pinCode, verifyCode,
                 new Callback<RecoverPinCodeResult>() {
             @Override
             public void onError(Throwable error) {

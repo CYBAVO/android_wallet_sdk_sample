@@ -175,8 +175,8 @@ public class PayViewModel extends AndroidViewModel {
 
             @Override
             public void onResult(GetBalancesResult result) {
-                if (result.balance.get(0) != null) {
-                    entry.setValue(new BalanceEntry(result.balance.get(0), SystemClock.uptimeMillis(), true));
+                if (result.balances.get(0) != null) {
+                    entry.setValue(new BalanceEntry(result.balances.get(0), SystemClock.uptimeMillis(), true));
                 }
             }
         });

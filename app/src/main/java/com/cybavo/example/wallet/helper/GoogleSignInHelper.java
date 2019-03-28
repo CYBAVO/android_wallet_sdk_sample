@@ -3,6 +3,7 @@ package com.cybavo.example.wallet.helper;
 import android.content.Context;
 
 import com.cybavo.example.wallet.BuildConfig;
+import com.cybavo.example.wallet.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -13,7 +14,7 @@ public class GoogleSignInHelper {
     public static GoogleSignInClient getClient(Context context) {
         if (sClient == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(BuildConfig.GOOGLE_SIGN_IN_CLI_ID)
+                    .requestIdToken(context.getString(R.string.google_sign_in_web_cli_id))
                     .requestEmail()
                     .requestProfile()
                     .build();

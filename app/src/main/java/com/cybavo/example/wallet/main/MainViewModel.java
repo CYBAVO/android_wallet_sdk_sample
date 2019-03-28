@@ -193,7 +193,7 @@ public class MainViewModel extends AndroidViewModel {
 
                 @Override
                 public void onResult(GetBalancesResult result) {
-                    for (Map.Entry<Integer, Balance> balance : result.balance.entrySet()) {
+                    for (Map.Entry<Integer, Balance> balance : result.balances.entrySet()) {
                         final Integer key = balance.getKey();
                         final Balance value = balance.getValue();
                         final BalanceAddress address = request.get(key);

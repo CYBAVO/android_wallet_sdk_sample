@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements SignInStateListen
     }
 
     @Override
-    public void onUserStateChanged(SignInState state) {
+    public void onSignInStateChanged(SignInState state) {
         handleSignInStateChange(state);
     }
 

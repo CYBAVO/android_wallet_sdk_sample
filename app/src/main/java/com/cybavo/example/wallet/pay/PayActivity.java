@@ -44,7 +44,7 @@ public class PayActivity extends AppCompatActivity implements SignInStateListene
     }
 
     @Override
-    public void onUserStateChanged(SignInState state) {
+    public void onSignInStateChanged(SignInState state) {
         handleSignInStateChange(state);
     }
 

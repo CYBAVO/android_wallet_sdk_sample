@@ -14,7 +14,7 @@ public class Helpers {
 
     private static final String TAG = Helpers.class.getSimpleName();
 
-    private final static String PIN_CODE_PATTERN = "\\d{8}";
+    private final static String PIN_CODE_PATTERN = "\\d{6}";
     public static boolean isPinCodeValid(String pinCode) {
         return pinCode.matches(PIN_CODE_PATTERN);
     }
