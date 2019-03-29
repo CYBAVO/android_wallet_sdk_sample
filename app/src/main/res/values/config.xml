@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_endpoint">MY_SERVICE_ENDPOINT</string>
-    <string name="default_api_code">MY_SERVICE_API_CODE</string>
-    <string name="google_sign_in_web_cli_id">MY_GOOGLE_SIGN_IN_WEB_CLI_ID</string>
+    <string name="default_endpoint">http://192.168.99.101:8080/v1/mw/</string>
+    <string name="default_api_code">-n9QypeI7XXqFmoFTmdupg</string>
+    <string name="google_sign_in_web_cli_id">992053546599-smilqh1008u2g89cpht3behvrkijp771.apps.googleusercontent.com</string>
+    <string name="wechat_sign_in_app_id">wx1aafec0b5ef363b8</string>
     <integer name="backup_answer_max_length">20</integer>
     <integer name="qr_code_image_size">480</integer>
 </resources>

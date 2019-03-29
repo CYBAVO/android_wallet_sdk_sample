@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cybavo.example.wallet">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".WalletApplication"
         android:icon="@drawable/ic_launcher"
@@ -22,9 +24,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Pay -->
+        </activity> <!-- Pay -->
         <activity android:name=".pay.PayActivity">
             <intent-filter>
                 <action android:name="com.cybavo.example.wallet.action.PAY" />
@@ -38,6 +38,13 @@
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
+
+        <!-- WeChat sign in -->
+        <activity android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Translucent"/>
+
     </application>
 
 </manifest>

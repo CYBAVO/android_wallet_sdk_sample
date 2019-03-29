@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.cybavo.example.wallet.BuildConfig;
 import com.cybavo.example.wallet.NavFragment;
 import com.cybavo.example.wallet.R;
+import com.cybavo.example.wallet.auth.Identity;
 import com.cybavo.example.wallet.config.Config;
 import com.cybavo.example.wallet.helper.GoogleSignInHelper;
 import com.cybavo.example.wallet.helper.Helpers;
@@ -36,9 +38,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import static com.cybavo.example.wallet.Constants.ID_PROVIDER_GOOGLE;
+
 public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static class SignOutDialog extends DialogFragment {
+
+        static final String IDENTITY_PROVIDER = "identity_provider";
 
         public SignOutDialog() {
         }
@@ -58,16 +64,25 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         }
 
         private void signOut(Activity activity) {
-            GoogleSignInClient cli = GoogleSignInHelper.getClient(activity);
-            cli.signOut().addOnCompleteListener(activity, task -> {
+            final String provider = getArguments().getString(IDENTITY_PROVIDER);
+            if (ID_PROVIDER_GOOGLE.equals(provider)) {
+                GoogleSignInClient cli = GoogleSignInHelper.getClient(activity);
+                cli.signOut().addOnCompleteListener(activity, task -> {
+                    Auth.getInstance().signOut();
+                    Identity.clear(activity);
+                });
+            } else {
                 Auth.getInstance().signOut();
-            });
+                Identity.clear(activity);
+            }
         }
     }
     private final static String KEY_ACCOUNT = "action_account";
     private final static String KEY_CHANGE_PIN = "action_change_pin";
     private final static String KEY_RESTORE_PIN = "action_restore_pin";
     private final static String KEY_SDK_VER = "pref_sdk_version";
+
+    private static Identity mIdentity;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -85,25 +100,27 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         final Context context = view.getContext();
 
         // account
+        mIdentity = Identity.read(getContext());
         final Preference accountPref = findPreference(KEY_ACCOUNT);
-        final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
-        if (accountPref != null && account != null) {
-            accountPref.setEnabled(true);
-            accountPref.setTitle(account.getDisplayName());
-            accountPref.setSummary(account.getEmail());
+        if (accountPref != null) {
+            accountPref.setTitle(String.format("%s (%s)", mIdentity.name, mIdentity.provider));
+            accountPref.setSummary(mIdentity.email);
             // load profile image
-            Glide.with(view)
-                    .asBitmap()
-                    .load(account.getPhotoUrl())
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                            drawable.setCircular(true);
-                            accountPref.setIcon(drawable);
-                        }
-                    });
+            if (!mIdentity.avatar.isEmpty()) {
+                Glide.with(view)
+                        .asBitmap()
+                        .load(Uri.parse(mIdentity.avatar))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                                drawable.setCircular(true);
+                                accountPref.setIcon(drawable);
+                            }
+                        });
+            }
         }
+
         // dev
         final Preference sdkVerPref = findPreference(KEY_SDK_VER);
         if (sdkVerPref != null) {
@@ -163,7 +180,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
     private void confirmSignOut() {
         final String tag = SignOutDialog.class.getSimpleName();
         if (getChildFragmentManager().findFragmentByTag(tag) == null) {
-            new SignOutDialog().show(getChildFragmentManager(), tag);
+            SignOutDialog dialog = new SignOutDialog();
+            Bundle args = new Bundle();
+            args.putString("identity_provider", mIdentity.provider);
+            dialog.setArguments(args);
+            dialog.show(getChildFragmentManager(), tag);
         }
     }
 

@@ -11,7 +11,6 @@ import com.cybavo.example.wallet.helper.ToolbarHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 public class SettingsFragment extends Fragment {

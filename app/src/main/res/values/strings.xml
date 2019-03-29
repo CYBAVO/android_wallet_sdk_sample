@@ -4,7 +4,8 @@
     <string name="action_submit">Submit</string>
     <string name="action_done">Done</string>
 
-    <string name="headline_sign_in_google">Sign In\nWith\nGoogle Account</string>
+    <string name="headline_sign_in_social">Sign In\nWith\nSocial Account</string>
+    <string name="action_wechat_sign_in">Sign in with WeChat</string>
 
     <string name="message_setup_pin">Please\nsetup your PIN code</string>
     <string name="message_invalid_pin">PIN Code is invalid (6 digits required)</string>

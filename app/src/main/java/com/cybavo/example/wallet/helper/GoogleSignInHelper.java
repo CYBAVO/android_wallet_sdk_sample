@@ -10,7 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class GoogleSignInHelper {
 
-    public static GoogleSignInClient sClient;
+    private static GoogleSignInClient sClient;
     public static GoogleSignInClient getClient(Context context) {
         if (sClient == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -1,17 +1,20 @@
 package com.cybavo.example.wallet.auth;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.GoogleSignInHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.settings.SettingsFragment;
+import com.cybavo.example.wallet.wxapi.WXEntryActivity;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
@@ -29,24 +32,29 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import static com.cybavo.example.wallet.Constants.ID_PROVIDER_GOOGLE;
+import static com.cybavo.example.wallet.Constants.ID_PROVIDER_WECHAT;
 
-public class GoogleSignInFragment extends Fragment {
 
-    private static final String TAG = GoogleSignInFragment.class.getSimpleName();
+public class SignInFragment extends Fragment {
+
+    private static final String TAG = SignInFragment.class.getSimpleName();
     private static final int GOOGLE_SIGN_IN_REQUEST_CODE = 43;
+    private static final int WECHAT_SIGN_IN_REQUEST_CODE = 44;
 
-    public GoogleSignInFragment() {
+    public SignInFragment() {
         // Required empty public constructor
     }
 
-    public static GoogleSignInFragment newInstance() {
-        return new GoogleSignInFragment();
+    public static SignInFragment newInstance() {
+        return new SignInFragment();
     }
 
     private Auth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    private SignInButton mSignIn;
+    private SignInButton mGoogleSignIn;
+    private Button mWeChatSignIn;
     private ProgressBar mProgress;
     private View mSettings;
 
@@ -54,7 +62,7 @@ public class GoogleSignInFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_google_sign_in, container, false);
+        return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 
     @Override
@@ -66,9 +74,12 @@ public class GoogleSignInFragment extends Fragment {
         mGoogleSignInClient = GoogleSignInHelper.getClient(view.getContext());
 
         mProgress = view.findViewById(R.id.progress);
-        mSignIn = view.findViewById(R.id.googleSignIn);
-        mSignIn.setSize(SignInButton.SIZE_WIDE);
-        mSignIn.setOnClickListener(v -> performSignIn());
+        mGoogleSignIn = view.findViewById(R.id.googleSignIn);
+        mGoogleSignIn.setSize(SignInButton.SIZE_WIDE);
+        mGoogleSignIn.setOnClickListener(v -> performSignIn(ID_PROVIDER_GOOGLE));
+
+        mWeChatSignIn = view.findViewById(R.id.weChatSignIn);
+        mWeChatSignIn.setOnClickListener(v -> performSignIn(ID_PROVIDER_WECHAT));
 
         mSettings = view.findViewById(R.id.action_settings);
         mSettings.setOnClickListener(v -> goSettings());
@@ -82,9 +93,16 @@ public class GoogleSignInFragment extends Fragment {
         ft.commit();
     }
 
-    private void performSignIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+    private void performSignIn(String identityProvider) {
+        if (ID_PROVIDER_GOOGLE.equals(identityProvider)) {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+        }
+        else { // ID_PROVIDER_WECHAT
+            Intent intent = new Intent(getContext(), WXEntryActivity.class);
+            intent.setAction("sign_in");
+            startActivityForResult(intent, WECHAT_SIGN_IN_REQUEST_CODE);
+        }
         setInProgress(true);
     }
 
@@ -95,7 +113,8 @@ public class GoogleSignInFragment extends Fragment {
             try {
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                signInWithGoogle(account);
+                signInWithToken(account.getIdToken(), ID_PROVIDER_GOOGLE, new Identity(ID_PROVIDER_GOOGLE, account.getDisplayName(), account.getEmail(), account.getPhotoUrl().toString()), true
+                );
             } catch (ApiException e) {
                 // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -103,21 +122,30 @@ public class GoogleSignInFragment extends Fragment {
                 Helpers.showToast(getContext(), "Google sign in failed: " + e.getStatusCode());
                 setInProgress(false);
             }
+        } else if (requestCode == WECHAT_SIGN_IN_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                signInWithToken(data.getStringExtra("code"), ID_PROVIDER_WECHAT, new Identity(ID_PROVIDER_WECHAT, "WeChat user", "No email", ""), true
+                );
+            } else {
+                Helpers.showToast(getContext(), "WeChat sign in failed: (" + data.getIntExtra("errCode", -1) + ")");
+                setInProgress(false);
+            }
         }
     }
 
     void setInProgress(boolean inProgress) {
-        mSignIn.setEnabled(!inProgress);
+        mGoogleSignIn.setEnabled(!inProgress);
+        mWeChatSignIn.setEnabled(!inProgress);
         mProgress.setVisibility(inProgress ? View.VISIBLE : View.GONE);
     }
 
-    private void signInWithGoogle(GoogleSignInAccount account) {
+    private void signInWithToken(String token, String identityProvider, Identity identity, boolean autoRegister) {
         setInProgress(true);
-        mAuth.signIn(account.getIdToken(), "Google", new Callback<SignInResult>() {
+        mAuth.signIn(token, identityProvider, new Callback<SignInResult>() {
             @Override
             public void onError(Throwable error) {
-                if (error instanceof Error && ((Error)error).getCode() == Error.Code.ErrRegistrationRequired) { // registration required
-                    registerWithGoogle(account);
+                if (autoRegister && error instanceof Error && ((Error)error).getCode() == Error.Code.ErrRegistrationRequired) { // registration required
+                    registerWithToken(token, identityProvider, identity);
                 } else { // sign in failed
                     onSignInFailed(error);
                 }
@@ -126,13 +154,14 @@ public class GoogleSignInFragment extends Fragment {
             @Override
             public void onResult(SignInResult result) {
                 setInProgress(false);
+                identity.save(getContext());
             }
         });
     }
 
-    private void registerWithGoogle(GoogleSignInAccount account) {
+    private void registerWithToken(String token, String identityProvider, Identity identity) {
         setInProgress(true);
-        mAuth.signUp(account.getIdToken(), "Google", new Callback<SignUpResult>() {
+        mAuth.signUp(token, identityProvider, new Callback<SignUpResult>() {
             @Override
             public void onError(Throwable error) {
                 onSignInFailed(error);
@@ -140,7 +169,7 @@ public class GoogleSignInFragment extends Fragment {
 
             @Override
             public void onResult(SignUpResult result) { // sign up success, retry sign in
-                signInWithGoogle(account);
+                signInWithToken(token, identityProvider, identity, false);
             }
         });
     }

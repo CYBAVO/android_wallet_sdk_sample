@@ -3,7 +3,7 @@ package com.cybavo.example.wallet.pay;
 import android.os.Bundle;
 
 import com.cybavo.example.wallet.R;
-import com.cybavo.example.wallet.auth.GoogleSignInFragment;
+import com.cybavo.example.wallet.auth.SignInFragment;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.SignInState;
 import com.cybavo.wallet.service.auth.SignInStateListener;
@@ -66,8 +66,8 @@ public class PayActivity extends AppCompatActivity implements SignInStateListene
 
         final FragmentManager fm = getSupportFragmentManager();
 
-        if (fm.findFragmentByTag(GoogleSignInFragment.class.getSimpleName()) == null) {
-            fm.beginTransaction().replace(R.id.fragmentRoot, GoogleSignInFragment.newInstance(), GoogleSignInFragment.class.getSimpleName())
+        if (fm.findFragmentByTag(SignInFragment.class.getSimpleName()) == null) {
+            fm.beginTransaction().replace(R.id.fragmentRoot, SignInFragment.newInstance(), SignInFragment.class.getSimpleName())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit();
         }

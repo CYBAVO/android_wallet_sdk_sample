@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".75"/>
+        app:layout_constraintGuide_percent=".70"/>
 
     <TextView
         android:id="@+id/headline"
@@ -27,7 +26,7 @@
         android:textColor="?attr/colorOnPrimary"
         android:background="?attr/colorPrimary"
         android:gravity="bottom"
-        android:text="@string/headline_sign_in_google"/>
+        android:text="@string/headline_sign_in_social"/>
 
     <View
         android:id="@+id/lower"
@@ -44,12 +43,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
-        app:layout_constraintBottom_toTopOf="@id/googleSignIn"
+        app:layout_constraintBottom_toTopOf="@id/weChatSignIn"
         android:layout_margin="@dimen/spacer_s"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         style="?android:attr/progressBarStyleSmall"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/weChatSignIn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/googleSignIn"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginBottom="@dimen/spacer_xs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_wechat"
+        app:backgroundTint="@android:color/holo_green_dark"
+        android:text="@string/action_wechat_sign_in"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignIn"

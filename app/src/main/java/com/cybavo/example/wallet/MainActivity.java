@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.cybavo.example.wallet.auth.GoogleSignInFragment;
+import com.cybavo.example.wallet.auth.SignInFragment;
 import com.cybavo.example.wallet.helper.GoogleSignInHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.wallet.service.api.Callback;
@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements SignInStateListen
 
         final FragmentManager fm = getSupportFragmentManager();
 
-        if (fm.findFragmentByTag(GoogleSignInFragment.class.getSimpleName()) == null) {
-            fm.beginTransaction().replace(R.id.fragmentRoot, GoogleSignInFragment.newInstance(), GoogleSignInFragment.class.getSimpleName())
+        if (fm.findFragmentByTag(SignInFragment.class.getSimpleName()) == null) {
+            fm.beginTransaction().replace(R.id.fragmentRoot, SignInFragment.newInstance(), SignInFragment.class.getSimpleName())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit();
         }
