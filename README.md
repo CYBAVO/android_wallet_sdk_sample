@@ -54,9 +54,10 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
    ```
 
 2. Edit `values/config.xml` ➜ `google_sign_in_web_cli_id` to your Google sign-in client ID
-3. Edit `values/config.xml` ➜ `default_endpoint` to point to your Wallet Service endpoont
-4. Register your app on CYBAVO WALLET MANAGEMENT system web > Administration > System settings, input `package name` and `Signature keystore SHA1 fingerprint`, follow the instruction to retrieve an `API Code`.
-5. Edit `values/config.xml` ➜ `default_api_code` to fill in yout `API Code`
+3. Edit `values/config.xml` ➜ `wechat_sign_in_app_id` to your WeChat app id
+4. Edit `values/config.xml` ➜ `default_endpoint` to point to your Wallet Service endpoont
+5. Register your app on CYBAVO WALLET MANAGEMENT system web > Administration > System settings, input `package name` and `Signature keystore SHA1 fingerprint`, follow the instruction to retrieve an `API Code`.
+6. Edit `values/config.xml` ➜ `default_api_code` to fill in yout `API Code`
 
 # Features
 
