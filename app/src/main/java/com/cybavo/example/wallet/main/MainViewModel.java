@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.cybavo.example.wallet.auth.Identity;
 import com.cybavo.example.wallet.config.Config;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.wallet.service.api.Callback;
@@ -60,7 +61,7 @@ public class MainViewModel extends AndroidViewModel {
 
     private Wallets mService = Wallets.getInstance();
 
-    private MutableLiveData<UserState> mUserState = new MutableLiveData<>();
+    private MutableLiveData<UserState> mUserState;
     private MutableLiveData<List<Wallet>> mWallets;
     private MutableLiveData<Boolean> mLoadingWallets = new MutableLiveData<>();
     private MutableLiveData<List<Currency>> mCurrencies;
@@ -68,9 +69,12 @@ public class MainViewModel extends AndroidViewModel {
 
     private Map<BalanceKey, MutableLiveData<BalanceEntry>> mBalances = new HashMap<>();
 
+    private Identity mIdentity;
+
     public MainViewModel(@NonNull Application application) {
         super(application);
         mLoadingWallets.setValue(false);
+        mIdentity = Identity.read(application);
     }
 
     public LiveData<List<Wallet>> getWallets() {
@@ -220,7 +224,8 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<UserState> getUserState() {
-        if (mUserState.getValue() == null) {
+        if (mUserState == null) {
+            mUserState = new MutableLiveData<>();
             fetchUserState();
         }
         return mUserState;
@@ -235,6 +240,9 @@ public class MainViewModel extends AndroidViewModel {
 
             @Override
             public void onResult(GetUserStateResult result) {
+                mIdentity.email = result.userState.email;
+                mIdentity.name = result.userState.realName;
+                mIdentity.save(getApplication());
                 mUserState.setValue(result.userState);
             }
         });

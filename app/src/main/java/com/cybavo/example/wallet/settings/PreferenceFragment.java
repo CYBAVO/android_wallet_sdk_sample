@@ -19,6 +19,7 @@ import com.cybavo.example.wallet.auth.Identity;
 import com.cybavo.example.wallet.config.Config;
 import com.cybavo.example.wallet.helper.GoogleSignInHelper;
 import com.cybavo.example.wallet.helper.Helpers;
+import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.wallet.service.WalletSdk;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.SignInState;
@@ -35,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -83,6 +85,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
     private final static String KEY_SDK_VER = "pref_sdk_version";
 
     private static Identity mIdentity;
+    private MainViewModel mViewModel;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -100,26 +103,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         final Context context = view.getContext();
 
         // account
-        mIdentity = Identity.read(getContext());
-        final Preference accountPref = findPreference(KEY_ACCOUNT);
-        if (accountPref != null) {
-            accountPref.setTitle(String.format("%s (%s)", mIdentity.name, mIdentity.provider));
-            accountPref.setSummary(mIdentity.email);
-            // load profile image
-            if (!mIdentity.avatar.isEmpty()) {
-                Glide.with(view)
-                        .asBitmap()
-                        .load(Uri.parse(mIdentity.avatar))
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                                drawable.setCircular(true);
-                                accountPref.setIcon(drawable);
-                            }
-                        });
-            }
-        }
+        updateUserProfile();
 
         // dev
         final Preference sdkVerPref = findPreference(KEY_SDK_VER);
@@ -132,6 +116,14 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                             info.get("BUILD_TYPE"))
             );
         }
+
+        mViewModel = ViewModelProviders.of(getParentFragment(),
+                new MainViewModel.Factory(getActivity().getApplication()))
+                .get(MainViewModel.class);
+        // update userState from servre
+        mViewModel.getUserState().observe(this, userState -> {
+            updateUserProfile();
+        });
     }
 
     @Override
@@ -168,6 +160,35 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         if (Arrays.asList(RESTART).contains(key)) {
             Helpers.showToast(getContext(), getString(R.string.message_change_restart));
         }
+    }
+
+    private void updateUserProfile() {
+        final Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        mIdentity = Identity.read(context);
+        final Preference accountPref = findPreference(KEY_ACCOUNT);
+        if (accountPref != null) {
+            accountPref.setTitle(String.format("%s (%s)", mIdentity.name, mIdentity.provider));
+            accountPref.setSummary(mIdentity.email);
+            // load profile image
+            if (!mIdentity.avatar.isEmpty()) {
+                Glide.with(context)
+                        .asBitmap()
+                        .load(Uri.parse(mIdentity.avatar))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                                drawable.setCircular(true);
+                                accountPref.setIcon(drawable);
+                            }
+                        });
+            }
+        }
+
     }
 
     private void setPreferenceVisible(String key, boolean visible) {
