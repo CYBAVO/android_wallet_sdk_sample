@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2019 CYBAVO, Inc.
+ * https://www.cybavo.com
+ *
+ * All rights reserved.
+ */
+
 package com.cybavo.example.wallet.detail;
 
 import android.content.Context;

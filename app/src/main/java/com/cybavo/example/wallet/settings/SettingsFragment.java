@@ -1,5 +1,11 @@
-package com.cybavo.example.wallet.settings;
+/**
+ * Copyright (c) 2019 CYBAVO, Inc.
+ * https://www.cybavo.com
+ *
+ * All rights reserved.
+ */
 
+package com.cybavo.example.wallet.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
