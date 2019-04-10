@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.cybavo.example.wallet.NavFragment;
 import com.cybavo.example.wallet.R;
+import com.cybavo.example.wallet.helper.CurrencyHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.wallet.service.api.Callback;
@@ -23,6 +24,11 @@ import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.BackupChallenge;
 import com.cybavo.wallet.service.auth.results.SetupBackupChallengeResult;
 import com.cybavo.wallet.service.auth.results.SetupPinCodeResult;
+import com.cybavo.wallet.service.wallet.Currency;
+import com.cybavo.wallet.service.wallet.Wallets;
+import com.cybavo.wallet.service.wallet.results.CreateWalletResult;
+
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -147,10 +153,29 @@ public class SetupFragment extends Fragment {
 
             @Override
             public void onResult(SetupPinCodeResult result) {
-                mSubmit.setEnabled(true);
-                showStep(Step.BACKUP);
+                createDefaultWallet(pinCode);
             }
         });
+    }
+
+    private void createDefaultWallet(String pinCode) {
+        mSubmit.setEnabled(false);
+        Wallets.getInstance().createWallet(CurrencyHelper.Coin.ETH, "", 0, "ETH", pinCode, new HashMap<>(),
+                new Callback<CreateWalletResult>() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.w(TAG, "createWallet failed", error);
+                        mSubmit.setEnabled(true);
+                        Helpers.showToast(getContext(), "createWallet failed: " + error.getMessage());
+                    }
+
+                    @Override
+                    public void onResult(CreateWalletResult result) {
+                        mSubmit.setEnabled(true);
+                        showStep(Step.BACKUP);
+                    }
+                });
+
     }
 
     private void setupBackupChallenge() {
