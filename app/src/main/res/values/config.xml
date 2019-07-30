@@ -6,4 +6,5 @@
     <string name="wechat_sign_in_app_id">MY_WECHAT_SIGN_IN_APP_ID</string>
     <integer name="backup_answer_max_length">20</integer>
     <integer name="qr_code_image_size">480</integer>
+    <integer name="pin_code_length">6</integer>
 </resources>

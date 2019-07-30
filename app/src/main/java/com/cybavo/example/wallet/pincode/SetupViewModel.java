@@ -10,6 +10,7 @@ package com.cybavo.example.wallet.pincode;
 import android.app.Application;
 
 import com.cybavo.example.wallet.R;
+import com.cybavo.example.wallet.helper.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,6 +44,7 @@ public class SetupViewModel extends AndroidViewModel {
 
     final private MutableLiveData<String> mVerifyCode;
     final private MutableLiveData<String> mPinCode;
+    final private LiveData<Boolean> mPinCodeValid;
 
     final int QUESTIONS_COUNT = 3;
     final private String[] mAllQuestions;
@@ -58,6 +61,8 @@ public class SetupViewModel extends AndroidViewModel {
 
         mPinCode = new MutableLiveData<>();
         mPinCode.setValue("");
+
+        mPinCodeValid = Transformations.map(mPinCode, Helpers::isPinCodeValid);
 
         for (int i = 0; i < QUESTIONS_COUNT; i++) {
             MutableLiveData<String> data = new MutableLiveData<>();
@@ -105,6 +110,10 @@ public class SetupViewModel extends AndroidViewModel {
 
     public LiveData<String> getPinCode() {
         return mPinCode;
+    }
+
+    public LiveData<Boolean> getPinCodeValid() {
+        return mPinCodeValid;
     }
 
     public void setPinCode(String pinCode) {

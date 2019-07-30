@@ -9,6 +9,8 @@ package com.cybavo.example.wallet.pincode;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -60,7 +62,7 @@ public class InputPinCodeDialog extends DialogFragment {
 
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         final View view = inflater.inflate(R.layout.dialog_input_pin_code, null, false);
-        final EditText pinCodeEdit = view.findViewById(R.id.newPinCode);
+        final EditText pinCodeEdit = view.findViewById(R.id.pinCode);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -83,15 +85,23 @@ public class InputPinCodeDialog extends DialogFragment {
                     dlg.dismiss();
                 }
             });
+            button.setEnabled(false);
         });
+
+        pinCodeEdit.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                final Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setEnabled(s.length() >= getResources().getInteger(R.integer.pin_code_length));
+            }
+        });
+
         return dialog;
     }
 
     private boolean onInputPinCode(String pinCode) {
-        if (!Helpers.isPinCodeValid(pinCode)) {
-            Helpers.showToast(getContext(), getString(R.string.message_invalid_pin));
-            return false;
-        }
         if (getParentFragment() instanceof OnPinCodeInputListener) {
             ((OnPinCodeInputListener) getParentFragment()).onPinCodeInput(pinCode);
         }

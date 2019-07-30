@@ -41,7 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
-            android:inputType="numberPassword"/>
+            android:inputType="numberPassword"
+            android:maxLength="@integer/pin_code_length"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,7 +61,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:inputType="numberPassword"/>
+            android:inputType="numberPassword"
+            android:maxLength="@integer/pin_code_length"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

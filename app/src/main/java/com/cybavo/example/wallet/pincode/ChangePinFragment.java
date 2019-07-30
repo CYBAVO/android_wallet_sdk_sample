@@ -9,6 +9,8 @@ package com.cybavo.example.wallet.pincode;
 
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,6 @@ import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.wallet.service.api.Callback;
-import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.results.ChangePinCodeResult;
 
@@ -67,6 +68,14 @@ public class ChangePinFragment extends Fragment {
 
         mCurrentPinCodeEdit = view.findViewById(R.id.currentPinCode);
         mNewPinCodeEdit = view.findViewById(R.id.newPinCode);
+        mNewPinCodeEdit.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mSubmit.setEnabled(s.length() >= getResources().getInteger(R.integer.pin_code_length));
+            }
+        });
 
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> {
@@ -87,11 +96,6 @@ public class ChangePinFragment extends Fragment {
 
     private void changePinCode(String currentPinCode, String newPinCode) {
         if (currentPinCode.isEmpty() || newPinCode.isEmpty()) {
-            return;
-        }
-
-        if (!Helpers.isPinCodeValid(newPinCode)) {
-            Helpers.showToast(getContext(), getString(R.string.message_invalid_pin));
             return;
         }
 

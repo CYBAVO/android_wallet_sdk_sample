@@ -89,6 +89,13 @@ public class SetupFragment extends Fragment {
 
         mSetupViewModel = ViewModelProviders.of(this,
                 new SetupViewModel.Factory(getActivity().getApplication())).get(SetupViewModel.class);
+
+        mSetupViewModel.getPinCodeValid().observe(this, valid -> {
+            if (mStep == Step.PIN) {
+                mSubmit.setEnabled(valid);
+            }
+        });
+
         showStep(Step.PIN);
     }
 
@@ -127,10 +134,6 @@ public class SetupFragment extends Fragment {
     private void next() {
         switch (mStep) {
             case PIN:
-                if (!Helpers.isPinCodeValid(mSetupViewModel.getPinCode().getValue())) {
-                    Helpers.showToast(getContext(), getString(R.string.message_invalid_pin));
-                    return;
-                }
                 setupPin();
                 break;
             case BACKUP:

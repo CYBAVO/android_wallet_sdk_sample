@@ -80,6 +80,13 @@ public class RecoverPinFragment extends Fragment {
 
         mSetupViewModel = ViewModelProviders.of(this,
                 new SetupViewModel.Factory(getActivity().getApplication())).get(SetupViewModel.class);
+
+        mSetupViewModel.getPinCodeValid().observe(this, valid -> {
+            if (mStep == Step.PIN) {
+                mSubmit.setEnabled(valid);
+            }
+        });
+
         showStep(Step.VERIFY_CODE);
     }
 
@@ -94,6 +101,7 @@ public class RecoverPinFragment extends Fragment {
             case PIN:
                 if (!fragmentExists(SetupPinFragment.class)) {
                     showFragment(SetupPinFragment.newInstance());
+                    mSubmit.setEnabled(false);
                     mSubmit.setText(R.string.action_next);
                 }
                 break;
@@ -127,10 +135,6 @@ public class RecoverPinFragment extends Fragment {
                 verifyCode(mSetupViewModel.getVerifyCode().getValue());
                 break;
             case PIN:
-                if (!Helpers.isPinCodeValid(mSetupViewModel.getPinCode().getValue())) {
-                    Helpers.showToast(getContext(), getString(R.string.message_invalid_pin));
-                    return;
-                }
                 showStep(Step.BACKUP);
                 break;
             case BACKUP:
