@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/appBar"
+        layout="@layout/app_bar" />
+
+    <TextView
+        android:id="@+id/labelRam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:text="@string/title_eos_resources_ram"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBar" />
+
+    <ProgressBar
+        android:id="@+id/progressRam"
+        style="?android:progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_marginEnd="@dimen/spacer_m"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelRam" />
+
+    <TextView
+        android:id="@+id/descRam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        app:layout_constraintEnd_toEndOf="@+id/progressRam"
+        app:layout_constraintTop_toBottomOf="@+id/progressRam" />
+
+    <TextView
+        android:id="@+id/ramPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?android:textColorPrimary"
+        app:layout_constraintStart_toStartOf="@+id/progressRam"
+        app:layout_constraintTop_toBottomOf="@+id/progressRam" />
+
+    <TextView
+        android:id="@+id/labelCpu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:text="@string/title_eos_resources_cpu"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descRam" />
+
+    <ProgressBar
+        android:id="@+id/progressCpu"
+        style="?android:progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_marginEnd="@dimen/spacer_m"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelCpu" />
+
+    <TextView
+        android:id="@+id/descCpu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        app:layout_constraintEnd_toEndOf="@+id/progressCpu"
+        app:layout_constraintTop_toBottomOf="@+id/progressCpu" />
+
+    <TextView
+        android:id="@+id/stakeCpu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?android:textColorPrimary"
+        app:layout_constraintStart_toStartOf="@+id/progressCpu"
+        app:layout_constraintTop_toBottomOf="@+id/progressCpu" />
+
+    <TextView
+        android:id="@+id/labelNet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:text="@string/title_eos_resources_net"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descCpu" />
+
+    <ProgressBar
+        android:id="@+id/progressNet"
+        style="?android:progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_marginEnd="@dimen/spacer_m"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelNet" />
+
+    <TextView
+        android:id="@+id/descNet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        app:layout_constraintEnd_toEndOf="@+id/progressNet"
+        app:layout_constraintTop_toBottomOf="@+id/progressNet" />
+
+    <TextView
+        android:id="@+id/stakeNet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?android:textColorPrimary"
+        app:layout_constraintStart_toStartOf="@+id/progressNet"
+        app:layout_constraintTop_toBottomOf="@+id/progressNet" />
+
+    <TextView
+        android:id="@+id/labelTransactionType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacer_l"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:text="@string/label_eos_transaction_type"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descNet" />
+
+    <HorizontalScrollView
+        android:id="@+id/transactionTypeWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:paddingStart="@dimen/spacer_m"
+        android:paddingEnd="@dimen/spacer_m"
+        android:clipToPadding="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelTransactionType"
+        android:scrollbars="none">
+
+        <RadioGroup
+            android:id="@+id/transactionType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:checked="true"
+                android:id="@+id/buyRam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_eos_buy_ram" />
+
+            <RadioButton
+                android:id="@+id/sellRam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_eos_sell_ram" />
+
+            <RadioButton
+                android:id="@+id/delegateCpu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_eos_delegate_cpu" />
+
+            <RadioButton
+                android:id="@+id/undelegateCpu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_eos_undelegate_cpu" />
+
+            <RadioButton
+                android:id="@+id/delegateNet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_eos_delegate_net" />
+
+            <RadioButton
+                android:id="@+id/undelegateNet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_eos_undelegate_net" />
+        </RadioGroup>
+    </HorizontalScrollView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amountWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/transactionTypeWrapper"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_amount"
+        app:helperTextEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/numBytesWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/amountWrapper"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_eos_number_of_bytes"
+        app:helperTextEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/numBytes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/receiverWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/numBytesWrapper"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_eos_receiver">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/receiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:maxLength="12"
+            android:inputType="textEmailAddress"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacer_m"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

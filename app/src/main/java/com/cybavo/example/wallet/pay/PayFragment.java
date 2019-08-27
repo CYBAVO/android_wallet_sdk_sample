@@ -33,6 +33,8 @@ import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateTransactionResult;
 
+import java.util.HashMap;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -221,7 +223,7 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
         }
 
         setInProgress(true);
-        mService.createTransaction(wallet.walletId, toAddress, amount, fee.amount, "", pinCode, new Callback<CreateTransactionResult>() {
+        mService.createTransaction(wallet.walletId, toAddress, amount, fee.amount, "", pinCode, new HashMap<>(), new Callback<CreateTransactionResult>() {
             @Override
             public void onError(Throwable error) {
                 Helpers.showToast(getContext(), "createTransaction failed: " + error.getMessage());

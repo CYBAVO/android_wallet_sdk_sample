@@ -140,7 +140,7 @@
     <EditText
         android:id="@+id/amount"
         app:layout_constraintTop_toBottomOf="@+id/amountLabel"
-        app:layout_constraintBottom_toTopOf="@+id/feeLabel"
+        app:layout_constraintBottom_toTopOf="@+id/memoLabel"
         android:layout_marginStart="@dimen/spacer_m"
         android:layout_marginEnd="@dimen/spacer_m"
         android:layout_width="match_parent"
@@ -150,8 +150,32 @@
         android:hint="@string/hint_withdraw_amount"/>
 
     <TextView
+        android:id="@+id/memoLabel"
+        app:layout_constraintTop_toBottomOf="@+id/address"
+        app:layout_constraintBottom_toTopOf="@+id/memo"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:text="@string/label_memo"/>
+
+    <EditText
+        android:id="@+id/memo"
+        app:layout_constraintTop_toBottomOf="@+id/memoLabel"
+        app:layout_constraintBottom_toTopOf="@+id/feeLabel"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:hint="@string/hint_withdraw_memo"/>
+
+    <TextView
         android:id="@+id/feeLabel"
-        app:layout_constraintTop_toBottomOf="@+id/amount"
+        app:layout_constraintTop_toBottomOf="@+id/memo"
         app:layout_constraintBottom_toTopOf="@+id/fee"
         android:layout_marginStart="@dimen/spacer_m"
         android:layout_marginEnd="@dimen/spacer_m"

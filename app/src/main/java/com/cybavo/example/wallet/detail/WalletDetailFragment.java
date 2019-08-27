@@ -10,6 +10,7 @@ package com.cybavo.example.wallet.detail;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -96,14 +97,23 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
         mToolbar = ToolbarHelper.setupToolbar(view, R.id.appBar)
                 .title(mWallet.name.isEmpty() ? getString(R.string.label_unnamed_wallet) : mWallet.name)
                 .menu(R.menu.detail, item -> {
-                    if (item.getItemId() == R.id.action_rename) {
-                        rename();
-                        return true;
+                    switch (item.getItemId()) {
+                        case R.id.action_rename:
+                            rename();
+                            return true;
+                        case R.id.action_eos_resources:
+                            goEOSResource();
+                            return true;
+                        default:
+                            return false;
                     }
-                    return false;
                 })
                 .onBack(v -> getFragmentManager().popBackStack())
                 .done();
+
+        // set EOS resources menu visible
+        mToolbar.getMenu().findItem(R.id.action_eos_resources)
+                .setVisible(mWallet.currency == CurrencyHelper.Coin.EOS);
 
         mBalance = view.findViewById(R.id.balance);
         mCurrency = view.findViewById(R.id.currency);
@@ -220,6 +230,10 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
 
     private void withdraw() {
         NavFragment.find(this).goWithdraw(mWallet);
+    }
+
+    private void goEOSResource() {
+        NavFragment.find(this).goEOSResource(mWallet);
     }
 
     @Override

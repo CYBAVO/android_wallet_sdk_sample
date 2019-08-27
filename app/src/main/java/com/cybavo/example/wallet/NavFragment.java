@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.cybavo.example.wallet.create.CreateWalletFragment;
 import com.cybavo.example.wallet.detail.DepositFragment;
+import com.cybavo.example.wallet.detail.eos.EOSResourceFragment;
 import com.cybavo.example.wallet.detail.TransactionDetailFragment;
 import com.cybavo.example.wallet.detail.WalletDetailFragment;
 import com.cybavo.example.wallet.detail.WithdrawFragment;
@@ -156,6 +157,14 @@ public class NavFragment extends Fragment implements FragmentManager.OnBackStack
 
         showFragment(WithdrawFragment.newInstance(wallet), true);
     }
+
+    public void goEOSResource(Wallet wallet) {
+        if (fragmentExists(SettingsFragment.class))
+            return;
+
+        showFragment(EOSResourceFragment.newInstance(wallet), true);
+    }
+
 
     public void goSettings() {
         if (fragmentExists(SettingsFragment.class))

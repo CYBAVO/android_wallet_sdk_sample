@@ -26,6 +26,7 @@
     <string name="label_unnamed_wallet">Unnamed wallet</string>
     <string name="action_rename">Rename</string>
     <string name="title_rename_wallet">Rename wallet</string>
+    <string name="action_eos_resources">EOS resources</string>
 
     <string name="title_create_wallet">New wallet</string>
     <string name="title_new_wallet_name">Name this wallet</string>
@@ -67,13 +68,30 @@
     <string name="title_withdraw">Withdraw</string>
     <string name="label_address">Address</string>
     <string name="label_amount">Amount</string>
+    <string name="label_memo">Memo</string>
     <string name="label_fee">Transaction fee</string>
     <string name="template_quota">%1$s %2$s Daily</string>
     <string name="template_usage">%1$s %2$s Today</string>
     <string name="hint_withdraw_address">Address to deposit…</string>
     <string name="hint_withdraw_amount">Amount to withdraw…</string>
+    <string name="hint_withdraw_memo">Memo / dst.tag for this transaction…</string>
     <string name="action_send">Send</string>
     <string name="action_send_with_token">Send w. token</string>
+
+    <string name="title_eos_resources">EOS resources</string>
+    <string name="title_eos_resources_cpu">CPU</string>
+    <string name="title_eos_resources_ram">RAM</string>
+    <string name="title_eos_resources_net">NET</string>
+    <string name="action_eos_buy_ram">Buy RAM</string>
+    <string name="action_eos_sell_ram">Sell RAM</string>
+    <string name="action_eos_delegate_cpu">Delegate CPU</string>
+    <string name="action_eos_undelegate_cpu">Undelegate CPU</string>
+    <string name="action_eos_delegate_net">Delegate NET</string>
+    <string name="action_eos_undelegate_net">Undelegate NET</string>
+    <string name="label_eos_transaction_type">Transaction</string>
+    <string name="label_eos_number_of_bytes">Number of bytes</string>
+    <string name="label_eos_receiver">Receiver</string>
+    <string name="message_staked_and_refund">%s staked • %s refunding</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_settings">Settings</string>

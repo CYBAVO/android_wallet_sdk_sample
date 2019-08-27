@@ -216,7 +216,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
         if (currency == null || pinCode.isEmpty())
             return;
 
-        Map<String, String> extras = new HashMap<>();
+        Map<String, Object> extras = new HashMap<>();
         if (currency.currency == Coin.EOS) {
             if (TextUtils.isEmpty(mAccount)) { // EOS must specify account
                 return;

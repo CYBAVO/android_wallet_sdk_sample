@@ -14,11 +14,11 @@ import com.cybavo.wallet.service.wallet.Wallet;
 
 public class WalletParcelable implements Parcelable {
 
-    static WalletParcelable fromWallet(Wallet wallet) {
+    public static WalletParcelable fromWallet(Wallet wallet) {
         return new WalletParcelable(wallet);
     }
 
-    static Wallet toWallet(Parcelable parcelable) {
+    public static Wallet toWallet(Parcelable parcelable) {
         return ((WalletParcelable) parcelable).wallet;
     }
 
