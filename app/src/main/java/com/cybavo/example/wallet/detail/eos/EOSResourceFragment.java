@@ -353,7 +353,8 @@ public class EOSResourceFragment extends Fragment implements InputPinCodeDialog.
                 mWallet.walletId,
                 receiver,
                 amount,
-                "",
+                "", // transactionFee
+                "", // description
                 pinCode,
                 extras,
                 new Callback<CreateTransactionResult>() {
