@@ -11,6 +11,7 @@ package com.cybavo.example.wallet.detail;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mAmount;
     private TextView mFee;
     private TextView mTxid;
+    private TextView mError;
     private TextView mTime;
     private TextView mPending;
     private TextView mFailed;
@@ -118,7 +120,15 @@ public class TransactionDetailFragment extends Fragment {
         mFee = view.findViewById(R.id.fee);
         mFee.setText(mTransaction.transactionFee);
         mTxid = view.findViewById(R.id.txid);
-        mTxid.setText(mTransaction.txid);
+        if (!TextUtils.isEmpty(mTransaction.txid)) {
+            mTxid.setVisibility(View.VISIBLE);
+            mTxid.setText(mTransaction.txid);
+        }
+        mError = view.findViewById(R.id.error);
+        if (!TextUtils.isEmpty(mTransaction.error)) {
+            mError.setVisibility(View.VISIBLE);
+            mError.setText(mTransaction.error);
+        }
 
         mTime = view.findViewById(R.id.time);
         mTime.setText(DateFormat.format(

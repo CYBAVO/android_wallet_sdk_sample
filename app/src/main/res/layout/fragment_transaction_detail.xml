@@ -187,12 +187,27 @@
         android:layout_marginEnd="@dimen/spacer_m"
         android:textAppearance="?attr/textAppearanceBody2"
         android:textColor="?android:textColorSecondary"
+        android:visibility="gone"
         tools:text="0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295"/>
+
+    <TextView
+        android:id="@+id/error"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"
+        tools:text="error message"/>
 
     <TextView
         android:id="@+id/timeLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txid"
+        app:layout_constraintTop_toBottomOf="@+id/error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacer_m"
