@@ -54,6 +54,8 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mTxid;
     private TextView mError;
     private TextView mTime;
+    private TextView mMemo;
+    private TextView mDescription;
     private TextView mPending;
     private TextView mFailed;
     private Button mExplorer;
@@ -134,6 +136,12 @@ public class TransactionDetailFragment extends Fragment {
         mTime.setText(DateFormat.format(
                 DateFormat.getBestDateTimePattern(Locale.getDefault(), "yyyyMMddHHmmss"),
                 new Date(mTransaction.timestamp * 1000)));
+
+        mMemo = view.findViewById(R.id.memo);
+        mMemo.setText(TextUtils.isEmpty(mTransaction.memo) ? "-" : mTransaction.memo);
+
+        mDescription = view.findViewById(R.id.description);
+        mDescription.setText(TextUtils.isEmpty(mTransaction.description) ? "-" : mTransaction.description);
 
         mPending = view.findViewById(R.id.pending);
         mPending.setVisibility(mTransaction.pending ? View.VISIBLE : View.GONE);

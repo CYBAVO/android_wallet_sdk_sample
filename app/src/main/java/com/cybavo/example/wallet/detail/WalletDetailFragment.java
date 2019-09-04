@@ -9,8 +9,8 @@ package com.cybavo.example.wallet.detail;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +28,10 @@ import com.cybavo.wallet.service.wallet.Transaction;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.RenameWalletResult;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,6 +59,11 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
     private Button mDeposit;
     private Button mWithdraw;
 
+    private MaterialButtonToggleGroup mTime;
+    private MaterialButtonToggleGroup mDirection;
+    private MaterialButtonToggleGroup mPending;
+    private MaterialButtonToggleGroup mSuccess;
+
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mHistoryList;
     private HistoryListAdapter mHistoryAdapter;
@@ -62,6 +71,14 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
     private View mLoading;
     private TextView mLoadingText;
     private ProgressBar mLoadingProgress;
+
+
+    final MaterialButtonToggleGroup.OnButtonCheckedListener SINGLE_SELECTION_HACK = (group, checkedId, isChecked) -> {
+        if (!isChecked && group.getCheckedButtonIds().size() == 0) {
+            ((MaterialButton) group.findViewById(checkedId)).setChecked(true);
+            return;
+        }
+    };
 
     public WalletDetailFragment() {
         // Required empty public constructor
@@ -153,6 +170,11 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
         mSwipeRefresh.setOnRefreshListener(() -> {
             refresh();
         });
+
+        mTime = view.findViewById(R.id.time);
+        mDirection = view.findViewById(R.id.direction);
+        mPending = view.findViewById(R.id.pending);
+        mSuccess = view.findViewById(R.id.success);
     }
 
     @Override
@@ -190,6 +212,84 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
                 mSwipeRefresh.setRefreshing(false);
             }
             mHistoryAdapter.updateTransactions(history.history);
+        });
+
+        mTime.addOnButtonCheckedListener(SINGLE_SELECTION_HACK);
+        mTime.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            final Calendar calNow = Calendar.getInstance();
+            final Calendar calMidnight = Calendar.getInstance();
+            calMidnight.set(Calendar.HOUR_OF_DAY, 0);
+            calMidnight.set(Calendar.MINUTE, 0);
+            calMidnight.set(Calendar.SECOND, 0);
+            calMidnight.set(Calendar.MILLISECOND, 0);
+
+            final long now = calNow.getTimeInMillis() / 1000;
+            final long midnight = calMidnight.getTimeInMillis() / 1000;
+
+            if (isChecked) {
+                switch (checkedId) {
+                    case R.id.timeAll:
+                        mDetailViewModel.setTime(null);
+                        break;
+                    case R.id.timeToday:
+                        mDetailViewModel.setTime(Pair.create(midnight, now));
+                        break;
+                    case R.id.timeYesterday:
+                        mDetailViewModel.setTime(Pair.create(midnight - 86400, midnight));
+                        break;
+                }
+            }
+        });
+
+        mDirection.addOnButtonCheckedListener(SINGLE_SELECTION_HACK);
+        mDirection.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                switch (checkedId) {
+                    case R.id.directionAll:
+                        mDetailViewModel.setDirectionFilter(null);
+                        break;
+                    case R.id.directionIn:
+                        mDetailViewModel.setDirectionFilter(Transaction.Direction.IN);
+                        break;
+                    case R.id.directionOut:
+                        mDetailViewModel.setDirectionFilter(Transaction.Direction.OUT);
+                        break;
+                }
+            }
+        });
+
+        mPending.addOnButtonCheckedListener(SINGLE_SELECTION_HACK);
+        mPending.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                switch (checkedId) {
+                    case R.id.pendingAll:
+                        mDetailViewModel.setPendingFilter(null);
+                        break;
+                    case R.id.pendingTrue:
+                        mDetailViewModel.setPendingFilter(true);
+                        break;
+                    case R.id.pendingFalse:
+                        mDetailViewModel.setPendingFilter(false);
+                        break;
+                }
+            }
+        });
+
+        mSuccess.addOnButtonCheckedListener(SINGLE_SELECTION_HACK);
+        mSuccess.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                switch (checkedId) {
+                    case R.id.successAll:
+                        mDetailViewModel.setSuccessFilter(null);
+                        break;
+                    case R.id.successTrue:
+                        mDetailViewModel.setSuccessFilter(true);
+                        break;
+                    case R.id.successFalse:
+                        mDetailViewModel.setSuccessFilter(false);
+                        break;
+                }
+            }
         });
     }
 

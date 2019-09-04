@@ -8,14 +8,19 @@
 package com.cybavo.example.wallet.detail;
 
 import android.app.Application;
+import android.util.Log;
+import android.util.Pair;
 
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.wallet.Transaction;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.GetHistoryResult;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -49,12 +54,21 @@ public class DetailViewModel extends AndroidViewModel {
     private Wallets mService = Wallets.getInstance();
 
     private MutableLiveData<HistoryList> mHistory;
+    private MutableLiveData<Transaction.Direction> mDirectionFilter;
+    private MutableLiveData<Boolean> mPendingFilter;
+    private MutableLiveData<Boolean> mSuccessFilter;
+    private MutableLiveData<Pair<Long, Long>> mTime;
 
     public DetailViewModel(@NonNull Application application, Wallet wallet) {
         super(application);
         mWallet = wallet;
         mHistory = new MutableLiveData<>();
         mHistory.setValue(new HistoryList());
+
+        mDirectionFilter = new MutableLiveData<>();
+        mPendingFilter = new MutableLiveData<>();
+        mSuccessFilter = new MutableLiveData<>();
+        mTime = new MutableLiveData<>();
     }
 
     public LiveData<HistoryList> getHistory() {
@@ -77,8 +91,23 @@ public class DetailViewModel extends AndroidViewModel {
         updateHistory(true, null, true);
 
         final int count = HISTORY_BATCH_COUNT;
-        mService.getHistory(mWallet.currency, mWallet.tokenAddress, mWallet.address,
-                start, count, new Callback<GetHistoryResult>() {
+        final Map<String, Object> filter = new HashMap<>();
+        if (mDirectionFilter.getValue() != null) {
+            filter.put("direction", mDirectionFilter.getValue());
+        }
+        if (mPendingFilter.getValue() != null) {
+            filter.put("pending", mPendingFilter.getValue());
+        }
+        if (mSuccessFilter.getValue() != null) {
+            filter.put("success", mSuccessFilter.getValue());
+        }
+        if (mTime.getValue() != null) {
+            filter.put("start_time", mTime.getValue().first);
+            filter.put("end_time", mTime.getValue().second);
+        }
+
+        mService.getHistory(mWallet.currency, mWallet.tokenAddress, mWallet.address, start, count, filter,
+                new Callback<GetHistoryResult>() {
                     @Override
                     public void onError(Throwable error) {
                         Helpers.showToast(getApplication(), "getHistory failed: " + error.getMessage());
@@ -86,7 +115,7 @@ public class DetailViewModel extends AndroidViewModel {
 
                     @Override
                     public void onResult(GetHistoryResult result) {
-                        updateHistory(false, result, result.transactions.length >= count);
+                        updateHistory(false, result, result.start + result.transactions.length < result.total);
                     }
                 });
     }
@@ -112,5 +141,25 @@ public class DetailViewModel extends AndroidViewModel {
         }
 
         mHistory.setValue(newHistory);
+    }
+
+    public void setDirectionFilter(Transaction.Direction direction) {
+        mDirectionFilter.setValue(direction);
+        refreshHistory();
+    }
+
+    public void setPendingFilter(Boolean pending) {
+        mPendingFilter.setValue(pending);
+        refreshHistory();
+    }
+
+    public void setSuccessFilter(Boolean success) {
+        mSuccessFilter.setValue(success);
+        refreshHistory();
+    }
+
+    public void setTime(Pair<Long, Long> time) {
+        mTime.setValue(time);
+        refreshHistory();
     }
 }

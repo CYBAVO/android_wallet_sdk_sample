@@ -205,9 +205,34 @@
         tools:text="error message"/>
 
     <TextView
-        android:id="@+id/timeLabel"
+        android:id="@+id/memoLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginBottom="@dimen/spacer_s"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:text="@string/label_memo"/>
+
+    <TextView
+        android:id="@+id/memo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?android:textColorSecondary"
+        tools:text="memo"/>
+
+    <TextView
+        android:id="@+id/timeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacer_m"
@@ -228,6 +253,31 @@
         android:textAppearance="?attr/textAppearanceBody2"
         android:textColor="?android:textColorSecondary"
         tools:text="2018/12/12 10:08:08"/>
+
+    <TextView
+        android:id="@+id/descriptionLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_marginBottom="@dimen/spacer_s"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:text="@string/label_description"/>
+
+    <TextView
+        android:id="@+id/description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?android:textColorSecondary"
+        tools:text="description"/>
 
     <TextView
         android:id="@+id/pending"

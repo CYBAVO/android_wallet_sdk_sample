@@ -90,9 +90,139 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"/>
 
+    <HorizontalScrollView
+        android:id="@+id/filterRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Light">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/spacer_m"
+            android:paddingEnd="@dimen/spacer_m"
+            android:paddingTop="@dimen/spacer_s"
+            android:paddingBottom="@dimen/spacer_s"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:checkedButton="@+id/timeAll">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/timeAll"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_all_time"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/timeToday"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_today"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/timeYesterday"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_yesterday"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacer_m"
+                app:singleSelection="true"
+                app:checkedButton="@+id/directionAll">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/directionAll"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_all"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/directionIn"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_received"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/directionOut"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_sent"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/pending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacer_m"
+                app:singleSelection="true"
+                app:checkedButton="@+id/pendingAll">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pendingAll"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_all"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pendingTrue"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_pending"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pendingFalse"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_done"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacer_m"
+                app:singleSelection="true"
+                app:checkedButton="@+id/successAll">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/successAll"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_all"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/successTrue"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_success"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/successFalse"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_failed"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineHoz"
+        app:layout_constraintTop_toBottomOf="@+id/filterRow"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp"

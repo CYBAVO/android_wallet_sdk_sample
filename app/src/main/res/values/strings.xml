@@ -46,6 +46,14 @@
     <string name="label_withdraw">Withdraw</string>
     <string name="label_loading_more">Loading more…</string>
     <string name="label_no_more">End of history</string>
+    <string name="label_all">All</string>
+    <string name="label_sent">Sent</string>
+    <string name="label_received">Received</string>
+    <string name="label_success">Success</string>
+    <string name="label_done">Done</string>
+    <string name="label_all_time">All time</string>
+    <string name="label_today">Today</string>
+    <string name="label_yesterday">Yesterday</string>
 
     <string name="title_transaction_detail">Transaction detail</string>
     <string name="label_from">From</string>
@@ -70,11 +78,13 @@
     <string name="label_amount">Amount</string>
     <string name="label_memo">Memo</string>
     <string name="label_fee">Transaction fee</string>
+    <string name="label_description">Description</string>
     <string name="template_quota">%1$s %2$s Daily</string>
     <string name="template_usage">%1$s %2$s Today</string>
     <string name="hint_withdraw_address">Address to deposit…</string>
     <string name="hint_withdraw_amount">Amount to withdraw…</string>
     <string name="hint_withdraw_memo">Memo / dst.tag for this transaction…</string>
+    <string name="hint_withdraw_description">Description for this transaction, private to this wallet.</string>
     <string name="action_send">Send</string>
     <string name="action_send_with_token">Send w. token</string>
 

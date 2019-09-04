@@ -195,6 +195,31 @@
         android:layout_height="wrap_content"
         app:popupTheme="@style/Base.Theme.MaterialComponents.Light"/>
 
+    <TextView
+        android:id="@+id/descriptionLabel"
+        app:layout_constraintTop_toBottomOf="@+id/fee"
+        app:layout_constraintBottom_toTopOf="@+id/description"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:text="@string/label_description"/>
+
+    <EditText
+        android:id="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionLabel"
+        app:layout_constraintBottom_toTopOf="@+id/submitWithToken"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:imeOptions="actionNext"
+        android:gravity="top"
+        android:inputType="textCapSentences|textMultiLine"
+        android:hint="@string/hint_withdraw_description"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitWithToken"
         app:layout_constraintBottom_toBottomOf="parent"

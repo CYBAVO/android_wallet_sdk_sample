@@ -61,7 +61,9 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     private View mScanAddress;
     private EditText mAddress;
     private EditText mAmount;
+    private View mMemoLabel;
     private EditText mMemo;
+    private EditText mDescription;
     private Button mSubmit;
     private Button mSubmitWithToken;
     private ProgressBar mLoading;
@@ -128,6 +130,10 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         mAmount = view.findViewById(R.id.amount);
         mMemo = view.findViewById(R.id.memo);
         mMemo.setVisibility(hasMemo() ? View.VISIBLE : View.GONE);
+        mMemoLabel = view.findViewById(R.id.memoLabel);
+        mMemoLabel.setVisibility(hasMemo() ? View.VISIBLE : View.GONE);
+
+        mDescription = view.findViewById(R.id.description);
 
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> {
@@ -139,8 +145,9 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
             final String toAddress = mAddress.getText().toString();
             final String amount = mAmount.getText().toString();
             final String memo = mMemo.getText().toString();
+            final String description = mDescription.getText().toString();
             final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-            createTransactionWithSecureToken(toAddress, amount, fee, memo, true);
+            createTransactionWithSecureToken(toAddress, amount, fee, memo, description, true);
 
         });
 
@@ -210,8 +217,9 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
             final String toAddress = mAddress.getText().toString();
             final String amount = mAmount.getText().toString();
             final String memo = mMemo.getText().toString();
+            final String description = mDescription.getText().toString();
             final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-            createTransaction(toAddress, amount, fee, memo, pinCode);
+            createTransaction(toAddress, amount, fee, memo, description, pinCode);
         }
     }
 
@@ -237,12 +245,13 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         mScanAddress.setEnabled(!inProgress);
         mAmount.setEnabled(!inProgress);
         mMemo.setEnabled(!inProgress);
+        mDescription.setEnabled(!inProgress);
         mFeeSpinner.setEnabled(!inProgress);
         mSubmit.setEnabled(!inProgress);
         mLoading.setVisibility(inProgress ? View.VISIBLE : View.GONE);
     }
 
-    private void createTransaction(String toAddress, String amount, Fee fee, String memo, String pinCode) {
+    private void createTransaction(String toAddress, String amount, Fee fee, String memo, String description, String pinCode) {
         if (toAddress.isEmpty() || amount.isEmpty() || fee == null || pinCode.isEmpty()) {
             return;
         }
@@ -252,7 +261,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         final Map<String, Object> extras = new HashMap<>();
         extras.put("memo", memo);
 
-        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, "", pinCode, extras,
+        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, description, pinCode, extras,
                 new Callback<CreateTransactionResult>() {
                 @Override
                 public void onError(Throwable error) {
@@ -270,7 +279,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
             });
     }
 
-    private void createTransactionWithSecureToken(String toAddress, String amount, Fee fee, String memo, boolean requestToken) {
+    private void createTransactionWithSecureToken(String toAddress, String amount, Fee fee, String memo, String description, boolean requestToken) {
         if (toAddress.isEmpty() || amount.isEmpty() || fee == null) {
             return;
         }
@@ -280,7 +289,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         final Map<String, Object> extras = new HashMap<>();
         extras.put("memo", memo);
 
-        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, "", extras, new Callback<CreateTransactionResult>() {
+        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, description, extras, new Callback<CreateTransactionResult>() {
             @Override
             public void onError(Throwable error) {
                 if (requestToken && error instanceof Error && ((Error) error).getCode() == Error.Code.ErrUserSecureTokenNotReady) { // Secure token not ready
@@ -310,6 +319,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         final String toAddress = mAddress.getText().toString();
         final String amount = mAmount.getText().toString();
         final String memo = mMemo.getText().toString();
+        final String description = mDescription.getText().toString();
         final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
 
         setInProgress(true);
@@ -322,7 +332,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
 
             @Override
             public void onResult(RequestSecureTokenResult requestSecureTokenResult) { // retry transaction
-                createTransactionWithSecureToken(toAddress, amount, fee, memo, false);
+                createTransactionWithSecureToken(toAddress, amount, fee, memo, description, false);
             }
         });
     }
