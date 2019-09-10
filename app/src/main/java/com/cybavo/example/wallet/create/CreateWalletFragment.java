@@ -167,7 +167,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
                 mParentSpinner.setVisibility(View.VISIBLE);
             }
 
-            if (currency.currency == Coin.EOS) { // EOS has account
+            if (currency.currency == Coin.EOS && currency.tokenAddress.isEmpty()) { // EOS has account
                 mAccountInput.setVisibility(View.VISIBLE);
             } else {
                 mAccountInput.setVisibility(View.GONE);
@@ -217,8 +217,9 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
             return;
 
         Map<String, String> extras = new HashMap<>();
-        if (currency.currency == Coin.EOS) {
+        if (currency.currency == Coin.EOS && currency.tokenAddress.isEmpty()) {
             if (TextUtils.isEmpty(mAccount)) { // EOS must specify account
+                Helpers.showToast(getContext(), "EOS account name is required");
                 return;
             }
             extras.put("account_name", mAccount);

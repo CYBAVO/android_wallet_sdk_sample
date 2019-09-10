@@ -17,9 +17,13 @@ import com.cybavo.wallet.service.wallet.Transaction;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.GetHistoryResult;
+import com.cybavo.wallet.service.wallet.results.GetTransactionInfoResult;
+import com.cybavo.wallet.service.wallet.results.GetTransactionsInfoResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;

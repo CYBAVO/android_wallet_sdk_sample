@@ -21,11 +21,15 @@ import android.widget.TextView;
 
 import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.CurrencyHelper;
+import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
+import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Transaction;
 import com.cybavo.wallet.service.wallet.Wallet;
+import com.cybavo.wallet.service.wallet.Wallets;
+import com.cybavo.wallet.service.wallet.results.GetTransactionInfoResult;
 
 import java.util.Date;
 import java.util.Locale;
@@ -58,6 +62,7 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mDescription;
     private TextView mPending;
     private TextView mFailed;
+    private TextView mConfirmBlocks;
     private Button mExplorer;
 
     public TransactionDetailFragment() {
@@ -149,6 +154,8 @@ public class TransactionDetailFragment extends Fragment {
         mFailed = view.findViewById(R.id.failed);
         mFailed.setVisibility(mTransaction.success ? View.GONE : View.VISIBLE);
 
+        mConfirmBlocks = view.findViewById(R.id.confirmBlocks);
+
         mExplorer = view.findViewById(R.id.explorer);
         final String uri = CurrencyHelper.getBlockExplorerUri(mWallet.currency, mWallet.tokenAddress, mTransaction.txid);
         if (uri != null) {
@@ -174,6 +181,27 @@ public class TransactionDetailFragment extends Fragment {
                 mCurrency.setText(c.displayName);
             } else {
                 mCurrency.setText(mWallet.currencySymbol);
+            }
+        });
+
+        fetchTransactionInfo();
+    }
+
+    private void fetchTransactionInfo() {
+        if (mTransaction.txid.isEmpty()) {
+            return;
+        }
+
+        Wallets.getInstance().getTransactionInfo(mWallet.currency, mTransaction.txid, new Callback<GetTransactionInfoResult>() {
+            @Override
+            public void onError(Throwable error) {
+                Helpers.showToast(getContext(), "getTransactionInfo failed: " + error.getMessage());
+            }
+
+            @Override
+            public void onResult(GetTransactionInfoResult result) {
+                mConfirmBlocks.setVisibility(View.VISIBLE);
+                mConfirmBlocks.setText(getString(R.string.label_confirm_blocks, result.confirmBlocks));
             }
         });
     }

@@ -54,6 +54,7 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
     private Toolbar mToolbar;
 
     private TextView mBalance;
+    private TextView mBalanceUnconfirmed;
     private TextView mCurrency;
     private TextView mAddress;
     private Button mDeposit;
@@ -63,6 +64,7 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
     private MaterialButtonToggleGroup mDirection;
     private MaterialButtonToggleGroup mPending;
     private MaterialButtonToggleGroup mSuccess;
+    private View mMoreFilters;
 
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mHistoryList;
@@ -133,6 +135,7 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
                 .setVisible(mWallet.currency == CurrencyHelper.Coin.EOS);
 
         mBalance = view.findViewById(R.id.balance);
+        mBalanceUnconfirmed = view.findViewById(R.id.balanceUnconfirmed);
         mCurrency = view.findViewById(R.id.currency);
         mAddress = view.findViewById(R.id.address);
 
@@ -175,6 +178,14 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
         mDirection = view.findViewById(R.id.direction);
         mPending = view.findViewById(R.id.pending);
         mSuccess = view.findViewById(R.id.success);
+
+        mMoreFilters = view.findViewById(R.id.moreFilters);
+        mMoreFilters.setOnClickListener(v -> {
+            mMoreFilters.setVisibility(View.GONE);
+            mTime.setVisibility(View.VISIBLE);
+            mPending.setVisibility(View.VISIBLE);
+            mSuccess.setVisibility(View.VISIBLE);
+        });
     }
 
     @Override
@@ -186,7 +197,16 @@ public class WalletDetailFragment extends Fragment implements RenameWalletDialog
                 .get(MainViewModel.class);
 
         mViewModel.getBalance(mWallet).observe(this, entry -> {
-            mBalance.setText(entry.init ? CurrencyHelper.getEffectiveBalance(entry.balance) : "…");
+            if (!entry.init) {
+                mBalance.setText("…");
+            } else {
+                mBalance.setText(CurrencyHelper.getEffectiveBalance(entry.balance));
+                // unconfirmed balance
+                if (mWallet.tokenAddress.isEmpty() && // only valid for native token
+                        !entry.balance.unconfirmedBalance.isEmpty() && !"0".equals(entry.balance.unconfirmedBalance)) { // unconfirmed balance is present
+                    mBalanceUnconfirmed.setText(entry.balance.unconfirmedBalance);
+                }
+            }
         });
 
         // detail ViewModel

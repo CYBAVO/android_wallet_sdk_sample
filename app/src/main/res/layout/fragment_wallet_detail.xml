@@ -26,14 +26,27 @@
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/balance"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceHeadline4"
-            android:textColor="?android:attr/textColorPrimary"
-            tools:text="3.1415927"/>
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/balanceUnconfirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceCaption"
+                android:textColor="?android:attr/textColorPrimary"
+                android:alpha="0.7"
+                tools:text="-0.001"/>
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceHeadline4"
+                android:textColor="?android:attr/textColorPrimary"
+                tools:text="3.1415927"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/currency"
@@ -103,16 +116,57 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/spacer_m"
-            android:paddingEnd="@dimen/spacer_m"
+            android:paddingStart="@dimen/spacer_s"
+            android:paddingEnd="@dimen/spacer_s"
             android:paddingTop="@dimen/spacer_s"
             android:paddingBottom="@dimen/spacer_s"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacer_s"
+                android:paddingEnd="@dimen/spacer_s"
+                app:singleSelection="true"
+                app:checkedButton="@+id/directionAll">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/directionAll"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_all"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/directionIn"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_received"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/directionOut"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_sent"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <ImageView
+                android:id="@+id/moreFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_more"
+                android:padding="@dimen/spacer_s"
+                app:tint="?colorPrimary"
+                android:background="?selectableItemBackground"/>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:visibility="gone"
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacer_s"
+                android:paddingEnd="@dimen/spacer_s"
                 app:singleSelection="true"
                 app:checkedButton="@+id/timeAll">
                 <com.google.android.material.button.MaterialButton
@@ -136,37 +190,12 @@
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/direction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacer_m"
-                app:singleSelection="true"
-                app:checkedButton="@+id/directionAll">
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/directionAll"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_all"/>
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/directionIn"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_received"/>
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/directionOut"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_sent"/>
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:visibility="gone"
                 android:id="@+id/pending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacer_m"
+                android:paddingStart="@dimen/spacer_s"
+                android:paddingEnd="@dimen/spacer_s"
                 app:singleSelection="true"
                 app:checkedButton="@+id/pendingAll">
                 <com.google.android.material.button.MaterialButton
@@ -189,12 +218,13 @@
                     android:text="@string/label_done"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-
             <com.google.android.material.button.MaterialButtonToggleGroup
+                android:visibility="gone"
                 android:id="@+id/success"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacer_m"
+                android:paddingStart="@dimen/spacer_s"
+                android:paddingEnd="@dimen/spacer_s"
                 app:singleSelection="true"
                 app:checkedButton="@+id/successAll">
                 <com.google.android.material.button.MaterialButton

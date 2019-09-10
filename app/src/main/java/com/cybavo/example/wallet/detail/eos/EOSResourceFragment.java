@@ -259,6 +259,7 @@ public class EOSResourceFragment extends Fragment implements InputPinCodeDialog.
     private void reset() {
         mAmount.getEditText().setText("0", TextView.BufferType.EDITABLE);
         mNumBytes.getEditText().setText("0", TextView.BufferType.EDITABLE);
+        mReceiver.getEditText().setText(mWallet.address);
     }
 
     private void updateTransactionType(EosResourceTransactionType transactionType) {

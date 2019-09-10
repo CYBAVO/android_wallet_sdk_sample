@@ -62,6 +62,7 @@
     <string name="label_time">Time</string>
     <string name="label_pending">Pending</string>
     <string name="label_failed">Failed</string>
+    <string name="label_confirm_blocks">%d confirmed</string>
     <string name="action_explore">Explore</string>
 
     <string name="action_withdraw">Withdraw</string>
