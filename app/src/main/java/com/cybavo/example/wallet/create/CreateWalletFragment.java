@@ -32,6 +32,7 @@ import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateWalletResult;
+import com.cybavo.wallet.service.wallet.results.ValidateEosAccountResult;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.HashMap;
@@ -137,7 +138,9 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
 
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> {
-            inputPinCode();
+            if (checkValid()) {
+                inputPinCode();
+            }
         });
     }
 
@@ -208,20 +211,63 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
         NavFragment.find(this).goRestore();
     }
 
+    private boolean checkValid() {
+        // check parent selected
+        final Currency currency = mCreateWalletViewModel.getSelectedCurrency().getValue();
+        if (currency == null) {
+            Helpers.showToast(getContext(), "No currency selected");
+            return false;
+        }
+
+        // check parent selected
+        if (!currency.tokenAddress.isEmpty() && mCreateWalletViewModel.getSelectedParent().getValue() <= 0) {
+            Helpers.showToast(getContext(), "No parent wallet selected");
+            return false;
+        }
+
+        // check EOS account
+        if (currency.currency == Coin.EOS && currency.tokenAddress.isEmpty()) {
+            // validate EOS account
+            setInProgress(true);
+            Wallets.getInstance().validateEosAccount(mAccount, new Callback<ValidateEosAccountResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    setInProgress(false);
+                    Helpers.showToast(getContext(), "validateEosAccount failed: " + error.getMessage());
+                }
+
+                @Override
+                public void onResult(ValidateEosAccountResult result) {
+                    setInProgress(false);
+                    if (!result.valid) {
+                        Helpers.showToast(getContext(), "EOS account invalid");
+                        return;
+                    }
+                    if (result.exist) {
+                        Helpers.showToast(getContext(), "EOS account already exists");
+                        return;
+                    }
+
+                    inputPinCode();
+                }
+            });
+            return false;
+        }
+
+        return true;
+    }
+
     private void createWallet(String pinCode) {
+
+        if (pinCode.isEmpty()) {
+            return;
+        }
 
         final Currency currency = mCreateWalletViewModel.getSelectedCurrency().getValue();
         final long parent = currency.tokenAddress.isEmpty() ? 0L : mCreateWalletViewModel.getSelectedParent().getValue();
 
-        if (currency == null || pinCode.isEmpty())
-            return;
-
         Map<String, String> extras = new HashMap<>();
         if (currency.currency == Coin.EOS && currency.tokenAddress.isEmpty()) {
-            if (TextUtils.isEmpty(mAccount)) { // EOS must specify account
-                Helpers.showToast(getContext(), "EOS account name is required");
-                return;
-            }
             extras.put("account_name", mAccount);
         }
 
