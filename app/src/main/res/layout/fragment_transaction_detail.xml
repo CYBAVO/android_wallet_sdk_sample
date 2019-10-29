@@ -127,7 +127,6 @@
     <TextView
         android:id="@+id/amount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/amountLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -310,6 +309,21 @@
         android:text="@string/label_failed"/>
 
     <TextView
+        android:id="@+id/dropped"
+        app:layout_constraintStart_toEndOf="@+id/failed"
+        app:layout_constraintTop_toTopOf="@+id/txidLabel"
+        app:layout_constraintBottom_toBottomOf="@id/txidLabel"
+        android:layout_margin="@dimen/spacer_xs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textAllCaps="true"
+        android:background="@drawable/tx_op_background"
+        app:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="?attr/colorOnPrimary"
+        android:text="@string/label_dropped"/>
+
+    <TextView
         android:id="@+id/confirmBlocks"
         app:layout_constraintStart_toEndOf="@+id/failed"
         app:layout_constraintTop_toTopOf="@+id/txidLabel"
@@ -323,6 +337,21 @@
         app:backgroundTint="@android:color/holo_green_dark"
         android:textColor="?attr/colorOnPrimary"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/platformFee"
+        app:layout_constraintStart_toEndOf="@+id/amount"
+        app:layout_constraintTop_toTopOf="@+id/amount"
+        app:layout_constraintBottom_toBottomOf="@id/amount"
+        android:layout_margin="@dimen/spacer_xs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textAllCaps="true"
+        android:background="@drawable/tx_op_background"
+        app:backgroundTint="@android:color/darker_gray"
+        android:textColor="?attr/colorOnPrimary"
+        android:text="@string/label_platform_fee"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/explorer"

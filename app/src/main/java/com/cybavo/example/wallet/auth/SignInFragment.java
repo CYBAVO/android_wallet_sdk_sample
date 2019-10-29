@@ -120,8 +120,8 @@ public class SignInFragment extends Fragment {
             try {
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                signInWithToken(account.getIdToken(), ID_PROVIDER_GOOGLE, new Identity(ID_PROVIDER_GOOGLE, account.getDisplayName(), account.getEmail(), account.getPhotoUrl().toString()), true
-                );
+                signInWithToken(account.getIdToken(), ID_PROVIDER_GOOGLE,
+                        new Identity(ID_PROVIDER_GOOGLE, account.getDisplayName(), account.getEmail(), account.getPhotoUrl().toString()), true);
             } catch (ApiException e) {
                 // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.

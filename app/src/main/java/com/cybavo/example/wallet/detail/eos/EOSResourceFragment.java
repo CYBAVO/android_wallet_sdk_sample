@@ -28,6 +28,7 @@ import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.wallet.EosResourceTransactionType;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
@@ -329,8 +330,8 @@ public class EOSResourceFragment extends Fragment implements InputPinCodeDialog.
     }
 
     @Override
-    public void onPinCodeInput(String pinCode) {
-        createResourceTransaction(pinCode);
+    public void onPinCodeInput(PinSecret pinSecret) {
+        createResourceTransaction(pinSecret);
     }
 
     @Override
@@ -338,7 +339,7 @@ public class EOSResourceFragment extends Fragment implements InputPinCodeDialog.
         NavFragment.find(this).goRestore();
     }
 
-    private void createResourceTransaction(String pinCode) {
+    private void createResourceTransaction(PinSecret pinSecret) {
         final String receiver = mResourcesViewModal.getReceiver().getValue();
         final String amount = mResourcesViewModal.getAmount().getValue();
         final long numBytes = mResourcesViewModal.getNumBytes().getValue();
@@ -356,7 +357,7 @@ public class EOSResourceFragment extends Fragment implements InputPinCodeDialog.
                 amount,
                 "", // transactionFee
                 "", // description
-                pinCode,
+                pinSecret,
                 extras,
                 new Callback<CreateTransactionResult>() {
                     @Override

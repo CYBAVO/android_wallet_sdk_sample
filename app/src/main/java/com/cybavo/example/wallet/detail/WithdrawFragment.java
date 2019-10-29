@@ -27,11 +27,13 @@ import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.api.Error;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Fee;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateTransactionResult;
+import com.cybavo.wallet.service.wallet.results.EstimateTransactionResult;
 import com.cybavo.wallet.service.wallet.results.RequestSecureTokenResult;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -44,7 +46,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnPinCodeInputListener {
+public class WithdrawFragment extends Fragment
+        implements InputPinCodeDialog.OnPinCodeInputListener, ConfirmTransactionDialog.OnConfirmListener {
 
     private static final String ARG_WALLET = "wallet";
 
@@ -69,6 +72,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     private ProgressBar mLoading;
 
     private FeeAdapter mFeeAdapter;
+    private boolean mWithSecureToken = false;
     private boolean mPinForToken = false;
 
     public WithdrawFragment() {
@@ -137,18 +141,12 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
 
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> {
-            inputPinCode(false);
+            estimateTransaction(false);
         });
 
         mSubmitWithToken = view.findViewById(R.id.submitWithToken);
         mSubmitWithToken.setOnClickListener(v -> {
-            final String toAddress = mAddress.getText().toString();
-            final String amount = mAmount.getText().toString();
-            final String memo = mMemo.getText().toString();
-            final String description = mDescription.getText().toString();
-            final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-            createTransactionWithSecureToken(toAddress, amount, fee, memo, description, true);
-
+            estimateTransaction(true);
         });
 
         mLoading = view.findViewById(R.id.progress);
@@ -210,16 +208,16 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     }
 
     @Override
-    public void onPinCodeInput(String pinCode) {
+    public void onPinCodeInput(PinSecret pinSecret) {
         if (mPinForToken) {
-            requestSecureToken(pinCode);
+            requestSecureToken(pinSecret);
         } else {
             final String toAddress = mAddress.getText().toString();
             final String amount = mAmount.getText().toString();
             final String memo = mMemo.getText().toString();
             final String description = mDescription.getText().toString();
             final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-            createTransaction(toAddress, amount, fee, memo, description, pinCode);
+            createTransaction(toAddress, amount, fee, memo, description, pinSecret);
         }
     }
 
@@ -251,8 +249,8 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         mLoading.setVisibility(inProgress ? View.VISIBLE : View.GONE);
     }
 
-    private void createTransaction(String toAddress, String amount, Fee fee, String memo, String description, String pinCode) {
-        if (toAddress.isEmpty() || amount.isEmpty() || fee == null || pinCode.isEmpty()) {
+    private void createTransaction(String toAddress, String amount, Fee fee, String memo, String description, PinSecret pinSecret) {
+        if (toAddress.isEmpty() || amount.isEmpty() || fee == null || pinSecret == null) {
             return;
         }
 
@@ -261,7 +259,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         final Map<String, Object> extras = new HashMap<>();
         extras.put("memo", memo);
 
-        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, description, pinCode, extras,
+        mService.createTransaction(mWallet.walletId, toAddress, amount, fee.amount, description, pinSecret, extras,
                 new Callback<CreateTransactionResult>() {
                 @Override
                 public void onError(Throwable error) {
@@ -315,7 +313,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         inputPinCode(true);
     }
 
-    private void requestSecureToken(String pinCode) {
+    private void requestSecureToken(PinSecret pinSecret) {
         final String toAddress = mAddress.getText().toString();
         final String amount = mAmount.getText().toString();
         final String memo = mMemo.getText().toString();
@@ -323,7 +321,7 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
         final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
 
         setInProgress(true);
-        mService.requestSecureToken(pinCode, new Callback<RequestSecureTokenResult>() {
+        mService.requestSecureToken(pinSecret, new Callback<RequestSecureTokenResult>() {
             @Override
             public void onError(Throwable error) {
                 Helpers.showToast(getContext(), "requestSecureToken failed: " + error.getMessage());
@@ -347,5 +345,55 @@ public class WithdrawFragment extends Fragment implements InputPinCodeDialog.OnP
     private boolean hasMemo() {
         return mWallet.currency == CurrencyHelper.Coin.EOS ||
                 mWallet.currency == CurrencyHelper.Coin.XRP;
+    }
+
+    private void estimateTransaction(boolean withSecureToken) {
+
+        final String toAddress = mAddress.getText().toString();
+        final String amount = mAmount.getText().toString();
+        final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
+
+        if (toAddress.isEmpty() || amount.isEmpty() || fee == null) {
+            return;
+        }
+
+        setInProgress(true);
+        mService.estimateTransaction(mWallet.currency, mWallet.tokenAddress, amount, fee.amount, new Callback<EstimateTransactionResult>() {
+            @Override
+            public void onError(Throwable error) {
+                Helpers.showToast(getContext(), "estimateTransaction failed: " + error.getMessage());
+                setInProgress(false);
+            }
+
+            @Override
+            public void onResult(EstimateTransactionResult result) {
+                setInProgress(false);
+                confirmTransaction(withSecureToken, toAddress, result.tranasctionAmout, result.platformFee, result.blockchainFee);
+            }
+        });
+    }
+
+    private void confirmTransaction(boolean withSecureToken, String address, String transactionAmount, String platformFee, String blockchainFee) {
+        final String tag = ConfirmTransactionDialog.class.getSimpleName();
+        if (getChildFragmentManager().findFragmentByTag(tag) == null) {
+            ConfirmTransactionDialog.newInstance(
+                    address, transactionAmount, platformFee, blockchainFee)
+                    .show(getChildFragmentManager(), tag);
+        }
+        mWithSecureToken = withSecureToken;
+    }
+
+    @Override
+    public void onConfirm() {
+        if (mWithSecureToken) {
+            final String toAddress = mAddress.getText().toString();
+            final String amount = mAmount.getText().toString();
+            final String memo = mMemo.getText().toString();
+            final String description = mDescription.getText().toString();
+            final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
+            createTransactionWithSecureToken(toAddress, amount, fee, memo, description, true);
+        } else {
+            inputPinCode(false);
+        }
     }
 }

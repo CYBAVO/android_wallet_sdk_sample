@@ -8,14 +8,15 @@
 package com.cybavo.example.wallet.pincode;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cybavo.example.wallet.R;
+import com.cybavo.example.wallet.helper.Helpers;
+import com.cybavo.wallet.service.auth.PinSecret;
+import com.cybavo.wallet.service.view.NumericPinCodeInputView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +35,8 @@ public class SetupPinFragment extends Fragment {
     }
 
     private SetupViewModel mSetupViewModel;
-    private EditText mPinCodeEdit;
+    private NumericPinCodeInputView mPinCodeInput;
+    private TextView mPinCode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,20 @@ public class SetupPinFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPinCodeEdit = view.findViewById(R.id.newPinCode);
-        mPinCodeEdit.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                mSetupViewModel.setPinCode(s.toString());
+        mPinCode = view.findViewById(R.id.pinCode);
+        mPinCodeInput = view.findViewById(R.id.pinCodeInput);
+
+        final int pinLength = mPinCodeInput.getMaxLength();
+        mPinCode.setText(Helpers.makePlaceholder(0, pinLength));
+        mPinCodeInput.setOnPinCodeInputListener(length -> {
+            mPinCode.setText(Helpers.makePlaceholder(length, pinLength));
+
+            // pin code length fulfilled
+            if (length >= pinLength) {
+                final PinSecret pinSecret = mPinCodeInput.submit();
+                mSetupViewModel.setPinSecret(pinSecret);
+            } else {
+                mSetupViewModel.setPinSecret(null);
             }
         });
     }

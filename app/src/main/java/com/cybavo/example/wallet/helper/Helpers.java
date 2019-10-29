@@ -21,11 +21,6 @@ public class Helpers {
 
     private static final String TAG = Helpers.class.getSimpleName();
 
-    private final static String PIN_CODE_PATTERN = "\\d{6}";
-    public static boolean isPinCodeValid(String pinCode) {
-        return pinCode.matches(PIN_CODE_PATTERN);
-    }
-
     public static Bitmap createQrCodeBitmap(String content, int size) {
         try {
             final BitMatrix matrix = new MultiFormatWriter()
@@ -53,5 +48,13 @@ public class Helpers {
         if (context != null) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static String makePlaceholder(int length, int maxLength) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < maxLength; i++) {
+            sb.append(i < length ? "*" : "-");
+        }
+        return sb.toString();
     }
 }

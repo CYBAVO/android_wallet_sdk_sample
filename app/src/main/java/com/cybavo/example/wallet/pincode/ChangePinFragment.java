@@ -9,27 +9,27 @@ package com.cybavo.example.wallet.pincode;
 
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
+import com.cybavo.example.wallet.NavFragment;
 import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.auth.Auth;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.auth.results.ChangePinCodeResult;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class ChangePinFragment extends Fragment {
+public class ChangePinFragment extends Fragment implements InputPinCodeDialog.OnPinCodeInputListener {
 
     private static final String TAG = ChangePinFragment.class.getSimpleName();
 
@@ -44,9 +44,14 @@ public class ChangePinFragment extends Fragment {
 
     private Auth mAuth;
 
-    private EditText mCurrentPinCodeEdit;
-    private EditText mNewPinCodeEdit;
+    private TextView mCurrentPinCode;
+    private TextView mNewPinCode;
     private Button mSubmit;
+
+    private boolean mCurrentOrNew;
+    private PinSecret mCurrentPinSecret = null;
+    private PinSecret mNewPinSecret = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,22 +71,23 @@ public class ChangePinFragment extends Fragment {
 
         mAuth = Auth.getInstance();
 
-        mCurrentPinCodeEdit = view.findViewById(R.id.currentPinCode);
-        mNewPinCodeEdit = view.findViewById(R.id.newPinCode);
-        mNewPinCodeEdit.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                mSubmit.setEnabled(s.length() >= getResources().getInteger(R.integer.pin_code_length));
-            }
-        });
+        mCurrentPinCode = view.findViewById(R.id.currentPinCode);
+        mCurrentPinCode.setOnClickListener(v -> inputPinCode(true));
+
+        mNewPinCode = view.findViewById(R.id.newPinCode);
+        mNewPinCode.setOnClickListener(v -> inputPinCode(false));
 
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(v -> {
-            changePinCode(mCurrentPinCodeEdit.getText().toString(),
-                    mNewPinCodeEdit.getText().toString());
+            changePinCode(mCurrentPinSecret, mNewPinSecret);
         });
+        mSubmit.setEnabled(false);
+    }
+
+    private void inputPinCode(boolean currentOrNew) {
+        mCurrentOrNew = currentOrNew;
+        InputPinCodeDialog dialog = InputPinCodeDialog.newInstance();
+        dialog.show(getChildFragmentManager(), "pinCode");
     }
 
     private void quit() {
@@ -89,18 +95,18 @@ public class ChangePinFragment extends Fragment {
     }
 
     private void setInProgress(boolean inProgress) {
-        mCurrentPinCodeEdit.setEnabled(!inProgress);
-        mNewPinCodeEdit.setEnabled(!inProgress);
+        mCurrentPinCode.setEnabled(!inProgress);
+        mNewPinCode.setEnabled(!inProgress);
         mSubmit.setEnabled(!inProgress);
     }
 
-    private void changePinCode(String currentPinCode, String newPinCode) {
-        if (currentPinCode.isEmpty() || newPinCode.isEmpty()) {
+    private void changePinCode(PinSecret currentPinSecret, PinSecret newPinSecret) {
+        if (currentPinSecret == null || newPinSecret == null) {
             return;
         }
 
         setInProgress(true);
-        mAuth.changePinCode(newPinCode, currentPinCode, new Callback<ChangePinCodeResult>() {
+        mAuth.changePinCode(newPinSecret, currentPinSecret, new Callback<ChangePinCodeResult>() {
             @Override
             public void onError(Throwable error) {
                 Log.w(TAG, "changePinCode failed", error);
@@ -115,5 +121,22 @@ public class ChangePinFragment extends Fragment {
                 quit();
             }
         });
+    }
+
+    @Override
+    public void onPinCodeInput(PinSecret pinSecret) {
+        if (mCurrentOrNew) {
+            mCurrentPinSecret = pinSecret;
+            mCurrentPinCode.setText("******");
+        } else {
+            mNewPinSecret = pinSecret;
+            mNewPinCode.setText("******");
+        }
+        mSubmit.setEnabled(mCurrentPinSecret != null && mNewPinSecret != null);
+    }
+
+    @Override
+    public void onForgotPinCode() {
+        NavFragment.find(this).goRestore();
     }
 }

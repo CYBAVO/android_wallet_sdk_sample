@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#80808080">
+    <item android:id="@android:id/background"
+        android:drawable="@drawable/pin_code_input_button_background_base"/>
+</ripple>

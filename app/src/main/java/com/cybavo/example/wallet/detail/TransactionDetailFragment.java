@@ -9,6 +9,7 @@ package com.cybavo.example.wallet.detail;
 
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -62,7 +63,9 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mDescription;
     private TextView mPending;
     private TextView mFailed;
+    private TextView mDropped;
     private TextView mConfirmBlocks;
+    private TextView mPlatformFee;
     private Button mExplorer;
 
     public TransactionDetailFragment() {
@@ -154,7 +157,16 @@ public class TransactionDetailFragment extends Fragment {
         mFailed = view.findViewById(R.id.failed);
         mFailed.setVisibility(mTransaction.success ? View.GONE : View.VISIBLE);
 
+        mDropped = view.findViewById(R.id.dropped);
+        mDropped.setVisibility(mTransaction.dropped ? View.VISIBLE : View.GONE);
+        if (mTransaction.dropped) {
+            mTxid.setPaintFlags(mTxid.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
         mConfirmBlocks = view.findViewById(R.id.confirmBlocks);
+
+        mPlatformFee = view.findViewById(R.id.platformFee);
+        mPlatformFee.setVisibility(mTransaction.platformFee ? View.VISIBLE : View.GONE);
 
         mExplorer = view.findViewById(R.id.explorer);
         final String uri = CurrencyHelper.getBlockExplorerUri(mWallet.currency, mWallet.tokenAddress, mTransaction.txid);
@@ -188,7 +200,7 @@ public class TransactionDetailFragment extends Fragment {
     }
 
     private void fetchTransactionInfo() {
-        if (mTransaction.txid.isEmpty()) {
+        if (mTransaction.txid.isEmpty() || mTransaction.dropped) {
             return;
         }
 

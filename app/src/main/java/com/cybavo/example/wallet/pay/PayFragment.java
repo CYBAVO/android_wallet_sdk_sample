@@ -28,6 +28,7 @@ import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.wallet.Fee;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
@@ -192,11 +193,11 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
     }
 
     @Override
-    public void onPinCodeInput(String pinCode) {
+    public void onPinCodeInput(PinSecret pinSecret) {
         final String toAddress = mPayTargetAddress;
         final String amount = mPayAmount;
         final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-        createTransaction(toAddress, amount, fee, pinCode);
+        createTransaction(toAddress, amount, fee, pinSecret);
     }
 
     @Override
@@ -212,8 +213,8 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
         mSubmit.setEnabled(!inProgress);
     }
 
-    private void createTransaction(String toAddress, String amount, Fee fee, String pinCode) {
-        if (toAddress.isEmpty() || amount.isEmpty() || fee == null || pinCode.isEmpty()) {
+    private void createTransaction(String toAddress, String amount, Fee fee, PinSecret pinSecret) {
+        if (toAddress.isEmpty() || amount.isEmpty() || fee == null || pinSecret == null) {
             return;
         }
 
@@ -223,7 +224,7 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
         }
 
         setInProgress(true);
-        mService.createTransaction(wallet.walletId, toAddress, amount, fee.amount, "", pinCode, new HashMap<>(), new Callback<CreateTransactionResult>() {
+        mService.createTransaction(wallet.walletId, toAddress, amount, fee.amount, "", pinSecret, new HashMap<>(), new Callback<CreateTransactionResult>() {
             @Override
             public void onError(Throwable error) {
                 Helpers.showToast(getContext(), "createTransaction failed: " + error.getMessage());

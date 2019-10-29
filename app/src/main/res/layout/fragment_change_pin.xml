@@ -26,45 +26,53 @@
         android:textColor="?attr/colorPrimary"
         android:text="@string/message_change_pin"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/currentPinCodeWrapper"
+    <TextView
+        android:id="@+id/currentPinCodeLabel"
         app:layout_constraintTop_toBottomOf="@+id/message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/spacer_xl"
         android:layout_marginStart="@dimen/spacer_m"
         android:layout_marginEnd="@dimen/spacer_m"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/label_current_pin_code">
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:text="@string/label_current_pin_code"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/currentPinCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="numberPassword"
-            android:maxLength="@integer/pin_code_length"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/newPinCodeWrapper"
-        app:layout_constraintTop_toBottomOf="@+id/currentPinCodeWrapper"
-        android:layout_marginTop="@dimen/spacer_l"
+    <Button
+        android:id="@+id/currentPinCode"
+        app:layout_constraintTop_toBottomOf="@+id/currentPinCodeLabel"
+        android:layout_marginTop="@dimen/spacer_s"
         android:layout_marginStart="@dimen/spacer_m"
         android:layout_marginEnd="@dimen/spacer_m"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/label_new_pin_code">
+        android:text="@string/hint_input_pin_code"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/newPinCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="numberPassword"
-            android:maxLength="@integer/pin_code_length"/>
+    <TextView
+        android:id="@+id/newPinCodeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/currentPinCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/spacer_xl"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:text="@string/label_new_pin_code"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/newPinCode"
+        app:layout_constraintTop_toBottomOf="@+id/newPinCodeLabel"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_input_pin_code"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submit"

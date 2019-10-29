@@ -58,6 +58,7 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 4. Edit `values/config.xml` ➜ `default_endpoint` to point to your Wallet Service endpoont
 5. Register your app on CYBAVO WALLET MANAGEMENT system web > Administration > System settings, input `package name` and `Signature keystore SHA1 fingerprint`, follow the instruction to retrieve an `API Code`.
 6. Edit `values/config.xml` ➜ `default_api_code` to fill in yout `API Code`
+7. If you want to provide push notification feature, setup project to integrate [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) (FCM) service, refer to [official document](https://firebase.google.com/docs/cloud-messaging/android/client) for details.
 
 # Features
 

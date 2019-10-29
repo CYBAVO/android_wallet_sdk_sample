@@ -10,7 +10,6 @@ package com.cybavo.example.wallet.create;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +28,7 @@ import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateWalletResult;
@@ -202,8 +202,8 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
     }
 
     @Override
-    public void onPinCodeInput(String pinCode) {
-        createWallet(pinCode);
+    public void onPinCodeInput(PinSecret pinSecret) {
+        createWallet(pinSecret);
     }
 
     @Override
@@ -257,9 +257,9 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
         return true;
     }
 
-    private void createWallet(String pinCode) {
+    private void createWallet(PinSecret pinSecret) {
 
-        if (pinCode.isEmpty()) {
+        if (pinSecret == null) {
             return;
         }
 
@@ -272,7 +272,7 @@ public class CreateWalletFragment extends Fragment implements InputPinCodeDialog
         }
 
         setInProgress(true);
-        Wallets.getInstance().createWallet(currency.currency, currency.tokenAddress, parent, mName, pinCode, extras, new Callback<CreateWalletResult>() {
+        Wallets.getInstance().createWallet(currency.currency, currency.tokenAddress, parent, mName, pinSecret, extras, new Callback<CreateWalletResult>() {
             @Override
             public void onError(Throwable error) {
                 Helpers.showToast(getContext(), "createWallet failed: " + error.getMessage());

@@ -20,7 +20,7 @@ import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
-import com.cybavo.wallet.service.auth.BackupChallenge;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.auth.results.RecoverPinCodeResult;
 import com.cybavo.wallet.service.auth.results.VerifyRecoveryCodeResult;
 
@@ -81,9 +81,9 @@ public class RecoverPinFragment extends Fragment {
         mSetupViewModel = ViewModelProviders.of(this,
                 new SetupViewModel.Factory(getActivity().getApplication())).get(SetupViewModel.class);
 
-        mSetupViewModel.getPinCodeValid().observe(this, valid -> {
+        mSetupViewModel.getPinSecret().observe(this, pinSec -> {
             if (mStep == Step.PIN) {
-                mSubmit.setEnabled(valid);
+                mSubmit.setEnabled(pinSec != null);
             }
         });
 
@@ -174,7 +174,7 @@ public class RecoverPinFragment extends Fragment {
     private void recoverPin() {
         final String verifyCode = mSetupViewModel.getVerifyCode().getValue();
 
-        final String pinCode = mSetupViewModel.getPinCode().getValue();
+        final PinSecret pinSecret = mSetupViewModel.getPinSecret().getValue();
 
         final String question1 = mSetupViewModel.getQuestion(0).getValue(),
                 question2 = mSetupViewModel.getQuestion(1).getValue(),
@@ -186,13 +186,13 @@ public class RecoverPinFragment extends Fragment {
 
         if (question1.isEmpty() || question2.isEmpty() || question3.isEmpty() // questions
                 || answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty() // answers
-                || pinCode.isEmpty() // pinCode
+                || pinSecret == null // pinSecret
                 || verifyCode.isEmpty()) { // verify code
             return;
         }
 
         setInProgress(true);
-        mAuth.recoverPinCode(pinCode, verifyCode,
+        mAuth.recoverPinCode(pinSecret, verifyCode,
                 new Callback<RecoverPinCodeResult>() {
             @Override
             public void onError(Throwable error) {

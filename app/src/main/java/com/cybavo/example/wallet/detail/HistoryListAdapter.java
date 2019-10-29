@@ -7,6 +7,7 @@
 
 package com.cybavo.example.wallet.detail;
 
+import android.graphics.Paint;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         TextView time;
         TextView txid;
         ImageView failed;
+        TextView platformFee;
 
         private Transaction mItem;
 
@@ -80,6 +82,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             time = view.findViewById(R.id.time);
             txid = view.findViewById(R.id.txid);
             failed = view.findViewById(R.id.failed);
+            platformFee = view.findViewById(R.id.platformFee);
         }
 
         void bind(Transaction item) {
@@ -95,12 +98,18 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             amount.setText(item.amount);
 
             txid.setText(item.txid);
+            txid.setPaintFlags(item.dropped ?
+                    txid.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG : // add strike-thru
+                    txid.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG // remove strike-thru
+            );
 
             time.setText(DateFormat.getDateFormat(itemView.getContext()).format(new Date(item.timestamp * 1000)));
 
             itemView.setAlpha(item.pending ? .5f : 1f);
 
             failed.setVisibility(item.success ? View.GONE : View.VISIBLE);
+
+            platformFee.setVisibility(item.platformFee ? View.VISIBLE : View.GONE);
 
             // onClick event
             itemView.setOnClickListener(v -> {

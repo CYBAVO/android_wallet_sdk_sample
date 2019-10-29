@@ -22,6 +22,7 @@ import com.cybavo.wallet.service.api.Callback;
 import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.BackupChallenge;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.auth.results.RestorePinCodeResult;
 import com.cybavo.wallet.service.auth.results.VerifyRestoreQuestionsResult;
 
@@ -77,9 +78,9 @@ public class RestorePinFragment extends Fragment {
         mSetupViewModel = ViewModelProviders.of(this,
                 new SetupViewModel.Factory(getActivity().getApplication())).get(SetupViewModel.class);
 
-        mSetupViewModel.getPinCodeValid().observe(this, valid -> {
+        mSetupViewModel.getPinSecret().observe(this, pinSec -> {
             if (mStep == Step.PIN) {
-                mSubmit.setEnabled(valid);
+                mSubmit.setEnabled(pinSec != null);
             }
         });
 
@@ -173,7 +174,7 @@ public class RestorePinFragment extends Fragment {
 
     private void restore() {
 
-        final String pinCode = mSetupViewModel.getPinCode().getValue();
+        final PinSecret pinSecret = mSetupViewModel.getPinSecret().getValue();
 
         final String question1 = mSetupViewModel.getQuestion(0).getValue(),
                 question2 = mSetupViewModel.getQuestion(1).getValue(),
@@ -185,11 +186,11 @@ public class RestorePinFragment extends Fragment {
 
         if (question1.isEmpty() || question2.isEmpty() || question3.isEmpty() // questions
                 || answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty() // answers
-                || pinCode.isEmpty()) { // pinCode
+                || pinSecret == null) { // pinCode
             return;
         }
 
-        mAuth.restorePinCode(pinCode,
+        mAuth.restorePinCode(pinSecret,
                 BackupChallenge.make(question1, answer1),
                 BackupChallenge.make(question2, answer2),
                 BackupChallenge.make(question3, answer3),

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/addressLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_address"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="?attr/colorPrimary"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/addressLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/address"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/amountLabel"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_transaction_amount"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="?attr/colorPrimary"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/amountLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="6.62607004"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/amount"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/blockchainFeeLabel"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_blockchain_fee"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="?attr/colorPrimary"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/blockchainFeeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/blockchainFee"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="3.14159"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/blockchainFee"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/platformFeeLabel"
+        android:layout_marginTop="@dimen/spacer_s"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_platform_fee"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="?attr/colorPrimary"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/platformFeeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/platformFee"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="2.71828182846"/>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/platformFee"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/estimateDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacer_m"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:text="@string/desc_estimate_transaction"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

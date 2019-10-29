@@ -54,6 +54,9 @@
     <string name="label_all_time">All time</string>
     <string name="label_today">Today</string>
     <string name="label_yesterday">Yesterday</string>
+    <string name="label_platform_fee">Platform Fee</string>
+    <string name="label_platform_fee_abbr">(Pl. Fee)</string>
+    <string name="label_blockchain_fee">Blockchain Fee</string>
 
     <string name="title_transaction_detail">Transaction detail</string>
     <string name="label_from">From</string>
@@ -63,6 +66,7 @@
     <string name="label_pending">Pending</string>
     <string name="label_failed">Failed</string>
     <string name="label_confirm_blocks">%d confirmed</string>
+    <string name="label_dropped">Dropped</string>
     <string name="action_explore">Explore</string>
 
     <string name="action_withdraw">Withdraw</string>
@@ -88,6 +92,10 @@
     <string name="hint_withdraw_description">Description for this transaction, private to this wallet.</string>
     <string name="action_send">Send</string>
     <string name="action_send_with_token">Send w. token</string>
+    <string name="title_confirm_transaction">Confirm transaction</string>
+    <string name="label_transaction_amount">Transaction Amount</string>
+    <string name="desc_estimate_transaction">(Estimated result)</string>
+    <string name="action_confirm">Confirm</string>
 
     <string name="title_eos_resources">EOS resources</string>
     <string name="title_eos_resources_cpu">CPU</string>
@@ -122,6 +130,7 @@
     <string name="label_current_pin_code">Your PIN code</string>
     <string name="label_new_pin_code">New PIN code</string>
     <string name="message_change_pin_success">Your PIN code has been changed successfully</string>
+    <string name="hint_input_pin_code">Click to input…</string>
 
     <string name="message_forgot_answers">I don\'t remember my answers…</string>
     <string name="title_recover_pin">Recover PIN Code</string>

@@ -9,6 +9,7 @@ package com.cybavo.example.wallet.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +20,12 @@ import com.cybavo.example.wallet.R;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.auth.Auth;
+import com.cybavo.wallet.service.auth.results.SetPushDeviceTokenResult;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.ClearSecureTokenResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -109,6 +113,8 @@ public class MainFragment extends Fragment implements WalletListAdapter.WalletLi
                 item.setVisible(!currencies.isEmpty());
             }
         });
+
+        initFCM();
     }
 
     @Override
@@ -156,6 +162,19 @@ public class MainFragment extends Fragment implements WalletListAdapter.WalletLi
             public void onResult(ClearSecureTokenResult clearSecureTokenResult) {
                 Helpers.showToast(context, "Secure Token revoked");
             }
+        });
+    }
+
+    private void initFCM() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+            final String token = task.getResult().getToken();
+            Log.d("FCM", "FCM token: " + token);
+            Auth.getInstance().setPushDeviceToken(token, new Callback<SetPushDeviceTokenResult>() {
+                @Override public void onResult(SetPushDeviceTokenResult result) {}
+                @Override public void onError(Throwable error) {
+                    Log.e("FCM", "setPushDeviceToken failed", error);
+                }
+            });
         });
     }
 }

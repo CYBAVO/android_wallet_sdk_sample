@@ -52,7 +52,7 @@
     <TextView
         android:id="@+id/amount"
         app:layout_constraintStart_toEndOf="@+id/operation"
-        app:layout_constraintEnd_toStartOf="@+id/arrow"
+        app:layout_constraintEnd_toStartOf="@+id/platformFee"
         app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
         android:layout_marginStart="@dimen/spacer_m"
         android:layout_width="0dp"
@@ -62,6 +62,18 @@
         android:ellipsize="end"
         android:textAppearance="?attr/textAppearanceBody1"
         tools:text="3.14159271415927141592714159271415927"/>
+
+    <TextView
+        android:id="@+id/platformFee"
+        app:layout_constraintEnd_toStartOf="@+id/arrow"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHoz"
+        android:layout_marginStart="@dimen/spacer_xs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:text="@string/label_platform_fee_abbr"
+        android:alpha="0.5"/>
 
     <TextView
         android:id="@+id/time"

@@ -20,11 +20,12 @@ import com.cybavo.example.wallet.helper.CurrencyHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.main.MainViewModel;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.api.Error;
 import com.cybavo.wallet.service.auth.Auth;
 import com.cybavo.wallet.service.auth.BackupChallenge;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.auth.results.SetupBackupChallengeResult;
 import com.cybavo.wallet.service.auth.results.SetupPinCodeResult;
-import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.CreateWalletResult;
 
@@ -90,9 +91,9 @@ public class SetupFragment extends Fragment {
         mSetupViewModel = ViewModelProviders.of(this,
                 new SetupViewModel.Factory(getActivity().getApplication())).get(SetupViewModel.class);
 
-        mSetupViewModel.getPinCodeValid().observe(this, valid -> {
+        mSetupViewModel.getPinSecret().observe(this, pinSec -> {
             if (mStep == Step.PIN) {
-                mSubmit.setEnabled(valid);
+                mSubmit.setEnabled(pinSec != null);
             }
         });
 
@@ -142,10 +143,13 @@ public class SetupFragment extends Fragment {
     }
 
     private void setupPin() {
-        final String pinCode = mSetupViewModel.getPinCode().getValue();
+        final PinSecret pinSecret = mSetupViewModel.getPinSecret().getValue();
+
+        // keep later for createDefaultWallet
+        pinSecret.retain();
 
         mSubmit.setEnabled(false);
-        Auth.getInstance().setupPinCode(pinCode,
+        Auth.getInstance().setupPinCode(pinSecret,
                 new Callback<SetupPinCodeResult>() {
             @Override
             public void onError(Throwable error) {
@@ -156,20 +160,25 @@ public class SetupFragment extends Fragment {
 
             @Override
             public void onResult(SetupPinCodeResult result) {
-                createDefaultWallet(pinCode);
+                createDefaultWallet(pinSecret);
             }
         });
     }
 
-    private void createDefaultWallet(String pinCode) {
+    private void createDefaultWallet(PinSecret pinSecret) {
+
+        // keep later for setupBackupChallenge
+        pinSecret.retain();
+
         mSubmit.setEnabled(false);
-        Wallets.getInstance().createWallet(CurrencyHelper.Coin.ETH, "", 0, "ETH", pinCode, new HashMap<>(),
+        Wallets.getInstance().createWallet(CurrencyHelper.Coin.ETH, "", 0, "ETH", pinSecret, new HashMap<>(),
                 new Callback<CreateWalletResult>() {
                     @Override
                     public void onError(Throwable error) {
                         Log.w(TAG, "createWallet failed", error);
                         mSubmit.setEnabled(true);
                         Helpers.showToast(getContext(), "createWallet failed: " + error.getMessage());
+                        quit();
                     }
 
                     @Override
@@ -183,7 +192,7 @@ public class SetupFragment extends Fragment {
 
     private void setupBackupChallenge() {
 
-        final String pinCode = mSetupViewModel.getPinCode().getValue();
+        final PinSecret pinSecret = mSetupViewModel.getPinSecret().getValue();
         final String question1 = mSetupViewModel.getQuestion(0).getValue(),
                 question2 = mSetupViewModel.getQuestion(1).getValue(),
                 question3 = mSetupViewModel.getQuestion(2).getValue();
@@ -194,12 +203,12 @@ public class SetupFragment extends Fragment {
 
         if (question1.isEmpty() || question2.isEmpty() || question3.isEmpty() // questions
                 || answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty() // answers
-                || pinCode.isEmpty()) { // pinCode
+                || pinSecret == null) { // pinCode
             return;
         }
 
         mSubmit.setEnabled(false);
-        Auth.getInstance().setupBackupChallenge(pinCode,
+        Auth.getInstance().setupBackupChallenge(pinSecret,
                 BackupChallenge.make(question1, answer1),
                 BackupChallenge.make(question2, answer2),
                 BackupChallenge.make(question3, answer3),
