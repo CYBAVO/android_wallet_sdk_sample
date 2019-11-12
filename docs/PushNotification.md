@@ -21,8 +21,6 @@
     }
     ```
 3. Receive the notification and utilize `PushNotification.parse(json)` to parse the json string.
-    
-    Android 
     ```java
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
