@@ -5,12 +5,13 @@
 1. Install and configure AWS Amplify push notification, please refer to [this](https://aws-amplify.github.io/docs/js/push-notifications).
 2. Setup AWS Mobile Hub. Please refer to [this](../docs/PushNotificationAws.md).
 ## Working with the API
-1. After receive the push token, call `Auth.getInstance().setPushDeviceToken(token)`
+1. Please remember to call `Auth.getInstance().setPushDeviceToken(token)`after signin. Otherwise the device won't be able to receive notification successfully. 
     ```java
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-
+        
+        // Make sure call setPushDeviceToken after signin. 
         Log.d(TAG, "FCM onNewToken: " + token);
         Auth.getInstance().setPushDeviceToken(token, new Callback<SetPushDeviceTokenResult>() {
             @Override public void onResult(SetPushDeviceTokenResult result) {}
@@ -20,7 +21,7 @@
         });
     }
     ```
-3. Receive the notification and utilize `PushNotification.parse(json)` to parse the json string.
+3. Receive the notification and we provided `PushNotification.parse(json)` to help parsing the json string.
     ```java
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
