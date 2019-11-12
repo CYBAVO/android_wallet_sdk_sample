@@ -5,48 +5,49 @@
 1. Install and configure AWS Amplify push notification, please refer to [this](https://aws-amplify.github.io/docs/js/push-notifications).
 2. Setup AWS Mobile Hub. Please refer to [this](../docs/PushNotificationAws.md).
 ## Working with the API
-1. For iOS, you can set if it's apns sandbox while init WalletSdk
-    ```javascript 1.8
-   WalletSdk.init({
-     endpoint: SERVICE_ENDPOINT,
-     apiCode: SERVICE_API_CODE,
-     apnsSandbox: true,
-   });
+1. After receive the push token, call `Auth.getInstance().setPushDeviceToken(token)`
+    ```java
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+
+        Log.d(TAG, "FCM onNewToken: " + token);
+        Auth.getInstance().setPushDeviceToken(token, new Callback<SetPushDeviceTokenResult>() {
+            @Override public void onResult(SetPushDeviceTokenResult result) {}
+            @Override public void onError(Throwable error) {
+                Log.e(TAG, "setPushDeviceToken failed", error);
+            }
+        });
+    }
     ```
-2. After receive the push token, call `Auth.setPushDeviceToken`
-    ```javascript 1.8
-    PushNotification.onRegister((token) => {
-     //Save the token and set push token after signin
-      AsyncStorage.setItem('pushDeviceToken', token)
-          .then(() =>
-          console.debug('save pushDeviceToken done')
-        );
-    });
-   
-   //This function should be called once signin
-   function setPushDeviceToken() {
-     return async (dispatch, getState) => {
-       const token = await AsyncStorage.getItem('pushDeviceToken');
-       const resp = await Auth.setPushDeviceToken(token);
-       return resp;
-     };
-   }
-    ```
-3. Receive the notification in `PushNotification.onNotification(notification => {})` and utilize `CYBAVOPushNotification.parse(json)` to parse the json string.
+3. Receive the notification and utilize `PushNotification.parse(json)` to parse the json string.
     
-    iOS 
-    ```javascript 1.8
-    PushNotification.onNotification(notification => {
-        let data = CYBAVOPushNotification.parse(
-              JSON.stringify(notification._data.data.jsonBody)
-            )
-    });
-    ```
     Android 
-    ```javascript 1.8
-    PushNotification.onNotification(notification => {
-        let data = CYBAVOPushNotification.parse(
-              notification.data['pinpoint.jsonBody']
-            );
-    });
+    ```java
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+
+        // Check if message contains a data payload.
+        if (remoteMessage.getData().size() > 0) {
+            Map<String, String> data = remoteMessage.getData();
+            final String body = data.get("pinpoint.jsonBody");
+            if (body == null) {
+                Log.d(TAG, "Empty body: " + data);
+                return;
+            }
+            PushNotification notification = PushNotification.parse(body);
+            switch (notification.type) {
+                case PushNotification.Type.TRANSACTION:
+                    TransactionNotification txNotification = (TransactionNotification) notification;
+                    onTransaction(txNotification);
+                    break;
+                default:
+                    Log.w(TAG, "Unknown notification: " + body);
+            }
+        }
+
+    }
     ```
