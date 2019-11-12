@@ -1,7 +1,5 @@
 # Setup push notification
 ## Requirements
-- React native wallet sdk `@cybavo/react-native-wallet-service@1.2.27`
-- iOS wallet sdk `'CYBAVOWallet', '~> 1.2.161'`
 - Android wallet sdk `com.cybavo.wallet:wallet-sdk-lib:1.2.1403`
 ## Installation and configuration
 1. Install and configure AWS Amplify push notification, please refer to [this](https://aws-amplify.github.io/docs/js/push-notifications).
