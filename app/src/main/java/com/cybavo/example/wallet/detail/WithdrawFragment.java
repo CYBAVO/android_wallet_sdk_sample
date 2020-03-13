@@ -61,8 +61,10 @@ public class WithdrawFragment extends Fragment
     private TextView mQuota;
     private TextView mUsage;
     private Spinner mFeeSpinner;
+    private Spinner mTokenIdSpinner;
     private View mScanAddress;
     private EditText mAddress;
+    private TextView mAmountLabel;
     private EditText mAmount;
     private View mMemoLabel;
     private EditText mMemo;
@@ -72,6 +74,7 @@ public class WithdrawFragment extends Fragment
     private ProgressBar mLoading;
 
     private FeeAdapter mFeeAdapter;
+    private TokenIdAdapter mTokenIdAdapter;
     private boolean mWithSecureToken = false;
     private boolean mPinForToken = false;
 
@@ -121,6 +124,10 @@ public class WithdrawFragment extends Fragment
         mQuota = view.findViewById(R.id.quota);
         mUsage = view.findViewById(R.id.usage);
 
+        mTokenIdSpinner = view.findViewById(R.id.token_id);
+        mTokenIdAdapter = new TokenIdAdapter(getContext());
+        mTokenIdSpinner.setAdapter(mTokenIdAdapter);
+
         mFeeSpinner = view.findViewById(R.id.fee);
         mFeeAdapter = new FeeAdapter(getContext());
         mFeeSpinner.setAdapter(mFeeAdapter);
@@ -131,6 +138,7 @@ public class WithdrawFragment extends Fragment
         });
 
         mAddress = view.findViewById(R.id.address);
+        mAmountLabel = view.findViewById(R.id.amountLabel);
         mAmount = view.findViewById(R.id.amount);
         mMemo = view.findViewById(R.id.memo);
         mMemo.setVisibility(hasMemo() ? View.VISIBLE : View.GONE);
@@ -182,6 +190,10 @@ public class WithdrawFragment extends Fragment
             if (entry.init) {
                 mBalance.setText(getString(R.string.template_amount,
                         CurrencyHelper.getEffectiveBalance(entry.balance), mWallet.currencySymbol));
+                if(entry.balance.tokens != null){
+                    mTokenIdAdapter.clear();
+                    mTokenIdAdapter.addAll(entry.balance.tokens);
+                }
             } else {
                 mBalance.setText(getString(R.string.template_amount, "…", mWallet.currencySymbol));
             }
@@ -190,6 +202,15 @@ public class WithdrawFragment extends Fragment
             final Currency c = CurrencyHelper.findCurrency(currencies, mWallet);
             if (c != null) {
                 mCurrency.setText(c.displayName);
+                if(CurrencyHelper.isFungibleToken(c)){
+                    mTokenIdSpinner.setVisibility(View.VISIBLE);
+                    mAmount.setVisibility(View.INVISIBLE);
+                    mAmountLabel.setText(R.string.label_token_id);
+                }else{
+                    mTokenIdSpinner.setVisibility(View.INVISIBLE);
+                    mAmount.setVisibility(View.VISIBLE);
+                    mAmountLabel.setText(R.string.label_amount);
+                }
             } else {
                 mCurrency.setText(mWallet.currencySymbol);
             }
@@ -213,10 +234,10 @@ public class WithdrawFragment extends Fragment
             requestSecureToken(pinSecret);
         } else {
             final String toAddress = mAddress.getText().toString();
-            final String amount = mAmount.getText().toString();
             final String memo = mMemo.getText().toString();
             final String description = mDescription.getText().toString();
             final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
+            String amount = getAmount();
             createTransaction(toAddress, amount, fee, memo, description, pinSecret);
         }
     }
@@ -348,11 +369,9 @@ public class WithdrawFragment extends Fragment
     }
 
     private void estimateTransaction(boolean withSecureToken) {
-
         final String toAddress = mAddress.getText().toString();
-        final String amount = mAmount.getText().toString();
         final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
-
+        String amount = getAmount();
         if (toAddress.isEmpty() || amount.isEmpty() || fee == null) {
             return;
         }
@@ -382,14 +401,19 @@ public class WithdrawFragment extends Fragment
         }
         mWithSecureToken = withSecureToken;
     }
-
+    private String getAmount(){
+        final String amountText = mAmount.getText().toString();
+        final String tokenId = (String) mTokenIdSpinner.getSelectedItem();
+        String amount = mTokenIdSpinner.getVisibility() == View.VISIBLE ? tokenId : amountText;
+        return amount;
+    }
     @Override
     public void onConfirm() {
         if (mWithSecureToken) {
             final String toAddress = mAddress.getText().toString();
-            final String amount = mAmount.getText().toString();
             final String memo = mMemo.getText().toString();
             final String description = mDescription.getText().toString();
+            String amount = getAmount();
             final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
             createTransactionWithSecureToken(toAddress, amount, fee, memo, description, true);
         } else {

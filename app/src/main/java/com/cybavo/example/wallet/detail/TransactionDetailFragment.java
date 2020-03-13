@@ -54,6 +54,7 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mCurrency;
     private TextView mFrom;
     private TextView mTo;
+    private TextView mAmountLabel;
     private TextView mAmount;
     private TextView mFee;
     private TextView mTxid;
@@ -125,8 +126,8 @@ public class TransactionDetailFragment extends Fragment {
         mFrom.setText(mTransaction.fromAddress);
         mTo = view.findViewById(R.id.to);
         mTo.setText(mTransaction.toAddress);
+        mAmountLabel = view.findViewById(R.id.amountLabel);
         mAmount = view.findViewById(R.id.amount);
-        mAmount.setText(getString(R.string.template_amount, mTransaction.amount, mWallet.currencySymbol));
         mFee = view.findViewById(R.id.fee);
         mFee.setText(mTransaction.transactionFee);
         mTxid = view.findViewById(R.id.txid);
@@ -191,8 +192,16 @@ public class TransactionDetailFragment extends Fragment {
             final Currency c = CurrencyHelper.findCurrency(currencies, mWallet);
             if (c != null) {
                 mCurrency.setText(c.displayName);
+                if(CurrencyHelper.isFungibleToken(c)){
+                    mAmountLabel.setText(R.string.label_token_id);
+                    mAmount.setText(mTransaction.amount);
+                }else{
+                    mAmountLabel.setText(R.string.label_amount);
+                    mAmount.setText(getString(R.string.template_amount, mTransaction.amount, mWallet.currencySymbol));
+                }
             } else {
                 mCurrency.setText(mWallet.currencySymbol);
+                mAmount.setText(getString(R.string.template_amount, mTransaction.amount, mWallet.currencySymbol));
             }
         });
 

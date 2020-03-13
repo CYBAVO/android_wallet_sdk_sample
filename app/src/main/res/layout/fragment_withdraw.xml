@@ -148,6 +148,15 @@
         android:imeOptions="actionNext"
         android:inputType="numberDecimal"
         android:hint="@string/hint_withdraw_amount"/>
+    <Spinner
+        android:id="@+id/token_id"
+        app:layout_constraintTop_toBottomOf="@+id/amountLabel"
+        app:layout_constraintBottom_toTopOf="@+id/memoLabel"
+        android:layout_marginStart="@dimen/spacer_m"
+        android:layout_marginEnd="@dimen/spacer_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:popupTheme="@style/Base.Theme.MaterialComponents.Light"/>
 
     <TextView
         android:id="@+id/memoLabel"

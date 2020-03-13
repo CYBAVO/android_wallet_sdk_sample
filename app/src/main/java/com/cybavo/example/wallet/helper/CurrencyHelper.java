@@ -62,7 +62,11 @@ public class CurrencyHelper {
                 "drawable", context.getPackageName()
         );
     }
-
+    public static boolean isFungibleToken(Currency currency){
+        if(currency == null)
+            return false;
+        return currency.tokenVersion == 721;
+    }
     // find currency by type & token addr
     public static Currency findCurrency(List<Currency> currencies, Wallet wallet) {
         return findCurrency(currencies, wallet.currency, wallet.tokenAddress);

@@ -81,6 +81,7 @@
     <string name="title_withdraw">Withdraw</string>
     <string name="label_address">Address</string>
     <string name="label_amount">Amount</string>
+    <string name="label_token_id">Token ID</string>
     <string name="label_memo">Memo</string>
     <string name="label_fee">Transaction fee</string>
     <string name="label_description">Description</string>
