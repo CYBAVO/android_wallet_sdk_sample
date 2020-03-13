@@ -38,19 +38,22 @@ public class ConfirmTransactionDialog extends DialogFragment {
     private static final String ARG_TX_AMOUNT = "tx_amount";
     private static final String ARG_PLAFTORM_FEE = "platform_fee";
     private static final String ARG_BLOCKCHAIN_FEE = "blockchain_fee";
+    private static final String ARG_IS_FUNGIBLE_TOKEN = "is_fungible_token";
 
     private String mAddress;
     private String mTransactionAmount;
     private String mPlatformFee;
     private String mBlockchainFee;
+    private boolean mIsFungibvleToken;
 
-    static ConfirmTransactionDialog newInstance(String address, String transactionAmount, String platformFee, String blockchainFee) {
+    static ConfirmTransactionDialog newInstance(String address, String transactionAmount, String platformFee, String blockchainFee, boolean isFungibleToken) {
         ConfirmTransactionDialog dialog = new ConfirmTransactionDialog();
         Bundle args = new Bundle();
         args.putString(ARG_ADDRESS, address);
         args.putString(ARG_TX_AMOUNT, transactionAmount);
         args.putString(ARG_PLAFTORM_FEE, platformFee);
         args.putString(ARG_BLOCKCHAIN_FEE, blockchainFee);
+        args.putBoolean(ARG_IS_FUNGIBLE_TOKEN, isFungibleToken);
         dialog.setArguments(args);
         return dialog;
     }
@@ -66,6 +69,7 @@ public class ConfirmTransactionDialog extends DialogFragment {
             mTransactionAmount = getArguments().getString(ARG_TX_AMOUNT);
             mPlatformFee = getArguments().getString(ARG_PLAFTORM_FEE);
             mBlockchainFee = getArguments().getString(ARG_BLOCKCHAIN_FEE);
+            mIsFungibvleToken = getArguments().getBoolean(ARG_IS_FUNGIBLE_TOKEN);
         }
     }
 
@@ -87,9 +91,14 @@ public class ConfirmTransactionDialog extends DialogFragment {
 
         TextView blockchainFeeLabel = view.findViewById(R.id.blockchainFeeLabel);
         TextView blockchainFeeText = view.findViewById(R.id.blockchainFee);
-
+        if(mIsFungibvleToken){
+            amountLabel.setText(R.string.label_token_id);
+            updateValue(amountLabel, amountText, mTransactionAmount,"");
+        }else{
+            amountLabel.setText(R.string.label_amount);
+            updateValue(amountLabel, amountText, mTransactionAmount);
+        }
         updateValue(addressLabel, address, mAddress);
-        updateValue(amountLabel, amountText, mTransactionAmount);
         updateValue(platformFeeLabel, platformFeeText, mPlatformFee);
         updateValue(blockchainFeeLabel, blockchainFeeText, mBlockchainFee);
 
@@ -106,7 +115,10 @@ public class ConfirmTransactionDialog extends DialogFragment {
     }
 
     private void updateValue(TextView labelView, TextView valueView, String src) {
-        if (TextUtils.isEmpty(src) || "0".equals(src)) {
+        updateValue(labelView,valueView,src, "0");
+    }
+    private void updateValue(TextView labelView, TextView valueView, String src, String skipValue) {
+        if (TextUtils.isEmpty(src) || skipValue.equals(src)) {
             labelView.setVisibility(View.GONE);
             valueView.setVisibility(View.GONE);
         } else {

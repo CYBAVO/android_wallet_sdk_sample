@@ -396,7 +396,7 @@ public class WithdrawFragment extends Fragment
         final String tag = ConfirmTransactionDialog.class.getSimpleName();
         if (getChildFragmentManager().findFragmentByTag(tag) == null) {
             ConfirmTransactionDialog.newInstance(
-                    address, transactionAmount, platformFee, blockchainFee)
+                    address, transactionAmount, platformFee, blockchainFee, mTokenIdSpinner.getVisibility() == View.VISIBLE)
                     .show(getChildFragmentManager(), tag);
         }
         mWithSecureToken = withSecureToken;
