@@ -102,6 +102,20 @@
         android:textColor="?android:attr/textColorSecondary"
         tools:text="0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295"/>
 
+    <TextView
+        android:id="@+id/replace_txid"
+        app:layout_constraintStart_toStartOf="@+id/txid"
+        app:layout_constraintEnd_toEndOf="@+id/txid"
+        app:layout_constraintTop_toBottomOf="@+id/txid"
+        app:layout_constraintWidth_percent=".5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?android:attr/textColorSecondary"
+        tools:text="0xf6DabB290FCE73f5617ED381ca90dBb7af0E8295"/>
+
     <ImageView
         android:id="@+id/arrow"
         app:layout_constraintTop_toTopOf="parent"

@@ -25,12 +25,15 @@ import com.cybavo.example.wallet.helper.CurrencyHelper;
 import com.cybavo.example.wallet.helper.Helpers;
 import com.cybavo.example.wallet.helper.ToolbarHelper;
 import com.cybavo.example.wallet.main.MainViewModel;
+import com.cybavo.example.wallet.pincode.InputPinCodeDialog;
 import com.cybavo.wallet.service.api.Callback;
+import com.cybavo.wallet.service.auth.PinSecret;
 import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Transaction;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
 import com.cybavo.wallet.service.wallet.results.GetTransactionInfoResult;
+import com.cybavo.wallet.service.wallet.results.ReplaceTransactionResult;
 
 import java.util.Date;
 import java.util.Locale;
@@ -40,12 +43,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class TransactionDetailFragment extends Fragment {
+public class TransactionDetailFragment extends Fragment
+        implements InputPinCodeDialog.OnPinCodeInputListener {
 
     private static final String ARG_WALLET = "wallet";
     private static final String ARG_TRANSACTION = "transaction";
 
     private MainViewModel mViewModel;
+    private DetailViewModel mDetailViewModel;
+
     protected Wallet mWallet;
     private Transaction mTransaction;
 
@@ -58,6 +64,7 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mAmount;
     private TextView mFee;
     private TextView mTxid;
+    private TextView mReplaceTxid;
     private TextView mError;
     private TextView mTime;
     private TextView mMemo;
@@ -65,9 +72,20 @@ public class TransactionDetailFragment extends Fragment {
     private TextView mPending;
     private TextView mFailed;
     private TextView mDropped;
+    private TextView mReplaced;
     private TextView mConfirmBlocks;
     private TextView mPlatformFee;
     private Button mExplorer;
+    private Button mSpeedUp;
+    private Button mCancel;
+
+
+    private enum Action {
+        None,
+        IncreaseFee,
+        Cancel,
+    }
+    private Action mAction = Action.None;
 
     public TransactionDetailFragment() {
         // Required empty public constructor
@@ -164,6 +182,17 @@ public class TransactionDetailFragment extends Fragment {
             mTxid.setPaintFlags(mTxid.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
+        mReplaced = view.findViewById(R.id.replaced);
+        mReplaced.setVisibility(mTransaction.replaced ? View.VISIBLE : View.GONE);
+        mReplaceTxid = view.findViewById(R.id.replace_txid);
+        if (mTransaction.replaced) {
+            mTxid.setPaintFlags(mTxid.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            mReplaceTxid.setVisibility(View.VISIBLE);
+            mReplaceTxid.setText(mTransaction.replaceTxid);
+        } else {
+            mReplaceTxid.setVisibility(View.GONE);
+        }
+
         mConfirmBlocks = view.findViewById(R.id.confirmBlocks);
 
         mPlatformFee = view.findViewById(R.id.platformFee);
@@ -178,6 +207,14 @@ public class TransactionDetailFragment extends Fragment {
         } else {
             mExplorer.setVisibility(View.GONE);
         }
+
+        mSpeedUp = view.findViewById(R.id.speedUp);
+        mSpeedUp.setVisibility(mTransaction.replaceable ? View.VISIBLE : View.GONE);
+        mSpeedUp.setOnClickListener(v -> replaceTransactionFee());
+
+        mCancel = view.findViewById(R.id.cancel);
+        mCancel.setVisibility(mTransaction.replaceable ? View.VISIBLE : View.GONE);
+        mCancel.setOnClickListener(v -> cancelTransaction());
     }
 
     @Override
@@ -205,7 +242,16 @@ public class TransactionDetailFragment extends Fragment {
             }
         });
 
+        mDetailViewModel = ViewModelProviders.of(getParentFragment(),
+                new DetailViewModel.Factory(getActivity().getApplication(), mWallet))
+                .get(DetailViewModel.class);
+
         fetchTransactionInfo();
+    }
+
+    private void setInProgress(boolean inProgress) {
+        mSpeedUp.setEnabled(!inProgress);
+        mCancel.setEnabled(!inProgress);
     }
 
     private void fetchTransactionInfo() {
@@ -223,6 +269,9 @@ public class TransactionDetailFragment extends Fragment {
             public void onResult(GetTransactionInfoResult result) {
                 mConfirmBlocks.setVisibility(View.VISIBLE);
                 mConfirmBlocks.setText(getString(R.string.label_confirm_blocks, result.confirmBlocks));
+
+                mSpeedUp.setVisibility(result.replaceable ? View.VISIBLE : View.GONE);
+                mCancel.setVisibility(result.replaceable ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -233,5 +282,58 @@ public class TransactionDetailFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void replaceTransactionFee() {
+        mAction = Action.IncreaseFee;
+        InputPinCodeDialog dialog = InputPinCodeDialog.newInstance();
+        dialog.show(getChildFragmentManager(), "pinCode");
+    }
+
+
+    private void cancelTransaction() {
+        mAction = Action.Cancel;
+        InputPinCodeDialog dialog = InputPinCodeDialog.newInstance();
+        dialog.show(getChildFragmentManager(), "pinCode");
+    }
+
+    private final static String LARGER_TX_FEE = "0.0000003";
+    // must be at least 10% higher than original transaction, let's just hard-coded a value for now
+
+    @Override
+    public void onPinCodeInput(PinSecret pinSecret) {
+        if (mAction == Action.IncreaseFee) {
+
+            Wallets.getInstance().increaseTransactionFee(mWallet.walletId, mTransaction.txid, LARGER_TX_FEE, pinSecret, new Callback<ReplaceTransactionResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    Helpers.showToast(getContext(), "replaceTransactionFee failed: " + error.getMessage());
+                }
+
+                @Override
+                public void onResult(ReplaceTransactionResult replaceTransactionResult) {
+                    mDetailViewModel.refreshHistory();
+                    getFragmentManager().popBackStack();
+                }
+            });
+        } else if (mAction == Action.Cancel) {
+            Wallets.getInstance().cancelTransaction(mWallet.walletId, mTransaction.txid, LARGER_TX_FEE, pinSecret, new Callback<ReplaceTransactionResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    Helpers.showToast(getContext(), "cancelTransaction failed: " + error.getMessage());
+                }
+
+                @Override
+                public void onResult(ReplaceTransactionResult replaceTransactionResult) {
+                    mDetailViewModel.refreshHistory();
+                    getFragmentManager().popBackStack();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onForgotPinCode() {
+
     }
 }

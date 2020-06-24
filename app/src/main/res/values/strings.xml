@@ -67,7 +67,10 @@
     <string name="label_failed">Failed</string>
     <string name="label_confirm_blocks">%d confirmed</string>
     <string name="label_dropped">Dropped</string>
+    <string name="label_replaced">Replaced</string>
     <string name="action_explore">Explore</string>
+    <string name="action_replace_fee">Speed up</string>
+    <string name="action_cancel">Cancel</string>
 
     <string name="action_withdraw">Withdraw</string>
     <string name="warning_withdraw">Send only %1$s to this deposit address. Sending and other coin or token to the address may result in the loss of your deposit.</string>

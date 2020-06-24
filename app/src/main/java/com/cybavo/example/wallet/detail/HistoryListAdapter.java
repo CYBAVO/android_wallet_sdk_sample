@@ -8,6 +8,7 @@
 package com.cybavo.example.wallet.detail;
 
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         TextView amount;
         TextView time;
         TextView txid;
+        TextView replaceTxid;
         ImageView failed;
         TextView platformFee;
 
@@ -81,6 +83,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             amount = view.findViewById(R.id.amount);
             time = view.findViewById(R.id.time);
             txid = view.findViewById(R.id.txid);
+            replaceTxid = view.findViewById(R.id.replace_txid);
             failed = view.findViewById(R.id.failed);
             platformFee = view.findViewById(R.id.platformFee);
         }
@@ -98,10 +101,17 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             amount.setText(item.amount);
 
             txid.setText(item.txid);
-            txid.setPaintFlags(item.dropped ?
+            txid.setPaintFlags(item.dropped || item.replaced ?
                     txid.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG : // add strike-thru
                     txid.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG // remove strike-thru
             );
+            if (TextUtils.isEmpty(item.replaceTxid)) {
+                replaceTxid.setVisibility(View.GONE);
+            } else {
+                replaceTxid.setVisibility(View.VISIBLE);
+                replaceTxid.setText(item.replaceTxid);
+            }
+
 
             time.setText(DateFormat.getDateFormat(itemView.getContext()).format(new Date(item.timestamp * 1000)));
 

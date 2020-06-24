@@ -45,7 +45,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Wallet SDK
-    implementation 'com.cybavo.wallet:wallet-sdk-lib:1.2.+'
+    implementation 'com.cybavo.wallet:wallet-sdk-lib:[1.2.2044-SNAPSHOT,)'
 
     // Android & AppCompat
     implementation 'androidx.appcompat:appcompat:1.1.0'
