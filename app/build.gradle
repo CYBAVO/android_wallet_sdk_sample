@@ -9,6 +9,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
 
@@ -45,7 +46,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Wallet SDK
-    implementation 'com.cybavo.wallet:wallet-sdk-lib:[1.2.2044-SNAPSHOT,)'
+    implementation 'com.cybavo.wallet:wallet-sdk-lib:1.2.+'
 
     // Android & AppCompat
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -68,4 +69,6 @@ dependencies {
 
     // Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_endpoint">MY_SERVICE_ENDPOINT</string>
-    <string name="default_api_code">MY_SERVICE_API_CODE</string>
-    <string name="google_sign_in_web_cli_id">MY_GOOGLE_SIGN_IN_WEB_CLI_ID</string>
+    <string name="default_endpoint_">http://192.168.1.101:8068/v1/mw/</string>
+    <string name="default_endpoint">https://mvault.cybavo.com/v1/mw/</string>
+    <string name="default_api_code_">E2J8uttUnYtlwo6WsOQEQw</string>
+    <string name="default_api_code">KnpjIKMftyKrvzRWXsM5vQ</string>
+    <string name="google_sign_in_web_cli_id">992053546599-smilqh1008u2g89cpht3behvrkijp771.apps.googleusercontent.com</string>
     <string name="wechat_sign_in_app_id">MY_WECHAT_SIGN_IN_APP_ID</string>
     <integer name="backup_answer_max_length">20</integer>
     <integer name="qr_code_image_size">480</integer>

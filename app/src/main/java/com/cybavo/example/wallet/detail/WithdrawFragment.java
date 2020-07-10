@@ -9,6 +9,7 @@ package com.cybavo.example.wallet.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import com.cybavo.wallet.service.wallet.Currency;
 import com.cybavo.wallet.service.wallet.Fee;
 import com.cybavo.wallet.service.wallet.Wallet;
 import com.cybavo.wallet.service.wallet.Wallets;
+import com.cybavo.wallet.service.wallet.results.CallAbiFunctionResult;
 import com.cybavo.wallet.service.wallet.results.CreateTransactionResult;
 import com.cybavo.wallet.service.wallet.results.EstimateTransactionResult;
 import com.cybavo.wallet.service.wallet.results.RequestSecureTokenResult;
@@ -49,6 +51,8 @@ import androidx.lifecycle.ViewModelProviders;
 public class WithdrawFragment extends Fragment
         implements InputPinCodeDialog.OnPinCodeInputListener, ConfirmTransactionDialog.OnConfirmListener {
 
+    private final static String TAG = "WithdrawFragment";
+    private static final String ABI_JSON = "[{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_testInt\",\"type\":\"uint256\"},{\"name\":\"_testStr\",\"type\":\"string\"}],\"name\":\"balanceOfCB\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferQQQ\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"transferFee\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_testInt\",\"type\":\"uint256\"},{\"name\":\"_testStr\",\"type\":\"string\"}],\"name\":\"transferCB\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"}]";
     private static final String ARG_WALLET = "wallet";
 
     private Wallets mService;
@@ -239,6 +243,8 @@ public class WithdrawFragment extends Fragment
             final Fee fee = (Fee) mFeeSpinner.getSelectedItem();
             String amount = getAmount();
             createTransaction(toAddress, amount, fee, memo, description, pinSecret);
+//            callAbiFunctionRead();
+//            callAbiFunctionTransaction(fee, pinSecret);
         }
     }
 
@@ -270,6 +276,41 @@ public class WithdrawFragment extends Fragment
         mLoading.setVisibility(inProgress ? View.VISIBLE : View.GONE);
     }
 
+    /*
+     * The smart contract is on test net for testing purpose
+     * */
+    private void callAbiFunctionTransaction(Fee fee, PinSecret pinSecret){
+        Wallets.getInstance().callAbiFunctionTransaction(mWallet.walletId, "transferCB", "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f", ABI_JSON
+                , new Object[]{"0x490d510c1A8b74749949cFE5cA06D0C6BD7119E2", 1, 100, "unintest"}, fee.amount, pinSecret, new Callback<CallAbiFunctionResult>() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.e(TAG, "callAbiFunctionTransaction failed", error);
+                    }
+
+                    @Override
+                    public void onResult(CallAbiFunctionResult result) {
+                        Log.d(TAG, String.format("callAbiFunctionTransaction success:%s, %s", result.txid, result.signedTx));
+                    }
+                });
+    }
+
+    /*
+     * The smart contract is on test net for testing purpose
+     * */
+    private void callAbiFunctionRead(){
+        Wallets.getInstance().callAbiFunctionRead(mWallet.walletId, "balanceOfCB", "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f", ABI_JSON
+                , new Object[]{"0x281F397c5a5a6E9BE42255b01EfDf8b42F0Cd179", 100, "test"}, new Callback<CallAbiFunctionResult>() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.e(TAG, "callAbiFunctionRead failed", error);
+                    }
+
+                    @Override
+                    public void onResult(CallAbiFunctionResult result) {
+                        Log.d(TAG, String.format("callAbiFunctionRead success:%s", result.output));
+                    }
+                });
+    }
     private void createTransaction(String toAddress, String amount, Fee fee, String memo, String description, PinSecret pinSecret) {
         if (toAddress.isEmpty() || amount.isEmpty() || fee == null || pinSecret == null) {
             return;
