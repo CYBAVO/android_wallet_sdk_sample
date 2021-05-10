@@ -47,10 +47,10 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
         // Required empty public constructor
     }
 
-    public static PayFragment newInstance(int currency, String tokenAddress, String amount, String targetAddress) {
+    public static PayFragment newInstance(long currency, String tokenAddress, String amount, String targetAddress) {
         PayFragment fragment = new PayFragment();
         Bundle args = new Bundle();
-        args.putInt(PayActivity.ARG_PAY_CURRENCY, currency);
+        args.putLong(PayActivity.ARG_PAY_CURRENCY, currency);
         args.putString(PayActivity.ARG_PAY_TOKEN_ADDRESS, tokenAddress);
         args.putString(PayActivity.ARG_PAY_AMOUNT, amount);
         args.putString(PayActivity.ARG_PAY_TARGET_ADDRESS, targetAddress);
@@ -59,7 +59,7 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
     }
 
     private Wallets mService;
-    private int mPayCurrency;
+    private long mPayCurrency;
     private String mPayTokenAddress;
     private String mPayAmount;
     private String mPayTargetAddress;
@@ -85,7 +85,7 @@ public class PayFragment extends Fragment implements InputPinCodeDialog.OnPinCod
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPayCurrency = getArguments().getInt(PayActivity.ARG_PAY_CURRENCY);
+            mPayCurrency = getArguments().getLong(PayActivity.ARG_PAY_CURRENCY);
             mPayTokenAddress = getArguments().getString(PayActivity.ARG_PAY_TOKEN_ADDRESS);
             mPayAmount = getArguments().getString(PayActivity.ARG_PAY_AMOUNT);
             mPayTargetAddress = getArguments().getString(PayActivity.ARG_PAY_TARGET_ADDRESS);

@@ -11,11 +11,11 @@ import java.util.Objects;
 
 public class BalanceKey {
 
-    public final int currency;
+    public final long currency;
     public final String tokenAddress;
     public final String address;
 
-    public BalanceKey(int currency, String tokenAddress, String address) {
+    public BalanceKey(long currency, String tokenAddress, String address) {
         this.currency = currency;
         this.tokenAddress = tokenAddress;
         this.address = address;

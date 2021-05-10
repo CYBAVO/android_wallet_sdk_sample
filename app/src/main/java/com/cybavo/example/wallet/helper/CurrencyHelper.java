@@ -46,7 +46,7 @@ public class CurrencyHelper {
         CurrencyHelper.sTxExplorers.put(Pair.create(Coin.EOS, ""), "https://eosflare.io/tx/%s"); // EOS
         CurrencyHelper.sTxExplorers.put(Pair.create(Coin.TRX, ""), "https://tronscan.org/#/transaction/%s"); // TRX
     }
-    public static String getBlockExplorerUri(int currency, String tokenAddress, String txid) {
+    public static String getBlockExplorerUri(long currency, String tokenAddress, String txid) {
         final String uri = sTxExplorers.get(Pair.create(currency, tokenAddress));
         if (uri != null) {
             return String.format(Locale.getDefault(), uri, txid);
@@ -72,7 +72,7 @@ public class CurrencyHelper {
         return findCurrency(currencies, wallet.currency, wallet.tokenAddress);
     }
 
-    public static Currency findCurrency(List<Currency> currencies, int currency, String tokenAddress) {
+    public static Currency findCurrency(List<Currency> currencies, long currency, String tokenAddress) {
         if (currencies != null) {
             for (Currency c : currencies) { // find currency matches wallet
                 if (c.currency == currency &&

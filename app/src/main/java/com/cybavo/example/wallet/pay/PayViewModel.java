@@ -45,10 +45,10 @@ public class PayViewModel extends AndroidViewModel {
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Application mApp;
-        private final int mCurrency;
+        private final long mCurrency;
         private final String mTokenAddress;
 
-        public Factory(Application application, int currency, String tokenAddress) {
+        public Factory(Application application, long currency, String tokenAddress) {
             mApp = application;
             mCurrency = currency;
             mTokenAddress = tokenAddress;
@@ -63,7 +63,7 @@ public class PayViewModel extends AndroidViewModel {
     }
 
     private Wallets mService = Wallets.getInstance();
-    private final int mCurrency;
+    private final long mCurrency;
     private final String mTokenAddress;
 
     private MutableLiveData<List<Wallet>> mAvailableWallets;
@@ -73,7 +73,7 @@ public class PayViewModel extends AndroidViewModel {
     private LiveData<BalanceEntry> mBalance;
     private MutableLiveData<List<Fee>> mFee;
 
-    public PayViewModel(@NonNull Application application, int currency, String tokenAddress) {
+    public PayViewModel(@NonNull Application application, long currency, String tokenAddress) {
         super(application);
         mCurrency = currency;
         mTokenAddress = tokenAddress;

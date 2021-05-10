@@ -82,7 +82,7 @@ public class PayActivity extends AppCompatActivity implements SignInStateListene
 
     private void showPay() {
 
-        final int currency = getIntent().getIntExtra(ARG_PAY_CURRENCY, -1);
+        final long currency = getIntent().getLongExtra(ARG_PAY_CURRENCY, -1);
         final String tokenAddress = getIntent().getStringExtra(ARG_PAY_TOKEN_ADDRESS);
         final String amount = getIntent().getStringExtra(ARG_PAY_AMOUNT);
         final String targetAddress = getIntent().getStringExtra(ARG_PAY_TARGET_ADDRESS);

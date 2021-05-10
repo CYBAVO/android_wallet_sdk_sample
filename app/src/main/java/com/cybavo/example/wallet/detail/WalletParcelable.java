@@ -34,7 +34,7 @@ public class WalletParcelable implements Parcelable {
         wallet.type = in.readInt();
         wallet.address = in.readString();
         wallet.name = in.readString();
-        wallet.currency = in.readInt();
+        wallet.currency = in.readLong();
         wallet.tokenAddress = in.readString();
         wallet.currencySymbol = in.readString();
         wallet.parentWalletId = in.readLong();
@@ -64,7 +64,7 @@ public class WalletParcelable implements Parcelable {
         dest.writeInt(wallet.type);
         dest.writeString(wallet.address);
         dest.writeString(wallet.name);
-        dest.writeInt(wallet.currency);
+        dest.writeLong(wallet.currency);
         dest.writeString(wallet.tokenAddress);
         dest.writeString(wallet.currencySymbol);
         dest.writeLong(wallet.parentWalletId);
