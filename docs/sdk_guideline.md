@@ -409,7 +409,7 @@ There are 2 types of push notification: Transacion and Announcement.
       wallet_id    | Wallet ID    |  long 
       currency    | Currency     |  int 
       token_address  | Token address | String
-      out  | Transaction direction<br>(true: out, false: in)| Boolean
+      out  | Transaction direction<br>(true: out, false: in)| String
       amount  | Transaction amount | String
       fee  | Transaction fee | String
       from_address  | Transaction from address | String
