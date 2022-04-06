@@ -213,7 +213,7 @@ public enum SignInState {
 ## Model : UserState
 
 ```java
-public protocol UserState {
+public final class UserState {
 
     public String realName; /* Real name of user */
 
@@ -383,7 +383,7 @@ There are 2 types of push notification: Transacion and Announcement.
 
 - Transaction
   
-  ```json
+  ```javascript
     {
         "currency": "194",
         "token_address": "",
@@ -402,39 +402,39 @@ There are 2 types of push notification: Transacion and Announcement.
     }
     ```
 
-- The keys of Transaction `remoteMessage` are listed below
-  Key    | Description  | Type  
-    :------------|:------------|:-------
-    type    | notification type    |  String 
-    wallet_id    | Wallet ID    |  long 
-    currency    | Currency     |  int 
-    token_address  | Token address | String
-    out  | Transaction direction<br>(true: out, false: in)| Boolean
-    amount  | Transaction amount | String
-    fee  | Transaction fee | String
-    from_address  | Transaction from address | String
-    to_address  | Transaction to address | String
-    timestamp  | Transaction timestamp | long
-    txid  | Transaction TXID | String
-    description  | Transaction description | String
+  - The keys of Transaction `remoteMessage` are listed below
+    Key    | Description  | Type  
+      :------------|:------------|:-------
+      type    | notification type    |  String 
+      wallet_id    | Wallet ID    |  long 
+      currency    | Currency     |  int 
+      token_address  | Token address | String
+      out  | Transaction direction<br>(true: out, false: in)| Boolean
+      amount  | Transaction amount | String
+      fee  | Transaction fee | String
+      from_address  | Transaction from address | String
+      to_address  | Transaction to address | String
+      timestamp  | Transaction timestamp | long
+      txid  | Transaction TXID | String
+      description  | Transaction description | String
 
-  Notification display example:
+  - Notification display example:
 
-  - Withdraw (currencySymbol was from API getWallets)
+    - Withdraw (currencySymbol was from API getWallets)
 
-    ```String
-    Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
-    ```
+      ```
+      Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
+      ```
 
-  - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
-  
-    ```string
-    Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
-    ```
+    - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
+    
+      ```
+      Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
+      ```
 
 - Announcement
 
-  ```JSON
+  ```javascript
   {
       "body": "All CYBAVO Wallet users will be charged 0.1% platform fee for BTC transaction during withdraw since 2021/9/10",
       "sound": "default",
