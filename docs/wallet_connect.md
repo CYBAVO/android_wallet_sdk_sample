@@ -70,7 +70,7 @@
 
 - ### [eth_sign](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sign)
 
-  - as above, [personal_sign](#personalsign)
+  - as above, [personal_sign](#personalsignhttpsdocswalletconnectcomjson-rpc-api-methodsethereumpersonalsign)
 
 - ### [eth_signTypedData](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_signtypeddata)
 
