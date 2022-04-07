@@ -48,7 +48,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
    walletsdk.maven.username=$MAVEN_REPO_USRENAME
    walletsdk.maven.password=$MAVEN_REPO_PASSWORD
    ```
-- Add the following dependencies to your `build.gradle` file:
+- Add the following dependencies to your app level `build.gradle` file:
    ```gradle
    dependencies {
       implementation 'com.cybavo.wallet:wallet-sdk-lib:1.2.+'
@@ -158,7 +158,7 @@ public enum SignInState {
 }
 ```
 
-- monitor `SignInState`
+- Listen `SignInState`
 
   1. Implement `SignInStateListener` to handle `onUserStateChanged` callback 
   2. Add the listener through `addSignInStateListener` 
@@ -227,7 +227,7 @@ public final class UserState {
 }
 ```
 
-- Once you SignedIn, you should get the current `UserState` to check the variable `setPin`.
+- Once you signed in, you should get the current `UserState` to check the variable `setPin`.
 
   `if (setPin == false)` ➡️ go to **_Setup PIN Code_** in the next section
 
@@ -243,13 +243,13 @@ public final class UserState {
 
 # PIN Code
 
-PIN Code is one of the most important components for user security.  
-Ensure your users setPIN right after sign-in success.
+PIN code is one of the most important components for user security.  
+Ensure your users setPin right after sign-in success.
 
 ## NumericPinCodeInputView
 
 - Use `NumericPinCodeInputView` to input PIN code, see [this](NumericPinCodeInputView.md)
-- feel free to customize your own input view.
+- Feel free to customize your own input view.
 
 ## Setup PIN Code / Change PIN Code
 
@@ -271,7 +271,7 @@ public abstract void changePinCode(PinSecret newPinSecret,
 ## Reset PIN code - with Security Question
 - There are 2 ways to reset PIN code, one is by answering security questions
 
-  1. Before that, the user have to set the answers of security questions.
+  1. Before that, the user has to set the answers of security questions.
   ```java
   public abstract void setupBackupChallenge(PinSecret pinSecret,
                                                 BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
@@ -294,7 +294,7 @@ public abstract void changePinCode(PinSecret newPinSecret,
 
 ## Reset PIN code - with Admin System
 
-- If the user forgot both PIN code and the answers, there's another way to reset PIN code.
+- If the user forgot both the PIN code and the answers, there's another way to reset the PIN code.
 
   1. First, call API `forgotPinCode` to get the **_Handle Number_**.
   ```java
@@ -317,12 +317,12 @@ public abstract void changePinCode(PinSecret newPinSecret,
 
 ## Notice
 
-- Old version `String pinCode` was deprecated, use `PinSecret` instead.
+- Old version `String pinCode` is deprecated, use `PinSecret` instead.
 
   `PinSecret` advantages:
-    1. much more secure
-    2. compatible with NumericPinCodeInputView
-    3. certainly release the PIN code with API  
+    1. Much more secure
+    2. Compatible with NumericPinCodeInputView
+    3. Certainly release the PIN code with API  
 
 - `PinSecret` will be cleared after Wallet and Auth APIs are executed. If you intendly want to keep the `PinSecret`, call `PinSecret.retain()` everytime before APIs are called.
 
