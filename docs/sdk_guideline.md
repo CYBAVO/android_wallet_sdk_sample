@@ -279,9 +279,6 @@ There are 2 ways to reset PIN code: by answering security questions or reset fro
   public abstract void setupBackupChallenge(PinSecret pinSecret,
                                                 BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
                                                 Callback<SetupBackupChallengeResult> callback);
-
-
-  public abstract void verifyRestoreQuestions(BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3, Callback<VerifyRestoreQuestionsResult> callback);
   ```
   1. Get the security question for user to answer
   ```java
