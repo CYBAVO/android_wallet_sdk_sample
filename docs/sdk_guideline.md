@@ -415,15 +415,15 @@ There are 2 types of push notification: Transacion and Announcement.
     Key    | Description  | Type  
       :------------|:------------|:-------
       type    | notification type    |  String 
-      wallet_id    | Wallet ID    |  long 
-      currency    | Currency     |  int 
+      wallet_id    | Wallet ID    |  String 
+      currency    | Currency     |  String 
       token_address  | Token address | String
-      out  | Transaction direction<br>(true: out, false: in)| String
+      out  | Transaction direction<br>("true": out, "false": in)| String
       amount  | Transaction amount | String
       fee  | Transaction fee | String
       from_address  | Transaction from address | String
       to_address  | Transaction to address | String
-      timestamp  | Transaction timestamp | long
+      timestamp  | Transaction timestamp | String
       txid  | Transaction TXID | String
       description  | Transaction description | String
 

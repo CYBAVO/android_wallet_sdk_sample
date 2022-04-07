@@ -85,7 +85,7 @@
     Property    | Description  | Type  
     :------------|:------------|:-------
     walletID    | Wallet ID    |  long 
-    currency    | Currency     |  int 
+    currency    | Currency     |  long 
     tokenAddress  | Token address | String
     direction  | Transaction direction | Wallets.Transaction.Direction<br>(IN:0, OUT:1)
     amount  | Transaction amount | String
