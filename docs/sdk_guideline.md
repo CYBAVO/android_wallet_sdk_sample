@@ -270,7 +270,7 @@ public abstract void changePinCode(PinSecret newPinSecret,
 
 ## Reset PIN code
 
-There are 2 ways to reset PIN code: by answering security questions or reset from the admin panel.
+- There are 2 ways to reset PIN code: by answering security questions or reset from the admin panel.
 
 ### Reset PIN code - with Security Question
 
@@ -295,7 +295,7 @@ There are 2 ways to reset PIN code: by answering security questions or reset fro
                                           Callback<RestorePinCodeResult> callback);
   ```
 
-## Reset PIN code - with Admin System
+### Reset PIN code - with Admin System
 
 - If the user forgot both the PIN code and the answers.
 
