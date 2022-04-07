@@ -268,43 +268,58 @@ public abstract void changePinCode(PinSecret newPinSecret,
                                        Callback<ChangePinCodeResult> callback);
 ```
 
-## Reset PIN code - with API
+## Reset PIN code
 
-- Set questions and answers for PIN code recovery.
+- There are 2 ways to reset PIN code: by answering security questions or reset from the admin panel.
 
-```java
-public abstract void setupBackupChallenge(String pinCode,
-                                      BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
-                                      Callback<SetupBackupChallengeResult> callback);
+### Reset PIN code - with Security Question
 
-public abstract void setupBackupChallenge(PinSecret pinSecret,
-                                              BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
-                                              Callback<SetupBackupChallengeResult> callback);
+  0. Before that, the user have to set the answers of security questions
+  ```java
+  public abstract void setupBackupChallenge(PinSecret pinSecret,
+                                                BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
+                                                Callback<SetupBackupChallengeResult> callback);
 
-public abstract void getRestoreQuestions(Callback<GetRestoreQuestionsResult> callback);
 
-public abstract void verifyRestoreQuestions(BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3, Callback<VerifyRestoreQuestionsResult> callback);
-```
+  public abstract void verifyRestoreQuestions(BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3, Callback<VerifyRestoreQuestionsResult> callback);
+  ```
+  1. Get the security question for user to answer
+  ```java
+  public abstract void getRestoreQuestions(Callback<GetRestoreQuestionsResult> callback);
+  ```
+  2. Verify user input answer (just check if the answers are correct)
+  ```java
+  public abstract void verifyRestoreQuestions(BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3, Callback<VerifyRestoreQuestionsResult> callback);
+  ```
+  3. Reset PIN code by security questions and answers
+  ```java
+  public abstract void restorePinCode(PinSecret newPinSecret,
+                                          BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
+                                          Callback<RestorePinCodeResult> callback);
+  ```
 
 ## Reset PIN code - with Admin System
 
-- If the user forgot both the PIN code and the answers which they have set.
+- If the user forgot both the PIN code and the answers.
 
   1. First, call API `forgotPinCode` to get the **_Handle Number_**.
-  2. Second, contact the system administrator.
-  3. System administrator should provide you with an 8 digits **_Recovery Code_**.
-  4. Then call API `verifyRecoveryCode` and `recoverPinCode` to recover PIN code.
+  ```java
+  public abstract void forgotPinCode(Callback<ForgotPinCodeResult> callback);
+  ```
 
-```java
-public abstract void forgotPinCode(Callback<ForgotPinCodeResult> callback);
+  2. Second, contact the system administrator and get an 8 digits **_Recovery Code_**.
+  3. Verify the recovery code  (just check if the recovery code is correct)
+  ```java
+  public abstract void verifyRecoveryCode(String recoveryCode,
+                                          Callback<VerifyRecoveryCodeResult> callback);
+  ```
+  4. Reset PIN code by the recovery code.
 
-public abstract void verifyRecoveryCode(String recoveryCode,
-                                        Callback<VerifyRecoveryCodeResult> callback);
-
-public abstract void recoverPinCode(String pinCode,
-                                        String recoveryCode,
-                                        Callback<RecoverPinCodeResult> callback);
-```
+  ```java
+  public abstract void recoverPinCode(PinSecret newPinSecret,
+                                          String recoveryCode,
+                                          Callback<RecoverPinCodeResult> callback);
+  ```
 
 ## Notice
 
