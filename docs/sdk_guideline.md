@@ -271,21 +271,21 @@ public abstract void changePinCode(PinSecret newPinSecret,
 ## Reset PIN code - with Security Question
 - There are 2 ways to reset PIN code, one is by answering security questions
 
-  0. Before that, the user have to set the answers of security questions.
+  1. Before that, the user have to set the answers of security questions.
   ```java
   public abstract void setupBackupChallenge(PinSecret pinSecret,
                                                 BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
                                                 Callback<SetupBackupChallengeResult> callback);
   ```
-  1. Get the security question for user to answer
+  2. Get the security question for user to answer
   ```java
   public abstract void getRestoreQuestions(Callback<GetRestoreQuestionsResult> callback);
   ```
-  2. Verify user input answer (just check if the answers are correct)
+  3. Verify user input answer (just check if the answers are correct)
   ```java
   public abstract void verifyRestoreQuestions(BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3, Callback<VerifyRestoreQuestionsResult> callback);
   ```
-  3. Reset PIN code by security questions and answers
+  4. Reset PIN code by security questions and answers
   ```java
   public abstract void restorePinCode(PinSecret newPinSecret,
                                           BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
