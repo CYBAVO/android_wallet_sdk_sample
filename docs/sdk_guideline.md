@@ -470,6 +470,7 @@ public abstract class Error extends Throwable {
     abstract public int getCode();
 
     public String getMessage()
+    ...
 }
 ```
 - Usage
