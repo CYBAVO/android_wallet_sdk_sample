@@ -149,7 +149,7 @@ Wallets.getInstance().callAbiFunctionTransaction(walletId,
                     null, // abiJson: fixed to null
                     args, 
                     "0", //transactionFee: our backend will take care of this 
-                    pinSecret: pinSecret, callback);
+                    pinSecret, callback);
 ```
 
 ### 3. Inner Transfer
