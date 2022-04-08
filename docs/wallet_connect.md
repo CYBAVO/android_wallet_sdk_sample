@@ -1,7 +1,9 @@
 # WalletConnect
 
 > WalletConnect is an open protocol which makes Dapps able to interact with wallets on different platforms.  
+>
 > Wallet SDK provides corresponding APIs which help you get the results to return to Dapp, after establishing a wallet client and being able to receive Dapp's request.  
+> 
 > In later sections, we'll illustrate how to use those APIs to respond to [session request](https://docs.walletconnect.com/tech-spec#session-request) and JSON-RPC call requests which are defined in [JSON-RPC API Methods](https://docs.walletconnect.com/json-rpc-api-methods/ethereum).  
 >
 > Wallet clients integration on Android : [Kotlin Client (Android)](https://docs.walletconnect.com/quick-start/wallets/kotlin)  
@@ -70,7 +72,7 @@
 
 - ### [eth_sign](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sign)
 
-  - as above, **_personal_sign_**
+  - As above, **_personal_sign_**
 
 - ### [eth_signTypedData](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_signtypeddata)
 
@@ -111,10 +113,10 @@
 
 - ### [eth_sendRawTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sendrawtransaction)
 
-    1. use `walletConnectSendSignedTransaction()` to get the `txid`.
+    1. Use `walletConnectSendSignedTransaction()` to get the `txid`.
     2. During some transactions, you may receive new currencies / tokens which don't exist in the currency list, like swapping a new type of token.
-    3. call `Wallets.getInstance().walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
-    4. call `Wallets.getInstance().getWallets` to get the new wallet list
+    3. Call `Wallets.getInstance().walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
+    4. Call `Wallets.getInstance().getWallets` to get the new wallet list.
 
 - ### [eth_sendTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sendtransaction)
 
@@ -131,8 +133,8 @@
         ```
 
     3. During some transactions, you may receive new currencies / tokens which don't exist in the currency list, like swapping a new type of token.
-    4. call `Wallets.getInstance().walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
-    5. call `Wallets.getInstance().getWallets` to get the new wallet list
+    4. Call `Wallets.getInstance().walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
+    5. Call `Wallets.getInstance().getWallets` to get the new wallet list.
 
 ## API History
 
@@ -187,22 +189,22 @@
 
 - How to cancel a transaction?
     1. Decide a new transaction fee.
-    2. Call `cancelWalletConnectTransaction` to cancel a WalletConnect Transaction
+    2. Call `cancelWalletConnectTransaction` to cancel a WalletConnect Transaction.
 
 - How to decide the new transaction fee?
     1. Call `getTransactionFee` to get the current Tx fee.
     2. Decide a new Tx fee
-        - if (Tx fee > original Tx fee) ➜ use the new Tx fee
-        - if (Tx fee <= original Tx fee) ➜ decide a higher Tx fee by your rules
-            - Suggestion: In our experience, (original Tx fee) * 1.1 might be an easy way to calculate a new price for doing this operation.
-    3. same as [Transaction_Replacement](transaction.md#transaction-replacement)
+        - If (Tx fee > original Tx fee) ➜ Use the new Tx fee
+        - If (Tx fee <= original Tx fee) ➜ Decide a higher Tx fee by your rules
+            - Suggestion: in our experience, (original Tx fee) * 1.1 might be an easy way to calculate a new price for doing this operation.
+    3. Same as [Transaction_Replacement](transaction.md#transaction-replacement)
 
 - How to see the cancel history?
     1. In list of `ApiHistoryItem`
-        - filter `apiName.equals("eth_sendRawTransaction")` ➜ original Tx operation
-        - filter `apiName.equals("eth_cancelTransaction")` ➜ cancel Tx operation
+        - Filter `apiName.equals("eth_sendRawTransaction")` ➜ Original Tx operation
+        - Filter `apiName.equals("eth_cancelTransaction")` ➜ Cancel Tx operation
         - Use `nonce` to map same pair of operations
     2. In same pair of operations:
         - When cancel operation's `status == ApiHistoryItem.Status.DONE.ordinal()` means cancel operation success.
         - When origin Tx operation's `status == ApiHistoryItem.Status.DONE.ordinal()` means cancel operation failed. The original Tx was succeeded.
-    3. refer to [Transaction Replacement History](transaction.md#transaction-replacement-history)
+    3. Refer to [Transaction Replacement History](transaction.md#transaction-replacement-history)
