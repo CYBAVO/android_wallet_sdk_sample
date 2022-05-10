@@ -85,7 +85,7 @@
     /// @param country ISO alpha-3 code of applicant
     /// - https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
     /// 
-    /// @param callback Callback<CheckKycSettingResult>
+    /// @param callback Callback<CreateKycResult>
     ///
     public abstract void createKyc(String country, Callback<CreateKycResult> callback);
     ```
