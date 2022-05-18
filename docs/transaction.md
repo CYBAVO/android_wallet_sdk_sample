@@ -136,7 +136,7 @@ public abstract void getAddressesTags(long currency, String[] addresses, Callbac
 ///   - pinSecret: PIN secret retrieved via {PinCodeInputView}
 ///   - extraAttributes: Extra attributes for specific currencies, pass null if unspecified.
 ///      - Supported extras:
-///         1. memo (String) - Memo for XRP, XML, EOS, BNB
+///         1. memo (String) - Memo for XRP, XLM, EOS, BNB
 ///         2. eos_transaction_type (EosResourceTransactionType) - Resource transaction type for EOS, such as buy RAM, delegate CPU
 ///         3. num_bytes (Long) - Bytes of RAM/NET for EOS RAM delegation/undelegation transactions. The minimal amounts are 1024 bytes
 ///         4. input_data (String) - Hex string of input data. Must also set gas_limit when have this attributes
