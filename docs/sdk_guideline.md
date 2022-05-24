@@ -113,11 +113,14 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 ///     4. Twitter - "Twitter"
 ///     5. WeChat - "WeChat"
 ///
-///   - callback: Callback<SignInResult>
-///     onResult: ➡️ ready to getUserState()
-///     onError: if error.getCode() == Error.Code.ErrRegistrationRequired ➡️ go to the Sign-up flow
+///   - extraAttributes: Extra attributes for specific provider, pass null if unspecified.
+///     1. id_token_secret (String) - Secret for Twitter
 ///
-public abstract void signIn(String token, String identityProvider, Callback<SignInResult> callback);
+///   - callback: Callback<SignInResult>
+///     onResult: ➡️ Ready to getUserState()
+///     onError: if (error.getCode() == Error.Code.ErrRegistrationRequired) ➡️ go to the Sign-up flow
+///
+public abstract void signIn(String token, String identityProvider, Map<String, String> extraAttributes, Callback<SignInResult> callback);
 ```
 
 ## Sign-up flow
@@ -127,13 +130,15 @@ public abstract void signIn(String token, String identityProvider, Callback<Sign
 ```java
 /// sign-up with Wallet SDK Auth
 /// - Parameters:
-///   - token: refer to signIn()
-///   - identityProvider: refer to signIn()
-///   - callback: Callback<SignUpResult>
-///   onResult: ➡️ ready to signIn()
-///   onError: handle ApiError
+///   - token: Refer to signIn()
+///   - identityProvider: Refer to signIn()
+///   - extraAttributes: Refer to signIn()
 ///
-public abstract void signUp(String token, String identityProvider, Callback<SignUpResult> callback);
+///   - callback: Callback<SignUpResult>
+///   onResult: ➡️ Ready to signIn()
+///   onError: Handle ApiError
+///
+public abstract void signUp(String token, String identityProvider, Map<String, String> extraAttributes, Callback<SignUpResult> callback);
 ```
 
 ## Sign-out
