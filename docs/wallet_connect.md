@@ -158,6 +158,23 @@
     ///   - callback: asynchronous callback of GetApiHistoryResult
     public abstract void getWalletConnectApiHistory(long walletId, int start, int count, Map<String, Object> filters, Callback<GetApiHistoryResult> callback);
     ```
+- WalletSDK also provides `getWalletConnectSignedTx` and `getWalletConnectUnsignedData` for further needs
+
+    ```java
+    /// Get signed TX for walletConnectSendSignedTransaction()
+    ///   - Parameters:
+    ///   - walletId: wallet ID
+    ///   - accessId: accessId from API history
+    ///   - callback: asynchronous callback of GetWalletConnectSignedTxResult
+    public abstract void getWalletConnectSignedTx(long walletId, String accessId, Callback<GetWalletConnectSignedTxResult> callback);
+
+    /// Get unsigned data for walletConnectSignTypedData() and walletConnectSignTransaction()
+    ///   - Parameters:
+    ///   - walletId: wallet ID
+    ///   - accessId: accessId from API history
+    ///   - callback: asynchronous callback of GetWalletConnectUnsignedDataResult
+    public abstract void getWalletConnectUnsignedData(long walletId, String accessId, Callback<GetWalletConnectUnsignedDataResult> callback);
+    ```
 
 ## Cancel a Transaction
 

@@ -141,10 +141,12 @@ public abstract void getAddressesTags(long currency, String[] addresses, Callbac
 ///         3. num_bytes (Long) - Bytes of RAM/NET for EOS RAM delegation/undelegation transactions. The minimal amounts are 1024 bytes
 ///         4. input_data (String) - Hex string of input data. Must also set gas_limit when have this attributes
 ///         5. gas_limit (Long) - Must specify this if there were input_data
-///         6. skip_email_notification (Boolean) -Determined whether or not to skip sending notification mail after create a transaction
-///         7. token_id (String) -token ID for ERC-1155
-///         8. kind (String) -kind for private chain, code: private to private; out: private to public
-///         9. to_address_tag (String[]) -AML tag, get from getAddressesTags() API
+///         6. skip_email_notification (Boolean) - Determined whether or not to skip sending notification mail after create a transaction
+///         7. token_id (String) - token ID for ERC-1155
+///         8. kind (String) - kind for private chain, code: private to private; out: private to public
+///         9. to_address_tag (String[]) - AML tag, get from getAddressesTags() API
+///        10. custom_nonce (Long, Integer) - Specific nonce
+///        11. custom_gas_limit (Long, Integer) - Specific gas limit
 ///      - Note:
 ///         - When eos_transaction_type is EosResourceTransactionType.SELL_RAM, EosResourceTransactionType.UNDELEGATE_CPU or EosResourceTransactionType.UNDELEGATE_NET, the receiver should be address of Wallet fromWalletId
 ///         - ex: ["memo": "abcd", "eos_transaction_type": EosResourceTransactionType.SELL_RAM.rawValue, "skip_email_notification": false, "kind": "code"]
