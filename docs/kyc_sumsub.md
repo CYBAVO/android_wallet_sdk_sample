@@ -8,6 +8,7 @@
   - [Create an Applicant](#create-an-applicant)
   - [Access Token and Launching Sumsub MSDK](#access-token-and-launching-sumsub-msdk)
   - [Sharing Applicants between Partner Services](#sharing-applicants-between-partner-services)
+  - [Getting applicant status](#getting-applicant-status)
 
 ## Preparation
 
@@ -146,4 +147,17 @@
     /// @param callback Callback<GetKycShareTokenResult>
     ///
     public abstract void getKycShareToken(Callback<GetKycShareTokenResult> callback);
+    ```
+## Getting applicant status
+- Sumsub provides API to get applicant status, for detailed status definition, please visit their [API Reference](https://developers.sumsub.com/api-reference/#getting-applicant-status-sdk).
+- Use `Auth.getInstance().getApplicantStatus()` to get applicant status.
+
+    ```java
+    ///
+    /// Get applicant KYC status for current user
+    /// The response is based on Sumsub API's definition, see
+    /// https://developers.sumsub.com/api-reference/#getting-applicant-status-sdk
+    ///
+    /// @param callback Asynchronized callback
+    public abstract void getApplicantStatus(Callback<GetApplicantStatusResult> callback) ;
     ```

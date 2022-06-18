@@ -100,8 +100,54 @@ public final class UserState {
     2. substitute readable address for making transactions in the private chain
 - `userReferralCode` represent the user's referral code
 - `linkUserReferralCode` represent the referrer's referral code
-- call `Auth.getInstance().registerReferralCode()` to register a referrer.
+- Call `Auth.getInstance().registerReferralCode()` to register a referrer.
+- You can search user by calling `Auth.getInstance().searchUser()`, the keyword can be `realName` (partial match) or `referralCode` (fully match)
+  ```java
+  Auth.getInstance().searchUser("userX", new Callback<SearchUserResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    //keyword length cannot less then 3, 
+                    //otherwise the API will receive ErrKeywordForSearchTooShort
+                    error.printStackTrace();
+                }
 
+                @Override
+                public void onResult(SearchUserResult result) {
+                    for(int i = 0; i < result.infos.length; i++){
+                        Log.d("searchUser", String.format("#%d, Name: %s, Code: %s", 
+                              i, result.infos[i].realName, result.infos[i].referralCode));
+                    }
+                }
+            });
+
+  ```
+- You can update `realName` by calling `Auth.getInstance().updateRealName()`
+  ```java
+  Auth.getInstance().updateRealName("userY" , new Callback<UpdateRealNameResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    //realName length cannot less then 3, 
+                    // otherwise the API will receive ErrKeywordForSearchTooShort
+                    error.printStackTrace();
+                }
+
+                @Override
+                public void onResult(UpdateRealNameResult result) {
+                    //getUserState after updateRealName
+                    Auth.getInstance().getUserState(new Callback<GetUserStateResult>() {
+                        @Override
+                        public void onError(Throwable error) {
+                            error.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResult(GetUserStateResult result) {
+                            Log.d("updateRealName",String.format("newRealName: %s", result.userState.realName));
+                        }
+                    });
+                }
+            });
+  ```
 ## Transactions
 
 - There are 3 types of transactions on the private chain.
