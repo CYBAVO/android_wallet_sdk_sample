@@ -106,7 +106,7 @@ public final class UserState {
   Auth.getInstance().searchUser("userX", new Callback<SearchUserResult>() {
                 @Override
                 public void onError(Throwable error) {
-                    //length cannot less then 3, 
+                    //keyword length cannot less then 3, 
                     //otherwise the API will receive ErrKeywordForSearchTooShort
                     error.printStackTrace();
                 }
@@ -126,7 +126,7 @@ public final class UserState {
   Auth.getInstance().updateRealName("userY" , new Callback<UpdateRealNameResult>() {
                 @Override
                 public void onError(Throwable error) {
-                    //length cannot less then 3, 
+                    //realName length cannot less then 3, 
                     // otherwise the API will receive ErrKeywordForSearchTooShort
                     error.printStackTrace();
                 }
@@ -142,7 +142,7 @@ public final class UserState {
 
                         @Override
                         public void onResult(GetUserStateResult result) {
-                            Log.d("updateRealName","newRealName: "+result.userState.realName);
+                            Log.d("updateRealName",String.format("newRealName: %s", result.userState.realName));
                         }
                     });
                 }

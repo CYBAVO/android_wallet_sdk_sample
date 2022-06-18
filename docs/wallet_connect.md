@@ -158,7 +158,7 @@
     ///   - callback: asynchronous callback of GetApiHistoryResult
     public abstract void getWalletConnectApiHistory(long walletId, int start, int count, Map<String, Object> filters, Callback<GetApiHistoryResult> callback);
     ```
-- WalletSDK also provides `getWalletConnectSignedTx` and `getWalletConnectUnsignedData` for further needs
+- WalletSDK also provides `getWalletConnectSignedTx` and `getWalletConnectUnsignedData` for further needs.
 
     ```java
     /// Get signed TX for walletConnectSendSignedTransaction()
