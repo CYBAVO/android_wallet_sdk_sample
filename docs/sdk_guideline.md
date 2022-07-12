@@ -243,6 +243,16 @@ public final class UserState {
   public abstract void getUserState(Callback<GetUserStateResult> callback);
   ```
 
+## Account deletion
+- For account deletion, Wallet SDK provides `revokeUser()` API and the detailed flow is described as below.
+1. Check `UserState.setPIN` 
+    - If it's true, ask user to input PIN and call `revokeUser(pinSecret, callback)`
+    - If it's false, just call `revokeUser(callback)`
+2. (Suggest) Lead user back to sign in page without calling `signOut` and sign out 3rd party SSO.  
+⚠️ After `revokeUser()`, `signOut()` will trigger `onSignInStateChanged` with state `SESSION_EXPIRED`.  
+3. On the admin panel, the user will be mark as disabled with extra info: unregistered by user, then the administrator can remove PII (real name, email and phone) of the user.  
+4. This account still can be enabled by administrator if needed. Before being enabled, if the user trying to sign in with revoked account, `signIn()` API will return `ErrUserRevoked` error. 
+
 [↑ go to the top ↑](#cybavo-wallet-app-sdk-for-andorid---guideline)
 
 ---
@@ -277,7 +287,8 @@ public abstract void changePinCode(PinSecret newPinSecret,
 ## Reset PIN code - with Security Question
 - There are 2 ways to reset PIN code, one is by answering security questions
 
-  1. Before that, the user has to set the answers of security questions.
+  1. Before that, the user has to set the answers of security questions.  
+  Please note that the account must have at least a wallet, otherwise, the API will return `ErrNoWalletToBackup` error.
   ```java
   public abstract void setupBackupChallenge(PinSecret pinSecret,
                                                 BackupChallenge challenge1, BackupChallenge challenge2, BackupChallenge challenge3,
