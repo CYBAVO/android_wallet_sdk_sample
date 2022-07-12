@@ -392,7 +392,7 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
                         }
                     });
     ```
-    Diffrernt from `callAbiFunctionRead()`, `callAbiFunctionTransaction()` requires 2 more parameters: `transactionFee` and `PinSecret` for transaction.  
+    Different from `callAbiFunctionRead()`, `callAbiFunctionTransaction()` requires 2 more parameters: `transactionFee` and `PinSecret` for transaction.  
     
     The parameter `name`, `contractAddress`, `abiJson` and `args` are varied according to the ABI function.  
     
