@@ -280,7 +280,8 @@ The user needs to create another Tx with higher Tx fee and the same nonce to rep
 
 ## Interact with Smart Contract
 Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/abi-spec.html) functions for general read and write operation.   
-- For read operation, like `balanceOf`, use `callAbiFunctionRead()`. The parameter is depends on the ABI function required. For example, here's the json of the ABI function we want to call:
+- For read operation, like `balanceOf`, use `callAbiFunctionRead()`. The parameter is depends on the ABI function required.  
+For example, here's the json of the ABI function we want to call:
   ```json
   {
       "constant": true,
@@ -332,7 +333,8 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
   ```
   Aside from `walletId` and  `callback`, all the parameters are varied according to the ABI function.  
   See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L300-L313) for complete example.  
-- For write operaion, like `transferFrom`, use `callAbiFunctionTransaction()`. The parameter is also depends on the ABI function required. For example, here's the json of the ABI function we want to call:
+- For write operaion, like `transferFrom`, use `callAbiFunctionTransaction()`. The parameter is also depends on the ABI function required.  
+For example, here's the json of the ABI function we want to call:
     ```json
     {
         "constant": false,
@@ -387,8 +389,10 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
                       }
                   });
   ```
-  Diffrernt from `callAbiFunctionRead`, `callAbiFunctionTransaction` requires 2 more parameters: `transactionFee` and PIN for transaction.  
+  Diffrernt from `callAbiFunctionRead()`, `callAbiFunctionTransaction()` requires 2 more parameters: `transactionFee` and `PinSecret` for transaction.  
   The parameter `name`, `contractAddress`, `abiJson` and `args` are varied according to the ABI function.  
+  
   See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for complete example.  
+  
   See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/80a27ad89193d26e40c75c0a1dc95294df6d79b6/docs/private_chain.md#perform-withdraw) for another specific usage in private chain.
 
