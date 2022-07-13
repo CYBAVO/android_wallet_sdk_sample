@@ -5,7 +5,7 @@
   - [Withdraw](#withdraw)
   - [Transaction Detail](#transaction-detail)
   - [Transaction Replacement](#transaction-replacement)
-  - [Others](#others)
+  - [Interact with Smart Contract](#interact-with-smart-contract)
 
 ## Deposit
 
@@ -147,9 +147,11 @@ public abstract void getAddressesTags(long currency, String[] addresses, Callbac
 ///         9. to_address_tag (String[]) - AML tag, get from getAddressesTags() API
 ///        10. custom_nonce (Long, Integer) - Specific nonce
 ///        11. custom_gas_limit (Long, Integer) - Specific gas limit
-///      - Note:
+///        12. sol_token_id (String) - token ID of SOL NFT, if get from getSolNftTokens(long, Callback) API, the token ID would be TokenMeta.tokenAddress
+///      - Note 1:
 ///         - When eos_transaction_type is EosResourceTransactionType.SELL_RAM, EosResourceTransactionType.UNDELEGATE_CPU or EosResourceTransactionType.UNDELEGATE_NET, the receiver should be address of Wallet fromWalletId
 ///         - ex: ["memo": "abcd", "eos_transaction_type": EosResourceTransactionType.SELL_RAM.rawValue, "skip_email_notification": false, "kind": "code"]
+///      - Note 2: Pass sol_token_id for SOL NFT transaction, and the amount must be "1", otherwise, it will return ErrInvalidParameter error code
 ///   - callback: asynchronous callback
 ///
 public abstract void createTransaction(long fromWalletId, String toAddress, String amount, String transactionFee, String description, PinSecret pinSecret,
@@ -276,6 +278,127 @@ The user needs to create another Tx with higher Tx fee and the same nonce to rep
         - `if Original-Tx.replaced == true` ➜ Cancel / Accelerate success
         - `if Replacement-Tx.replaced == true` ➜ Cancel / Accelerate failed
 
-## Others
+## Interact with Smart Contract
+Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/abi-spec.html) functions for general read and write operation.   
+- For read operation, like `balanceOf`, use `callAbiFunctionRead()`. The parameter is depends on the ABI function required.  
 
-- ABI functions `callAbiFunctionTransaction()`, `callAbiFunctionRead()` see this [Sample](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java)
+  For example, here's the json of the ABI function we want to call:
+    ```javascript
+    //Part of ABI_JSON
+    {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          },
+          {
+            "name": "_testInt",
+            "type": "uint256"
+          },
+          {
+            "name": "_testStr",
+            "type": "string"
+          }
+        ],
+        "name": "balanceOfCB",
+        "outputs": [
+          {
+            "name": "balance",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ``` 
+    According to its definition, we would compose an API call like this:
+    ```java
+    Wallets.getInstance().callAbiFunctionRead(
+                        walletId,
+                        "balanceOfCB", // name, function name of ABI
+                        "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f", // contractAddress, contract address of ABI
+                        ABI_JSON, // abiJson, ABI contract json
+                        new Object[]{"0x281F397c5a5a6E9BE42255b01EfDf8b42F0Cd179", 100, "test"}, // args, argument array of ABI function
+                        new Callback<CallAbiFunctionResult>() {
+                            @Override
+                            public void onError(Throwable error) {
+                                Log.e(TAG, "callAbiFunctionRead failed", error);
+                            }
+
+                            @Override
+                            public void onResult(CallAbiFunctionResult result) {
+                                Log.d(TAG, String.format("callAbiFunctionRead success:%s", result.output));
+                            }
+                        });
+    ```
+    Aside from `walletId` and  `callback`, all the parameters are varied according to the ABI function.  
+    
+    See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L300-L313) for complete example.  
+- For write operaion, like `transferFrom`, use `callAbiFunctionTransaction()`. The parameter is also depends on the ABI function required.  
+
+  For example, here's the json of the ABI function we want to call:
+    ```javascript
+    //Part of ABI_JSON
+    {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          },
+          {
+            "name": "_testInt",
+            "type": "uint256"
+          },
+          {
+            "name": "_testStr",
+            "type": "string"
+          }
+        ],
+        "name": "transferCB",
+        "outputs": [
+          {
+            "name": "success",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ```
+    According to its definition, we would compose an API call like this:
+    ```java
+    Wallets.getInstance().callAbiFunctionTransaction(walletId,
+                    "transferCB",// name, the function name of ABI
+                    "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f",// contractAddress, contract address of ABI
+                    ABI_JSON, // abiJson, ABI contract json
+                    new Object[]{"0x490d510c1A8b74749949cFE5cA06D0C6BD7119E2", 1, 100, "unintest"},// args, argument array of abi function
+                    fee.amount, // transactionFee, see getTransactionFee and amount property of Fee class
+                    pinSecret,
+                    new Callback<CallAbiFunctionResult>() {
+                        @Override
+                        public void onError(Throwable error) {
+                            Log.e(TAG, "callAbiFunctionTransaction failed", error);
+                        }
+
+                        @Override
+                        public void onResult(CallAbiFunctionResult result) {
+                            Log.d(TAG, String.format("callAbiFunctionTransaction success:%s, %s", result.txid, result.signedTx));
+                        }
+                    });
+    ```
+    Different from `callAbiFunctionRead()`, `callAbiFunctionTransaction()` requires 2 more parameters: `transactionFee` and `PinSecret` for transaction.  
+    
+    The parameter `name`, `contractAddress`, `abiJson` and `args` are varied according to the ABI function.  
+    
+    See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for complete example.  
+    
+    See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/80a27ad89193d26e40c75c0a1dc95294df6d79b6/docs/private_chain.md#perform-withdraw) for another specific usage in private chain.
+
