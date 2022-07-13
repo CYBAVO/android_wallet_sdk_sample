@@ -398,7 +398,7 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
     
     The parameter `name`, `contractAddress`, `abiJson` and `args` are varied according to the ABI function.  
     
-    See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for complete example.  
+    See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for complete example.  
     
-    See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for another specific usage in private chain.
+    See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/docs/private_chain.md#perform-withdraw) for another specific usage in private chain.
 
