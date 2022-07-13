@@ -335,7 +335,7 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
     ```
     Aside from `walletId` and  `callback`, all the parameters are varied according to the ABI function.  
     
-    See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L300-L313) for complete example.  
+    See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L300-L313) for complete example.  
 - For write operaion, like `transferFrom`, use `callAbiFunctionTransaction()`. The parameter is also depends on the ABI function required.  
 
   For example, here's the json of the ABI function we want to call:
@@ -400,5 +400,5 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
     
     See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/4c2840c8e0e20794536b5193776bc99f51d2a6b8/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for complete example.  
     
-    See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/80a27ad89193d26e40c75c0a1dc95294df6d79b6/docs/private_chain.md#perform-withdraw) for another specific usage in private chain.
+    See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for another specific usage in private chain.
 

@@ -245,12 +245,12 @@ public final class UserState {
 
 ## Account deletion
 For account deletion, Wallet SDK provides `revokeUser()` API and the detailed flow is described as below.
-1. Check `UserState.setPIN` 
+1. Check `UserState.setPin` 
 
     - If it's true, ask user to input PIN and call `revokeUser(pinSecret, callback)`.
     - If it's false, just call `revokeUser(callback)`.
 
-2. (Suggest) Lead user back to sign in page without calling `signOut` and sign out 3rd party SSO.  
+2. (Suggest) Lead user back to sign in page without calling `signOut()` and sign out 3rd party SSO.  
 ⚠️ After `revokeUser()`, `signOut()` will trigger `onSignInStateChanged` with state `SESSION_EXPIRED`.  
 
 3. On the admin panel, the user will be mark as disabled with extra info: unregistered by user, then the administrator can remove PII (real name, email and phone) of the user.  
