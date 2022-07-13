@@ -192,7 +192,7 @@ Object[] args = new Object[]{toAddress,
 Wallets.getInstance().callAbiFunctionTransaction(walletId, 
                     "burn", // name: fixed to "burn"
                     wallet.tokenAddress, 
-                    null, // abiJson: fixed to null
+                    "", // abiJson: fixed to ""
                     args, 
                     "0", //transactionFee: our backend will take care of this 
                     pinSecret, callback);
