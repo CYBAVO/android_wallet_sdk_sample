@@ -380,7 +380,7 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
                     "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f",// contractAddress, contract address of ABI
                     ABI_JSON, // abiJson, ABI contract json
                     new Object[]{"0x490d510c1A8b74749949cFE5cA06D0C6BD7119E2", 1, 100, "unintest"},// args, argument array of abi function
-                    fee.amount, // transactionFee, see getTransactionFee and amount property of Fee class
+                    fee.amount, // transactionFee, see getTransactionFee() and amount property of Fee class
                     pinSecret,
                     new Callback<CallAbiFunctionResult>() {
                         @Override
