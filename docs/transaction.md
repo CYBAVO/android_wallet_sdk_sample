@@ -284,7 +284,7 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
 
   For example, here's the json of the ABI function we want to call:
     ```javascript
-    //ABI_JSON
+    //Part of ABI_JSON
     {
         "constant": true,
         "inputs": [
@@ -340,7 +340,7 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
 
   For example, here's the json of the ABI function we want to call:
     ```javascript
-    //ABI_JSON
+    //Part of ABI_JSON
     {
         "constant": false,
         "inputs": [
