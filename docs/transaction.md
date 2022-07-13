@@ -283,7 +283,8 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
 - For read operation, like `balanceOf`, use `callAbiFunctionRead()`. The parameter is depends on the ABI function required.  
 
   For example, here's the json of the ABI function we want to call:
-    ```json
+    ```javascript
+    //ABI_JSON
     {
         "constant": true,
         "inputs": [
@@ -338,7 +339,8 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
 - For write operaion, like `transferFrom`, use `callAbiFunctionTransaction()`. The parameter is also depends on the ABI function required.  
 
   For example, here's the json of the ABI function we want to call:
-    ```json
+    ```javascript
+    //ABI_JSON
     {
         "constant": false,
         "inputs": [
