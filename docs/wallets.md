@@ -77,8 +77,8 @@ public abstract void getCurrencyPrice(Wallet[] wallets, String[] exchangeCurrenc
 ```java
 /// Get number balances on a batch of addresses
 /// - Parameters:
-///   - addresses: Map of addresses to query. ex: (Wallet.walletId, Wallet)
-///   - callback: Contains Map of Balances. ex: (Wallet.walletId, Balance)
+///   - addresses: Map of addresses to query. ex: (index, BalanceAddress)
+///   - callback: Contains Map of Balances. ex: (index, Balance)
 public abstract void getBalances(Map<Integer, BalanceAddress> addresses, Callback<GetBalancesResult> callback);
 ```
 
