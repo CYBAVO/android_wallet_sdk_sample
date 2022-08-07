@@ -188,7 +188,7 @@ Related APIs are listed in [APIs which Required Biometrics Verification](#apis-w
 
             @Override
             public void onResult(RegisterPubkeyResult registerPubkeyResult) {
-                //Setup completed, you can use APIs which Required Biometrics Verification
+                //Setup completed, you can use APIs which required biometrics verification
             }
         });
     }
