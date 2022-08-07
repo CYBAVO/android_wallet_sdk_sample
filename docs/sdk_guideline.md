@@ -166,9 +166,9 @@ public enum SignInState {
 
 - Listen `SignInState`
 
-  1. Implement `SignInStateListener` to handle `onUserStateChanged` callback 
-  2. Add the listener through `addSignInStateListener` 
-  3. Remove the listener through `removeSignInStateListener` if you don’t need monitor anymore
+  1. Implement `SignInStateListener` to handle `onUserStateChanged` callback. 
+  2. Add the listener through `addSignInStateListener`. 
+  3. Remove the listener through `removeSignInStateListener` if you don’t need monitor anymore.
 
   ```java
   public abstract void addSignInStateListener(SignInStateListener listener);
@@ -182,7 +182,7 @@ public enum SignInState {
 - For Security Enhancement in the [flowchart](#sign-in--sign-up-flowchart), `NEED_VERIFY_OTP` and `NEED_REGISTER_PHONE` SignInState, please see [Security Enhancement](bio_n_sms.md)
 
 
-- call `getSignInState` anytime when you need current `SignInState`
+- Call `getSignInState` whenever you need current `SignInState`.
 
   ```java
   public abstract SignInState getSignInState();
@@ -209,7 +209,7 @@ public final class UserState {
 
   `if (setPin == false)` ➡️ go to **_Setup PIN Code_** in the next section
 
-- call `getUserState` to get the current `UserState`
+- Call `getUserState` to get the current `UserState`.
 
   ```java
   public abstract void getUserState(Callback<GetUserStateResult> callback);
