@@ -1,5 +1,5 @@
 # Security Enhancement
-- Security Enhancement is optional, after activated, WalletSDK will require further authentication while signin and transaction / sign operation.
+- Security enhancement is optional, after activated, WalletSDK will require further authentication while sign-in and transaction / sign operation.
 - Bookmarks
   - [Enable User Phone Verification](#enable-user-phone-verification)
   - [Skipping SMS Verify](#skipping-sms-verify)
@@ -107,12 +107,12 @@ Auth.getInstance().verifyOtp(
 
 ## Skipping SMS Verify
 
-- Although `Security Enhancement` is applied globally, in **User Management**, the administrator still can set a single user to skip SMS / biometrics verification.
+- Although security enhancement is applied globally, in **User Management**, the administrator still can set a single user to skip SMS / biometrics verification.
 
 
   <img src="images/sdk_guideline/screenshot_skip_sms_2.png" alt="drawing" width="800"/> 
 - By checking `UserState`, you can get to know whether the user is required verify or not.
-  -  `enableBiometrics`.  
+  -  `enableBiometrics`  
       Mapping to **admin panel** ➜ **System settings** ➜ **Security Enhancement** ➜ **Enable biometrics verification on transaction**.
   -  `skipSmsVerify`  
       Mapping to **admin panel** ➜ **User Management** ➜ click signal user ➜ **Skip SMS verification**.
@@ -148,17 +148,23 @@ Related APIs are listed in [APIs which Required Biometrics Verification](#apis-w
 
 - Complete the setup before using [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
 1. Check if the user needs biometrics / SMS verification
-2. Call `updateDeviceInfo`, pass nil Wallet SDK will decide the value for you.
-    - This step is telling server if the device able to use biometrics or not.
-    - Passing `BiometricsType.NONE` means you'll use SMS verification instead of biometrics.
-3. Call `getBiometricsType` ➜ supported biometric type
+2. Call `updateDeviceInfo()`, this step is telling server if the device able to use biometrics or not.
+    ```java
+    // Update device's biometrics type, SDK will decide the type
+    Wallets.getInstance().updateDeviceInfo(context, callback);
+
+    // Update device's biometrics type with specific type
+    // Passing BiometricsType.NONE means you'll use SMS verification instead of biometrics.
+    Wallets.getInstance().updateDeviceInfo(BiometricsType.NONE, callback);
+    ```
+3. Call `getBiometricsType()` ➜ supported biometric type
 4. `if (BiometryType != BiometricsType.NONE)` ➜ call `registerPubkey`
 5. `if (BiometryType == BiometricsType.NONE)` && `accountSkipSmsVerify` ➜ prompt error. ex. The device not supporting biometrics, please contact the system admin.  
   (There's no Apple Sign-In account on Android, you can ignore this step.)
 ```java
     public void checkAndRegisterPubkey(){
         // Step 3.
-        BiometricsType type = Wallets.getInstance().getBiometricsType(mApp);// BiometryType { NONE / FACE / FINGER }
+        BiometricsType type = Wallets.getInstance().getBiometricsType(context);// BiometryType { NONE / FACE / FINGER }
         // Step 2. update device's biometrics type
         Wallets.getInstance().updateDeviceInfo(type.ordinal(), new Callback<UpdateDeviceInfoResult>() {
             @Override
