@@ -210,6 +210,7 @@ Wallets.getInstance().callAbiFunctionTransaction(walletId,
 - Platform fee calculation:
   1. Platform Fee = Transfer Amount * **Transfer Fee Rate**
   2. If the result of step 1 is less then **Transfer Fee Min**, use **Transfer Fee Min**.
+  3. If the currency not supported platform fee, the `platformFee` will be `"0"`
 - You can use `estimateTransaction()` to get the platfom fee:
 ```java
 Wallets.getInstance().estimateTransaction(
