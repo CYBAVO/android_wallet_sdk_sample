@@ -147,14 +147,14 @@ Related APIs are listed in [APIs which Required Biometrics Verification](#apis-w
 ![img](images/sdk_guideline/biometric_verification.jpg)
 
 - Complete the setup before using [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
-  1. Check if the user needs biometrics / SMS verification
-  2. Call `updateDeviceInfo`, pass nil Wallet SDK will decide the value for you.
-      - This step is telling server if the device able to use biometrics or not.
-      - Passing `BiometricsType.NONE` means you'll use SMS verification instead of biometrics.
-  3. Call `getBiometricsType` ➜ supported biometric type
-  4. `if (BiometryType != BiometricsType.NONE)` ➜ call `registerPubkey`
-  5. `if (BiometryType == BiometricsType.NONE)` && `accountSkipSmsVerify` ➜ prompt error. ex. The device not supporting biometrics, please contact the system admin.  
-    (There's no Apple Sign-In account on Android, you can ignore this step.)
+1. Check if the user needs biometrics / SMS verification
+2. Call `updateDeviceInfo`, pass nil Wallet SDK will decide the value for you.
+    - This step is telling server if the device able to use biometrics or not.
+    - Passing `BiometricsType.NONE` means you'll use SMS verification instead of biometrics.
+3. Call `getBiometricsType` ➜ supported biometric type
+4. `if (BiometryType != BiometricsType.NONE)` ➜ call `registerPubkey`
+5. `if (BiometryType == BiometricsType.NONE)` && `accountSkipSmsVerify` ➜ prompt error. ex. The device not supporting biometrics, please contact the system admin.  
+  (There's no Apple Sign-In account on Android, you can ignore this step.)
 ```java
     public void checkAndRegisterPubkey(){
         // Step 3.
