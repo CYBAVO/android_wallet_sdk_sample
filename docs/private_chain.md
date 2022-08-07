@@ -16,7 +16,9 @@
   - [Model - Wallet](#wallet)
   - [Model - Currency](#currency)
   - [Model - UserState](#userstate)
-  - [Transactions (Deposit to Private Chain, Withdraw to Public Chain, Inner Transfer)](#transactions)
+  - [Transactions - Deposit to Private Chain](#1-deposit-to-private-chain)
+  - [Transactions - Withdraw to Public Chain](#2-withdraw-to-public-chain)
+  - [Transactions - Inner Transfer](#3-inner-transfer)
   - [Transaction History](#transaction-history)
 
 ## Models
@@ -160,7 +162,7 @@ public final class UserState {
 
 ### 2. Withdraw to Public Chain
 
-#### getTransactionFee
+#### Get Transaction Fee
 
 - Withdrawing to public chain will be charged a fixed transaction fee.  
 i.e. `getTransactionFee()` will return the same amount of { high, medium, low } level for private chain currency.
@@ -200,7 +202,35 @@ Wallets.getInstance().callAbiFunctionTransaction(walletId,
 
 ### 3. Inner Transfer
 
-- There's no transaction fee for inner transfer.
+#### Private Chain Platform Fee
+- On the **admin panel** ➜ **CYBAVO Smart Chain** ➜ **Chain Settings**, choose a currency which supports platform fee, click **Manage** button ➜ **Chain Wallet info**, you can found **Transfer Fee Rate** and **Transfer Fee Min**.  
+
+  <img src="images/sdk_guideline/private_chain_platform_fee.png" alt="drawing" width="600"/>
+- All the transfer operation on private chain will be charged platform fee, including inner transfer and transaction for finance product, not including deposit to private chain and withdraw to public chain. 
+- Platform fee calculation:
+  1. Platform Fee = Transfer Amount * **Transfer Fee Rate**
+  2. If the result of step 1 is less then **Transfer Fee Min**, use **Transfer Fee Min**.
+- You can use `estimateTransaction()` to get the platfom fee:
+```java
+Wallets.getInstance().estimateTransaction(
+                wallet.currency,
+                wallet.tokenAddress,
+                amount,// ex. "100"
+                "0", // transactionFee: fixed to "0"
+                wallet.walletId,
+                new Callback<EstimateTransactionResult>() {
+                    @Override
+                    public void onError(Throwable error) {
+                        error.printStackTrace();
+                    }
+        
+                    @Override
+                    public void onResult(EstimateTransactionResult result) {
+                        //check result.platformFee;
+                    }
+        });
+```
+#### Create Transaction
 - Call `createTransaction()` to perform the transaction with specific parameters:
 
 ```java
