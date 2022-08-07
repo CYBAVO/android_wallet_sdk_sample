@@ -12,7 +12,7 @@
   <img src="images/sdk_guideline/screenshot_security_enhancement_1.png" alt="drawing" width="400"/>   
 ### SignInState for Register flow
 1. Activated this option on the admin panel.
-2. App invoke Wallets API, ex. Wallets.getCurrencies(),  `SignInStateListener.onSignInStateChanged()` might be invoked with `NEED_REGISTER_PHONE` or `NEED_VERIFY_OTP`.
+2. When App invokes Wallets API, ex. `getCurrencies()`, server will check if the user registered the phone and is verified on this device. If not, WalletSDK will invoke `SignInStateListener.onSignInStateChanged()` with `NEED_REGISTER_PHONE` or `NEED_VERIFY_OTP`.  
 ```java
 Auth.getInstance().addSignInStateListener(new SignInStateListener() {
             @Override
@@ -90,7 +90,7 @@ Wallets.getInstance().getLoginSmsCode(
 });
 // Step 5.
 Auth.getInstance().verifyOtp(
-                actionToken,// From result of registerPhoneNumber()
+                actionToken,// From result of getLoginSmsCode()
                 smsCode, // Input by user
                 new Callback<VerifyOtpResult>() {
                     @Override
@@ -150,18 +150,19 @@ Related APIs are listed in [APIs which Required Biometrics Verification](#apis-w
 1. Check if the user needs biometrics / SMS verification
 2. Call `updateDeviceInfo()`, this step is telling server if the device able to use biometrics or not.
     ```java
-    // Update device's biometrics type, SDK will decide the type
+    // Update device's biometrics type, WalletSDK will decide the type
     Wallets.getInstance().updateDeviceInfo(context, callback);
 
     // Update device's biometrics type with specific type
     // Passing BiometricsType.NONE means you'll use SMS verification instead of biometrics.
     Wallets.getInstance().updateDeviceInfo(BiometricsType.NONE, callback);
     ```
-3. Call `getBiometricsType()` ➜ supported biometric type
+3. Call `getBiometricsType()` to get supported biometric type
 4. `if (BiometryType != BiometricsType.NONE)` ➜ call `registerPubkey`
 5. `if (BiometryType == BiometricsType.NONE)` && `accountSkipSmsVerify` ➜ prompt error. ex. The device not supporting biometrics, please contact the system admin.  
   (There's no Apple Sign-In account on Android, you can ignore this step.)
-```java
+  
+    ```java
     public void checkAndRegisterPubkey(){
         // Step 3.
         BiometricsType type = Wallets.getInstance().getBiometricsType(context);// BiometryType { NONE / FACE / FINGER }
@@ -198,7 +199,7 @@ Related APIs are listed in [APIs which Required Biometrics Verification](#apis-w
             }
         });
     }
-```
+    ```
 ## APIs which Required Biometrics Verification 
 
 - There are two versions (biometrics and SMS) for following transaction  / sign APIs:
@@ -241,7 +242,7 @@ Wallets.getInstance().getTransactionSmsCode(
     });
 // Step 2.  
 Wallets.getInstance().createTransactionSms(
-                actionToken, // From result of registerPhoneNumber()
+                actionToken, // From result of getTransactionSmsCode()
                 smsCode, // Input by user
                 fromWalletId, toAddress, amount, transactionFee, description, pinSecret, extras, callback);
 ```
