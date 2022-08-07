@@ -63,7 +63,7 @@ Auth.getInstance().verifyOtp(
 
                     @Override
                     public void onResult(VerifyOtpResult result) {
-                        //Step 6. Bring user back to the main page
+                        //Step 6. bring user back to the main page
                     }
                 });
 ```
@@ -100,7 +100,7 @@ Auth.getInstance().verifyOtp(
 
                     @Override
                     public void onResult(VerifyOtpResult result) {
-                        //Step 6. Bring user back to the main page
+                        //Step 6. bring user back to the main page
                     }
                 });        
 ```
@@ -112,12 +112,12 @@ Auth.getInstance().verifyOtp(
 
   <img src="images/sdk_guideline/screenshot_skip_sms_2.png" alt="drawing" width="800"/> 
 - By checking `UserState`, you can get to know whether the user is required verify or not.
-  -  `enableBiometrics`  
-      Mapping to **admin panel** ➜ **System settings** ➜ **Security Enhancement** ➜ **Enable biometrics verification on transaction**
+  -  `enableBiometrics`.  
+      Mapping to **admin panel** ➜ **System settings** ➜ **Security Enhancement** ➜ **Enable biometrics verification on transaction**.
   -  `skipSmsVerify`  
-      Mapping to **admin panel** ➜ **User Management** ➜ click signal user ➜ **Skip SMS verification**
+      Mapping to **admin panel** ➜ **User Management** ➜ click signal user ➜ **Skip SMS verification**.
   -  `accountSkipSmsVerify`  
-      Not configuable
+      Not configurable.
 
     ```java
     public final class UserState {
@@ -139,7 +139,7 @@ Auth.getInstance().verifyOtp(
     ex. For Apple Sign-In account,  only biometrics verification is available.
 ## Enable Biometrics Verification on Transaction
 - On the **admin panel** ➜ **System settings** ➜ **Security Enhancement**, you can activate **Enable biometrics verification on transaction** which means require biometrics verification (or SMS verification if the device does not support biometrics) while performing transaction or sign operations.  
-Related APIs are list in [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
+Related APIs are listed in [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
 - If **Enable biometrics verification on transaction** is activated, the system will also activate **Enable user phone verification**.
 
   <img src="images/sdk_guideline/screenshot_security_enhancement_2.png" alt="drawing" width="400"/>   
@@ -147,20 +147,19 @@ Related APIs are list in [APIs which Required Biometrics Verification](#apis-whi
 ![img](images/sdk_guideline/biometric_verification.jpg)
 
 - Complete the setup before using [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
-- Steps:
-    1. Check if the user needs biometrics / SMS verification
-    2. Call `updateDeviceInfo`, pass nil Wallet SDK will decide the value for you.
-        - This step is telling server if the device able to use biometrics or not.
-        - Passing `BiometricsType.NONE` means you'll use SMS verification instead of biometrics.
-    3. Call `getBiometricsType` ➜ supported biometric type
-    4. `if (BiometryType != BiometricsType.NONE)` ➜ call `registerPubkey`
-    5. `if (BiometryType == BiometricsType.NONE)` && `accountSkipSmsVerify` ➜ prompt error. ex. The device not supporting biometrics, please contact the system admin.  
-    (There's no Apple Sign-In account on Android, ignore this)
+  1. Check if the user needs biometrics / SMS verification
+  2. Call `updateDeviceInfo`, pass nil Wallet SDK will decide the value for you.
+      - This step is telling server if the device able to use biometrics or not.
+      - Passing `BiometricsType.NONE` means you'll use SMS verification instead of biometrics.
+  3. Call `getBiometricsType` ➜ supported biometric type
+  4. `if (BiometryType != BiometricsType.NONE)` ➜ call `registerPubkey`
+  5. `if (BiometryType == BiometricsType.NONE)` && `accountSkipSmsVerify` ➜ prompt error. ex. The device not supporting biometrics, please contact the system admin.  
+    (There's no Apple Sign-In account on Android, you can ignore this step.)
 ```java
     public void checkAndRegisterPubkey(){
         // Step 3.
         BiometricsType type = Wallets.getInstance().getBiometricsType(mApp);// BiometryType { NONE / FACE / FINGER }
-        // Step 2., update device's biometrics type
+        // Step 2. update device's biometrics type
         Wallets.getInstance().updateDeviceInfo(type.ordinal(), new Callback<UpdateDeviceInfoResult>() {
             @Override
             public void onError(Throwable error) {
