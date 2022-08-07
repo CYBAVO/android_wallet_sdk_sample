@@ -75,19 +75,19 @@ Auth.getInstance().verifyOtp(
 6. Wallets API can be invoked normally now, you can bring the user back to the main page.
 ```java
 // Step 4.
-        Wallets.getInstance().getLoginSmsCode(
-                SMS_COOL_TIME_SEC, // SMS expire duration in second, minimum value is 60, ex. 60
-                new Callback<GetActionTokenResult>() {
-                    @Override
-                    public void onError(Throwable error) {
-                        error.printStackTrace();
-                    }
-        
-                    @Override
-                    public void onResult(GetActionTokenResult result) {
-                        // Keep result.actionToken for verifyOtp()
-                    }
-        });
+Wallets.getInstance().getLoginSmsCode(
+        SMS_COOL_TIME_SEC, // SMS expire duration in second, minimum value is 60, ex. 60
+        new Callback<GetActionTokenResult>() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onResult(GetActionTokenResult result) {
+                // Keep result.actionToken for verifyOtp()
+            }
+});
 // Step 5.
 Auth.getInstance().verifyOtp(
                 actionToken,// From result of registerPhoneNumber()
@@ -107,7 +107,7 @@ Auth.getInstance().verifyOtp(
 
 ## Skipping SMS Verify
 
-- Although `Security Enhancement` is applied globally, in User Management, the administrator still can set a single user to skip SMS / biometrics verification.
+- Although `Security Enhancement` is applied globally, in **User Management**, the administrator still can set a single user to skip SMS / biometrics verification.
 
 
   <img src="images/sdk_guideline/screenshot_skip_sms_2.png" alt="drawing" width="800"/> 
@@ -138,7 +138,8 @@ Auth.getInstance().verifyOtp(
 
     ex. For Apple Sign-In account,  only biometrics verification is available.
 ## Enable Biometrics Verification on Transaction
-- On the **admin panel** ➜ **System settings** ➜ **Security Enhancement**, you can activate **Enable biometrics verification on transaction** which means require biometrics verification (or SMS verification if the device does not support biometrics) while performing transaction or sign operations, related APIs are list in [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
+- On the **admin panel** ➜ **System settings** ➜ **Security Enhancement**, you can activate **Enable biometrics verification on transaction** which means require biometrics verification (or SMS verification if the device does not support biometrics) while performing transaction or sign operations.  
+Related APIs are list in [APIs which Required Biometrics Verification](#apis-which-required-biometrics-verification).
 - If **Enable biometrics verification on transaction** is activated, the system will also activate **Enable user phone verification**.
 
   <img src="images/sdk_guideline/screenshot_security_enhancement_2.png" alt="drawing" width="400"/>   
@@ -188,7 +189,7 @@ Auth.getInstance().verifyOtp(
 
             @Override
             public void onResult(RegisterPubkeyResult registerPubkeyResult) {
-                mRegisteredPubKyc.setValue(true);
+                //Setup completed, you can use APIs which Required Biometrics Verification
             }
         });
     }
@@ -216,7 +217,8 @@ Auth.getInstance().verifyOtp(
 
 ### SMS version usage
 1. Invoke `getTransactionSmsCode()` to send SMS and get `actionToken`.
-2. Invoke SMS version function with user input OTP, `actionToken`. Other parameters are same as usual.
+2. Invoke SMS version function with user input OTP, `actionToken`.  
+Other parameters are same as usual.
 ```java
 // Step 1.
 Wallets.getInstance().getTransactionSmsCode(
@@ -240,7 +242,8 @@ Wallets.getInstance().createTransactionSms(
 ```
 
 ### Biometrics version usage
-1. Invoke biometrics version funtion with `activity`, `promptMessage`, `cancelButtonText`. Other parameters are same as usual.
+1. Invoke biometrics version funtion with `activity`, `promptMessage`, `cancelButtonText`.  
+Other parameters are same as usual.
 ```java
 Wallets.getInstance().createTransactionBio(
                 getActivity(),
