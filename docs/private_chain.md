@@ -226,7 +226,7 @@ Wallets.getInstance().estimateTransaction(
         
                     @Override
                     public void onResult(EstimateTransactionResult result) {
-                        //check result.platformFee;
+                        //check result.platformFee
                     }
         });
 ```
