@@ -71,7 +71,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ![ref](images/sdk_guideline/app_flowchart.jpg)
 
-### First-time login tasks
+### First-time Login Tasks
 
 ![ref](images/sdk_guideline/first_time_login.jpg)
 
@@ -85,11 +85,11 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ![ref](images/sdk_guideline/signin_signup.jpg)
 
-## Third-Party login
+## Third-Party Login
 
   Supported services : Google / Facebook / LINE / Twitter / WeChat
 
-## Sign-in flow
+## Sign-in Flow
 
 - 3rd party login ➡️ `Auth.getInstance().signIn` ➡️ get success ➡️ wait for `onSignInStateChanged` update
   
@@ -123,7 +123,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 public abstract void signIn(String token, String identityProvider, Map<String, String> extraAttributes, Callback<SignInResult> callback);
 ```
 
-## Sign-up flow
+## Sign-up Flow
 
 - `Auth.getInstance().signUp` ➡️ get success ➡️ `Auth.getInstance().signIn`
 
@@ -179,36 +179,8 @@ public enum SignInState {
     void onSignInStateChanged(SignInState state);
   }
   ```
+- For Security Enhancement in the [flowchart](#sign-in--sign-up-flowchart), `NEED_VERIFY_OTP` and `NEED_REGISTER_PHONE` SignInState, please see [Security Enhancement](bio_n_sms.md)
 
-- If you activate the Security Enhancement in the console.  
-
-  <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="400"/>  
-
-  You might get `NEED_REGISTER_PHONE` or `NEED_VERIFY_OTP` as your `SignInState`.  
-  ➡️ Do `registerPhoneNumber` and `verifyOtp` before the next step.
-
-- RegisterPhoneNumber
-
-  ```java
-  /// register phone number
-  /// - Parameters:
-  ///   - countryCode: country code, ex. 886
-  ///   - phone: phone number, ex. 900123456
-  ///   - duration: OTP valid duration in seconds, ex. 60
-  ///   - callback: Callback<RegisterPhoneNumberResult> ➡️ get actionToken
-  public abstract void registerPhoneNumber(String countryCode, String phone, long duration, Callback<RegisterPhoneNumberResult> callback);
-  ```
-
-- VerifyOTP
-
-  ```java
-  /// verify OTP
-  /// - Parameters:
-  ///   - actionToken: actionToken returned by registerPhoneNumber / getSmsCode
-  ///   - code: SMS code that registered phone received
-  ///   - callback: asynchronous callback
-  public abstract void verifyOtp(String actionToken, String code, Callback<VerifyOtpResult> callback);
-  ```
 
 - call `getSignInState` anytime when you need current `SignInState`
 
