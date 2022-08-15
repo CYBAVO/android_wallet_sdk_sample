@@ -17,7 +17,7 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - Advanced
     - NFT ➜ [NFT.md](NFT.md)
     - WalletConnect ➜ [wallet_connect.md](wallet_connect.md)
-    - Private Chain ➜ [private_chain.md](private_chain.md)
+    - CYBAVO Private Chain ➜ [private_chain.md](private_chain.md)
     - KYC with Sumsub ➜ [kyc_sumsub.md](kyc_sumsub.md)
 
 ## SDK Guideline
