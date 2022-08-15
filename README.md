@@ -66,7 +66,7 @@ Please refer to "Google Login - Setup with Firebase" section in CYBAVO Wallet SD
 3. Edit `values/config.xml` ➜ `wechat_sign_in_app_id` to your WeChat app id.  
 Please refer to "Wechat Login Setup" section in CYBAVO Wallet SDK Admin Panel User Manual.
 4. Edit `values/config.xml` ➜ `default_endpoint` to point to your Wallet Service endpoont.  
-For example, set `default_endpoint` = https://mvault.cybavo.com/v1/mw/ for test environemnt
+For example, set `default_endpoint` = https://mvault.sandbox.cybavo.com/v1/mw/ for test environemnt
 5. Register your app on CYBAVO WALLET MANAGEMENT system web > Administration > System settings, input `package name` and `Signature keystore SHA1 fingerprint`, follow the instruction to retrieve an `API Code`.  
 Please refer to "Setup in Android" section in CYBAVO Wallet SDK Admin Panel User Manual.
 6. Edit `values/config.xml` ➜ `default_api_code` to fill in yout `API Code`

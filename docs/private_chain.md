@@ -1,6 +1,5 @@
-# Private Chain
+# CYBAVO Private Chain (CPC)
 
-- Private chain a.k.a. CYBAVO Private Smart Chain (CPSC)
 - Scenario for:
   - Financial Products
   - Financial Management Services
@@ -30,7 +29,7 @@ public final class Wallet {
 
     public long walletId; // Wallet ID
 
-    public boolean isPrivate; // Is private chain (CPSC)
+    public boolean isPrivate; // Is private chain (CPC)
 
     public long mapToPublicCurrency; // Public chain's currency
 
@@ -61,7 +60,7 @@ public final class Wallet {
 ```java
 public final class Currency {
 
-    final public boolean isPrivate; // Is private chain (CPSC)
+    final public boolean isPrivate; // Is private chain (CPC)
 
     final public long mapToPublicType; // Public chain's currency type
 
