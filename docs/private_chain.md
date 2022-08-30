@@ -19,6 +19,7 @@
   - [Transactions - Withdraw to Public Chain](#2-withdraw-to-public-chain)
   - [Transactions - Inner Transfer](#3-inner-transfer)
   - [Transaction History](#transaction-history)
+  - [Finance Product](#finance-product-solution)
 
 ## Models
 
@@ -252,3 +253,15 @@ Wallets.getInstance().createTransaction(walletId,
  The only different thing is the parameter `crosschain` of `getHistory()`:
   - Pass `crosschain: 1`, it returns transactions of [Deposit to Private Chain](#deposit-to-private-chain) and [Withdraw to Public Chain](#withdraw-to-public-chain)
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
+
+## Finance Product Solution
+After deposit to CPC, you can further deposit to finance product for a period of time to get interest, the finance product can be setup on the admin panel.  
+In this section, we will illustrate how to achieve this feature through related API.
+
+### Product Setting and Model
+Below is an example to show how a finance product may look like and related fields.
+|  Product Setting (Admin Panel)   | Model  | Example UI (App)  |
+|  ----  | ----  | ----  |
+|  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  | <img src="images/sdk_guideline/private_chain_fp_model.png" alt="drawing" width="500"/> | <img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |
+ 
+
