@@ -259,9 +259,19 @@ After deposit to CPC, you can further deposit to finance product for a period of
 In this section, we will illustrate how to achieve this feature through related API.
 
 ### Product Setting and Model
-Below is an example to show how a finance product may look like and related fields.
+Below is an example to show how a finance product may look like and related fields. 
+
 |  Product Setting (Admin Panel)   | Model  | Example UI (App)  |
 |  ----  | ----  | ----  |
 |  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  | <img src="images/sdk_guideline/private_chain_fp_model.png" alt="drawing" width="500"/> | <img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |
+|  Contract Address  | `uuid`  | |
+|  StartAt  | `startTimestamp`  | If current time is earlier than `startTimestamp`, display **Not Start** tag|
+|  Title:zh-tw <br>Title:zh-cn<br>Title:zh-en | `title.tw`<br>`title.cn`<br>`title.en`  | Display one of these as product name according to device locale|
+|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  | If `maxUsers` <= `userCount`, display **Sold Out** tag<br>If `maxUsers` * `userPercent` >= `userCount`, display **Available** tag, else  display **About Full** tag|
+|  Show Rate  | `rate`  | Display it as annual interest rate, use `ratePercent` for calculation|
+|  Campaign  | `GetFinanceProductsResult.campaign`  | If Campaign is checked, this product will also exist in `GetFinanceProductsResult.campaig`|
+|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  | Display the deposit amount limit range, ex.  **Min 0.1 HW-ETH - 1000 HW-ETH** |
+|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of finance product: fixed deposit and demand deposit<br>If InverseProfitSharingCurrency is set to **Disable**, `kind` is `FinanceProduct.Kind.DEMAND_DEPOSIT` = `2` ,<br>otherwise, `kind` is `FinanceProduct.Kind.FIXED_DEPOSIT` = `1`.
+|
  
 
