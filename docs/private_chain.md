@@ -254,8 +254,8 @@ Wallets.getInstance().createTransaction(walletId,
   - Pass `crosschain: 1`, it returns transactions of [Deposit to Private Chain](#deposit-to-private-chain) and [Withdraw to Public Chain](#withdraw-to-public-chain)
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
-## Finance Product Solution
-After deposit to CPC, you can further deposit to finance product for a period of time to get interest, the finance product can be setup on the admin panel.  
+## Finance Product
+After deposit to CPC, users can further deposit to finance product for a period of time to get interest, the finance product can be setup on the admin panel.  
 In this section, we will illustrate how to achieve this feature through related API.
 
 ### Product Setting and Model
@@ -267,11 +267,15 @@ Below is an example to show how a finance product may look like and related fiel
 |  Contract Address  | `uuid`  | |
 |  StartAt  | `startTimestamp`  | If current time is earlier than `startTimestamp`, display **Not Start** tag.|
 |  Title:zh-tw <br>Title:zh-cn<br>Title:zh-en | `title.tw`<br>`title.cn`<br>`title.en`  | Display one of these as product name according to device locale.|
-|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  | If `maxUsers` <= `userCount`, display **Sold Out** tag<br>If `maxUsers` * `userPercent` >= `userCount`, display **Available** tag, else  display **About Full** tag.|
-|  Show Rate  | `rate`  | Display it as annual interest rate, use `ratePercent` for calculation|
+|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  | If `maxUsers` <= `userCount`, display **Sold Out** tag.<br>If `maxUsers` * `userPercent` >= `userCount`, display **Available** tag, else  display **About Full** tag.|
+|  Show Rate  | `rate`  | Display it as annual interest rate, use `ratePercent` for calculation.|
 |  Campaign  | `GetFinanceProductsResult.campaign`  | If Campaign is checked, this product will also exist in `GetFinanceProductsResult.campaign`.|
-|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  | Display the deposit amount limit range,<br>ex.  **Min 0.1 HW-ETH - 1000 HW-ETH** |
-|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of finance product:<br>fixed deposit and demand deposit<br>If InverseProfitSharingCurrency is set to **Disable**, `kind` is `FinanceProduct.Kind.DEMAND_DEPOSIT` = `2` ,<br>otherwise, `kind` is `FinanceProduct.Kind.FIXED_DEPOSIT` = `1`.
-|
+|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  | Display the deposit amount limit range,<br>ex.  **Min 0.5 HW-ETH - 1000 HW-ETH**. |
+|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of finance product:<br>fixed deposit and demand deposit<br>If InverseProfitSharingCurrency is set to **Disable**, `kind` is `FinanceProduct.Kind.DEMAND_DEPOSIT` = `2` ,<br>otherwise, `kind` is `FinanceProduct.Kind.FIXED_DEPOSIT` = `1`.|
+|  | `isNeedApprove`  | Provide **Approve** button only.|
+|  | `isCanWithdraw`  | `FIXED_DEPOSIT`: provide **Withdraw All** button, which means withdraw principal and interest<br>`DEMAND_DEPOSIT`: provide **Withdraw** button, which means withdraw principal.|
+|  | `isCanWithdrawReward`  | Provide **Harvest** button, only available for `DEMAND_DEPOSIT`.|
+|  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FIXED_DEPOSIT`.|
+|  | `isCanDeposit`  | Provide **Deposit** button.|
  
 
