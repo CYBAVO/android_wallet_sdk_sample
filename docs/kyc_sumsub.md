@@ -91,7 +91,7 @@
     public abstract void createKyc(String country, Callback<CreateKycResult> callback);
     ```
 ## Access Token and Launching Sumsub MSDK
-- Use `Auth.getInstance().getKycAccessToken()` and use the result to launch MSDK
+- Use `Auth.getInstance().getKycAccessToken()` and use the result to launch MSDK.
 - User must has called `createKyc` before this step, which means have an applicant on Sumsub dashboard.
 - Please visit [Sumsub Developer Hub](https://developers.sumsub.com/msdk/android/#initialization) for detailed MSDK instruction .
 
