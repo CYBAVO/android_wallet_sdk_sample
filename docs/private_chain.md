@@ -19,7 +19,7 @@
   - [Transactions - Withdraw to Public Chain](#2-withdraw-to-public-chain)
   - [Transactions - Inner Transfer](#3-inner-transfer)
   - [Transaction History](#transaction-history)
-  - [Finance Product](#finance-product-solution)
+  - [Finance Product](#finance-product)
 
 ## Models
 
@@ -271,11 +271,131 @@ Below is an example to show how a finance product may look like and related fiel
 |  Show Rate  | `rate`  | Display it as annual interest rate, use `ratePercent` for calculation.|
 |  Campaign  | `GetFinanceProductsResult.campaign`  | If Campaign is checked, this product will also exist in `GetFinanceProductsResult.campaign`.|
 |  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  | Display the deposit amount limit range,<br>ex.  **Min 0.5 HW-ETH - 1000 HW-ETH**. |
-|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of finance product:<br>fixed deposit and demand deposit<br>If InverseProfitSharingCurrency is set to **Disable**, `kind` is `FinanceProduct.Kind.DEMAND_DEPOSIT` = `2` ,<br>otherwise, `kind` is `FinanceProduct.Kind.FIXED_DEPOSIT` = `1`.|
-|  | `isNeedApprove`  | Provide **Approve** button only.|
-|  | `isCanWithdraw`  | `FIXED_DEPOSIT`: provide **Withdraw All** button, which means withdraw principal and interest<br>`DEMAND_DEPOSIT`: provide **Withdraw** button, which means withdraw principal.|
+|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of finance product:<br>if InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DEMAND_DEPOSIT`(2) ,<br>otherwise, `kind` would be `FIXED_DEPOSIT`(1).|
+|  | `isNeedApprove`  | Provide **Approve Activate** button only.|
+|  | `isCanWithdraw`  | `FIXED_DEPOSIT`: provide **Withdraw All** button, which means withdraw principal and interest.<br>`DEMAND_DEPOSIT`: provide **Withdraw** button, which means withdraw principal.|
 |  | `isCanWithdrawReward`  | Provide **Harvest** button, only available for `DEMAND_DEPOSIT`.|
 |  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FIXED_DEPOSIT`.|
 |  | `isCanDeposit`  | Provide **Deposit** button.|
- 
+
+ ### Getting Finance Product Lists
+ ```java
+/** 
+* Refers to FinanceProduct.MapKind:
+* DEFAULT(0), USER_DEPOSITS(1), DEMAND_DEPOSITS(2), FIXED_DEPOSITS(3), CAMPAIGN(4)
+*/
+int kind = FinanceProduct.MapKind.DEFAULT;
+
+Wallets.getInstance().getFinanceProducts(
+        kind,
+        new Callback<GetFinanceProductsResult>() {
+        @Override
+        public void onError(Throwable error) {
+            error.printStackTrace();
+        }
+
+        @Override
+        public void onResult(GetFinanceProductsResult result) {
+            /**
+              Finance product lists are categorized as following:
+              result.userDeposits
+              result.demandDeposits
+              result.fixedDeposits
+              result.campaign
+              */
+        }
+});
+ ```
+### Transaction Operations 
+There are 6 operations for finance product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
+|  API Method Name (`args[0]`)   | `kind`  | Description | Available Condition| `args` |
+|  :----:  | :----  | :----  | :---- | :---- |
+|  approve  | `FIXED_DEPOSIT`<br>`DEMAND_DEPOSIT` | - Approve to activate the product. | `isNeedApprove` is true| ["approve", product.uuid] |
+|  deposit  | `FIXED_DEPOSIT`  | - Deposit from given finance wallet.<br>- Every deposit will create an order. | `isCanDeposit` is true| ["deposit", product.uuid, ""] |
+|  deposit  | `DEMAND_DEPOSIT` | - Deposit from given finance wallet.| `isCanDeposit` is true| ["deposit", product.uuid, ""] |
+|  withdraw  | `FIXED_DEPOSIT` | - Withdraw all principal and interest to given finance wallet.<br>- Withdraw by product / order.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
+|  withdraw  | `DEMAND_DEPOSIT` | - Withdraw a certain amount of principal to given finance wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
+|  earlyWithdraw  | `FIXED_DEPOSIT` | - Withdraw all principal and interest to given finance wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanEarlyWithdraw` is true| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
+|  withdrawReward  | `DEMAND_DEPOSIT` | - Withdraw all interest to given finance wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
+|  withdrawBonus  |  | - Withdraw bonus to given finance wallet.<br>- Withdraw by bonus.| `Bonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
+
+Below code snippet shows a pattern to use `callAbiFunctionTransaction()` for those operations.
+ ```java
+Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
+
+Object[] args = new Object[]{
+                abiMethodName, // Possible value: "approve", "deposit", "withdraw", "earlyWithdraw", "withdrawReward", "withdrawBonus"
+                ...
+                };
+
+Wallets.getInstance().callAbiFunctionTransaction(
+        wallet.walletId, 
+        "financial", //name: fixed to "financial"
+        wallet.tokenAddress,
+        "", //abiJson: fixed to ""
+        args,
+        "0", // transactionFee: fixed to "0"
+        pinSecret,
+        callback);
+
+   // Find wallet by currency and tokenAddress in giving list.
+   public Wallet findWallet(ArrayList<Wallet> wallets, long currency, String tokenAddress){
+        Wallet targetWallet = null;
+        for(Wallet w: wallets){
+            if(currency == w.currency && tokenAddress.equals(w.tokenAddress)){
+                targetWallet = w;
+                break;
+            }
+        }
+        return targetWallet;
+    }
+ ```
+#### Check and Create Wallet
+Before
+#### isNeedApprove - Approve Activate
+Activating is required before the first deposit to the financial product.  
+If the product's `isNeedApprove` is true, you need to call `callAbiFunctionTransaction()` with args[0] `"approve"`.
+ ```java
+
+Wallet wallet = findWallet(priWallets, product.currency, product.tokenAddress);
+
+Object[] args = new Object[]{
+                "approve", // fixed to "approve"
+                product.uuid};
+
+Wallets.getInstance().callAbiFunctionTransaction(
+        wallet.walletId, 
+        "financial", //name: fixed to "financial"
+        wallet.tokenAddress,
+        "", //abiJson: fixed to ""
+        args,
+        "0", // transactionFee: fixed to "0"
+        pinSecret,
+        new Callback<CallAbiFunctionResult>() {
+        @Override
+        public void onError(Throwable error) {
+            error.printStackTrace();
+        }
+
+        @Override
+        public void onResult(CallAbiFunctionResult result) {
+            /**
+              Keep product.uuid and display activating, because isNeedApprove will not change immediately.
+              Call getFinanceProducts() to refresh.
+            */
+        }
+    });
+
+   // Find wallet by currency and tokenAddress in giving list.
+   public Wallet findWallet(ArrayList<Wallet> wallets, long currency, String tokenAddress){
+        Wallet targetWallet = null;
+        for(Wallet w: wallets){
+            if(currency == w.currency && tokenAddress.equals(w.tokenAddress)){
+                targetWallet = w;
+                break;
+            }
+        }
+        return targetWallet;
+    }
+ ```
 
