@@ -278,7 +278,7 @@ Below is an example to show how a finance product may look like and related fiel
 |  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FIXED_DEPOSIT`.|
 |  | `isCanDeposit`  | Provide **Deposit** button.|
 
- ### Getting Finance Product Lists
+ ### Get Finance Product Lists
  ```java
 /** 
 * Refers to FinanceProduct.MapKind:
@@ -308,7 +308,7 @@ Wallets.getInstance().getFinanceProducts(
  ```
 ### Transaction Operations 
 There are 6 operations for finance product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
-|  API Method Name (`args[0]`)   | `kind`  | Description | Available Condition| `args` |
+|  API Method Name<br>`args[0]`)   | `kind`  | Description | Available Condition| `args` |
 |  :----:  | :----  | :----  | :---- | :---- |
 |  approve  | `FIXED_DEPOSIT`<br>`DEMAND_DEPOSIT` | - Approve to activate the product. | `isNeedApprove` is true| ["approve", product.uuid] |
 |  deposit  | `FIXED_DEPOSIT`  | - Deposit from given finance wallet.<br>- Every deposit will create an order. | `isCanDeposit` is true| ["deposit", product.uuid, ""] |
@@ -351,7 +351,25 @@ Wallets.getInstance().callAbiFunctionTransaction(
     }
  ```
 #### Check and Create Wallet
-Before
+Before performing those operations, you should check if required wallets are created and create for the user if needed.  
+Required wallets including:  
+1. `currency` is same as `FinanceProduct.currency`, `tokenAddress` is empty.
+2. `mapToPublicCurrency` is same as `FinanceProduct.publicCurrency`, `mapToPublicTokenAddress` is empty. 
+3. `mapToPublicCurrency` is same as `FinanceProduct.publicCurrency`, `mapToPublicTokenAddress` is same as `FinanceProduct.publicTokenAddress`.  
+
+For example, for a HW-ETH finance product  
+(`currency`: 99999999995, `tokenAddress`: "0x123...", `publicCurrency`: 60, `publicTokenAddress`: "")  
+required wallets are
+1. CPSC wallet (`currency`: 99999999995, `tokenAddress`: "").
+2. CPSC-ETH wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "").
+
+For another example, for a HW-USDT finance product  
+(`currency`: 99999999995, `tokenAddress`: "0x234...", `publicCurrency`: 60, `publicTokenAddress`: "0x456...")  
+required wallets are
+1. CPSC wallet (`currency`: 99999999995, `tokenAddress`: "").
+2. CPSC-ETH wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "").
+3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").
+
 #### isNeedApprove - Approve Activate
 Activating is required before the first deposit to the financial product.  
 If the product's `isNeedApprove` is true, you need to call `callAbiFunctionTransaction()` with args[0] `"approve"`.
