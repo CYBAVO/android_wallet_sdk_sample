@@ -272,20 +272,20 @@ Below is an example to show how a financial product may look like and related fi
 |  Show Rate  | `rate`  | Display it as annual interest rate, use `ratePercent` for calculation.|
 |  Campaign  | `GetFinancialProductsResult.campaign`  | If Campaign is checked, this product will also exist in `GetFinancialProductsResult.campaign`.|
 |  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  | Display the deposit amount limit range,<br>ex.  **Min 0.5 HW-ETH - 1000 HW-ETH**. |
-|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of financial product:<br>if InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DEMAND_DEPOSIT`(2) ,<br>otherwise, `kind` would be `FIXED_DEPOSIT`(1).|
+|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of financial product:<br>if InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
 |  | `isNeedApprove`  | Provide **Approve Activate** button only.|
-|  | `isCanWithdraw`  | `FIXED_DEPOSIT`: provide **Withdraw All** button, which means withdraw principal and interest.<br>`DEMAND_DEPOSIT`: provide **Withdraw** button, which means withdraw principal.|
-|  | `isCanWithdrawReward`  | Provide **Harvest** button, only available for `DEMAND_DEPOSIT`.|
-|  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FIXED_DEPOSIT`.|
+|  | `isCanWithdraw`  | `FixedDeposit`: provide **Withdraw All** button, which means withdraw principal and interest.<br>`DemandDeposit`: provide **Withdraw** button, which means withdraw principal.|
+|  | `isCanWithdrawReward`  | Provide **Harvest** button, only available for `DemandDeposit`.|
+|  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FixedDeposit`.|
 |  | `isCanDeposit`  | Provide **Deposit** button.|
 
  ### Get Financial Product Lists
  ```java
 /** 
 * Refers to FinancialProduct.ListKind:
-* DEFAULT(0), USER_DEPOSITS(1), DEMAND_DEPOSITS(2), FIXED_DEPOSITS(3), CAMPAIGN(4)
+* All(0), UserDeposit(1), DemandDeposit(2), FixedDeposit(3), Campaign(4)
 */
-int kind = FinancialProduct.ListKind.DEFAULT;
+int kind = FinancialProduct.ListKind.All.getValue();
 
 Wallets.getInstance().getFinancialProducts(
         kind,
@@ -310,6 +310,9 @@ Wallets.getInstance().getFinancialProducts(
  ### Model - FinancialHistory
  If users have deposited or withdrawn a financial product, related FinancialHistory will be created.  
  For depositing FinancialHistory, App can perform transaction operations according to `FinancialHistory.isCan...` field, see [Transaction Operations](#transaction-operations) for detailed usage.   
+ ```java
+
+ ```
  
  ### Get Financial History Lists
  ```java
@@ -319,13 +322,13 @@ Wallets.getInstance().getFinancialProducts(
 There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
 |  ABI Method Name<br>`args[0]`   | `kind`  | Description | Available Condition| `args` |
 |  :----:  | :----  | :----  | :---- | :---- |
-|  approve  | `FIXED_DEPOSIT`<br>`DEMAND_DEPOSIT` | - Approve to activate the product. | `isNeedApprove` is true| ["approve", product.uuid] |
-|  deposit  | `FIXED_DEPOSIT`  | - Deposit from given financial wallet.<br>- Every deposit will create an order. | `isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
-|  deposit  | `DEMAND_DEPOSIT` | - Deposit from given financial wallet.| `isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
-|  withdraw  | `FIXED_DEPOSIT` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
-|  withdraw  | `DEMAND_DEPOSIT` | - Withdraw a certain amount of principal to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
-|  earlyWithdraw  | `FIXED_DEPOSIT` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanEarlyWithdraw` is true| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
-|  withdrawReward  | `DEMAND_DEPOSIT` | - Withdraw all interest to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
+|  approve  | `FixedDeposit`<br>`DemandDeposit` | - Approve to activate the product. | `isNeedApprove` is true| ["approve", product.uuid] |
+|  deposit  | `FixedDeposit`  | - Deposit from given financial wallet.<br>- Every deposit will create an order. | `isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
+|  deposit  | `DemandDeposit` | - Deposit from given financial wallet.| `isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
+|  withdraw  | `FixedDeposit` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
+|  withdraw  | `DemandDeposit` | - Withdraw a certain amount of principal to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
+|  earlyWithdraw  | `FixedDeposit` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanEarlyWithdraw` is true| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
+|  withdrawReward  | `DemandDeposit` | - Withdraw all interest to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
 |  withdrawBonus  |  | - Withdraw bonus to given financial wallet.<br>- Withdraw by bonus.| `Bonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
 
 Below code snippet shows a pattern to use `callAbiFunctionTransaction()` for those operations.
