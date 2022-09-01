@@ -258,7 +258,7 @@ Wallets.getInstance().createTransaction(walletId,
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In this section, we will illustrate how to achieve this feature through related API.
 
-### Model - FinancialProduct
+### Financial Product
 - After setup financial product on the admin panel, App can get financial product lists and perform transaction operation according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.    
 - Below is an example to show how a financial product may look like and related fields. 
 
@@ -375,6 +375,39 @@ Wallets.getInstance().getFinancialOrder(
                     }
         });
 ```
+### Financial Bonus
+- CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his/her financial list.
+- User can perform `withdrawBonus` with `uuid` if `isAlreadyWithdrawn` is false.
+```java
+Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult>() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onResult(GetFinancialBonusResult result) {
+                for (FinancialBonus bonus: result.bonusList){
+                    BigDecimal totalPerBonus = BigDecimal.ZERO;
+                    if(bonus.rewards == null){
+                        continue;
+                    }
+                    for (FinancialReward reward: bonus.rewards){
+                        // If need to display total amount, accumulate reward.amount
+                        BigDecimal amountValue = BigDecimal.valueOf(Double.parseDouble(reward.amount));
+                        totalPerBonus = totalPerBonus.add(amountValue);
+                    }
+                    //ex. Bonus: SavingRebate, withdraw:false, total: 5.375417 HW-XRP
+                    Log.d(TAG, String.format("Bonus: %s, withdraw:%b, total: %s %s",
+                            FinancialBonus.Kind.getKind(bonus.kind),
+                            bonus.isAlreadyWithdrawn,
+                            totalPerBonus.stripTrailingZeros().toPlainString(),
+                            bonus.publicName));
+                }
+            }
+        });
+```
+
 ### Transaction Operations 
 There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
 |  ABI Method Name<br>`args[0]`   | `kind`  | Description | Available Condition| `args` |
