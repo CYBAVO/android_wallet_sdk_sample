@@ -255,12 +255,12 @@ Wallets.getInstance().createTransaction(walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
-In this section, we will illustrate how to achieve this feature through related API.
+- After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
+- In this section, we will illustrate how to achieve this feature through related API.
 
 ### Model - FinancialProduct
-After setup financial product on the admin panel, App can get financial product lists and perform transaction operation according to `FinancialProduct.isCan...` field, see [Transaction Operations](#transaction-operations) for detailed usage.    
-Below is an example to show how a financial product may look like and related fields. 
+- After setup financial product on the admin panel, App can get financial product lists and perform transaction operation according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.    
+- Below is an example to show how a financial product may look like and related fields. 
 
 |  Product Setting (Admin Panel)   | Model  | Example UI (App)  |
 |  ----  | ----  | ----  |
@@ -280,6 +280,7 @@ Below is an example to show how a financial product may look like and related fi
 |  | `isCanDeposit`  | Provide **Deposit** button.|
 
  ### Get Financial Product Lists
+- You can get financial product list by `FinancialProduct.ListKind`:
  ```java
 /** 
 * Refers to FinancialProduct.ListKind:
@@ -307,17 +308,73 @@ Wallets.getInstance().getFinancialProducts(
         }
 });
  ```
- ### Model - FinancialHistory
- If users have deposited or withdrawn a financial product, related FinancialHistory will be created.  
- For depositing FinancialHistory, App can perform transaction operations according to `FinancialHistory.isCan...` field, see [Transaction Operations](#transaction-operations) for detailed usage.   
- ```java
-
- ```
+ ### Financial History
+- If users have deposited or withdrawn a financial product, related FinancialHistory will be created.  
+- For depositing FinancialHistory, App can perform transaction operations according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.   
  
- ### Get Financial History Lists
+ ### Get Financial History List
+ - You can get financial history list by `FinancialHistory.ListKind`:
  ```java
- ```
+/**
+  * Refers to FinancialHistory.ListKind:
+  * Depositing(1), Withdraw(2), WithdrawReward(3)
+  */
+int kind = FinancialHistory.ListKind.Depositing.getValue();
 
+// Flag for paging: pass null, or nextPage or prevPage of GetFinancialHistoryResult
+String page = doRefresh? null: previousResult.nextPage
+
+Wallets.getInstance().getFinancialHistory(
+        kind, 
+        page,
+        new Callback<GetFinancialHistoryResult>() {
+          @Override
+          public void onError(Throwable error) {
+              error.printStackTrace();
+          }
+
+          @Override
+          public void onResult(GetFinancialHistoryResult result) {
+              for(FinancialHistory history: result.histories){
+                  //Get FinancialProduct for this history in result.products
+                  FinancialProduct product = result.products.get(history.productUuid);
+              }
+          }
+});
+ ```
+- Fixed deposit product may have more then one order (demand deposit product only has one depositing history), you can get depositing financial history by `FinancialProduct.uuid`:   
+```java
+// Flag for paging: pass null, or nextPage or prevPage of GetFinancialHistoryResult
+String page = doRefresh? null: previousResult.nextPage
+
+Wallets.getInstance().getFinancialHistory(
+        financialProduct.uuid,
+        page, 
+        callback);
+```
+### Financial Order
+- Financial order is only of fixed deposit product.
+- Before users perform `earlyWithdraw` operation, App can display a warning message with `earlyReward` and `userReward` which means deducted interest and the original receivable interest.  
+ex. "The fixed deposit is not yet due, interest will be deducted at this time, continue to withdrawing the principal and interest?  
+Receivable interest: 0.0000001 HW-XRP  
+(Origin receivable interest: 16.126252 HW-XRP)"
+- You can get financial order detail by `FinancialHistory.orderId`
+```java
+Wallets.getInstance().getFinancialOrder(
+                history.productUuid,
+                history.orderId,
+                new Callback<GetFinancialOrderResult>() {
+                    @Override
+                    public void onError(Throwable error) {
+                        error.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResult(GetFinancialOrderResult result) {
+                        // If the order is not exist, result.kind will be -1
+                    }
+        });
+```
 ### Transaction Operations 
 There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
 |  ABI Method Name<br>`args[0]`   | `kind`  | Description | Available Condition| `args` |
@@ -329,7 +386,7 @@ There are 6 operations for financial product, they can be achieved by `callAbiFu
 |  withdraw  | `DemandDeposit` | - Withdraw a certain amount of principal to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
 |  earlyWithdraw  | `FixedDeposit` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanEarlyWithdraw` is true| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
 |  withdrawReward  | `DemandDeposit` | - Withdraw all interest to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
-|  withdrawBonus  |  | - Withdraw bonus to given financial wallet.<br>- Withdraw by bonus.| `Bonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
+|  withdrawBonus  |  | - Withdraw bonus to given financial wallet.<br>- Withdraw by bonus.| `FinancialBonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
 
 Below code snippet shows a pattern to use `callAbiFunctionTransaction()` for those operations.
  ```java
