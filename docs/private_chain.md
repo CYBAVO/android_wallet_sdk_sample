@@ -558,16 +558,16 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
 
 ### Transaction Operations 
 There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
-|  ABI Method Name<br>`args[0]`   | `kind`  | Description | Available Condition| `args` |
-|  :----:  | :----  | :----  | :---- | :---- |
-|  approve  | `FixedDeposit`<br>`DemandDeposit` | - Approve to activate the product. | `isNeedApprove` is true| ["approve", product.uuid] |
-|  deposit  | `FixedDeposit`  | - Deposit from given financial wallet.<br>- Every deposit will create an order. | `isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
-|  deposit  | `DemandDeposit` | - Deposit from given financial wallet.| `isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
-|  withdraw  | `FixedDeposit` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
-|  withdraw  | `DemandDeposit` | - Withdraw a certain amount of principal to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
-|  earlyWithdraw  | `FixedDeposit` | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted.<br>- Cannot withdraw if current time is earlier then `history.userWaitToWithdraw`.| `isCanEarlyWithdraw` is true| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
-|  withdrawReward  | `DemandDeposit` | - Withdraw all interest to given financial wallet.<br>- Withdraw by product.<br>- Cannot withdraw if current time is earlier then `product.userWaitToWithdraw`.| `isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
-|  withdrawBonus  |  | - Withdraw bonus to given financial wallet.<br>- Withdraw by bonus.| `FinancialBonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
+ 
+|  ABI Method Name<br>`args[0]`   | `kind` /<br>Perform  to  | Note | `args` |
+|  :----:  | :----  | :----  | :---- |
+|  approve  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct | - Approve to activate the product.<br>- Required and cannot perform other operations if `FinancialProduct.isNeedApprove` is true | ["approve", product.uuid] |
+|  deposit  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct  | - Deposit to the product.| ["deposit",<br>product.uuid,<br>amount, <br>""] |
+|  withdraw  | `FixedDeposit` / <br>Order which linked to FinancialHistory| - Withdraw all principal and interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true<br>- `isCanWithdraw = history.isCanWithdraw == null? product.isCanWithdraw: history.isCanWithdraw`| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
+|  withdraw  | `DemandDeposit` / <br>FinancialProduct | - Withdraw a certain amount of principal to given financial wallet.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `FinancialProduct.isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
+|  earlyWithdraw  | `FixedDeposit` / <br>Order which linked to FinancialHistory | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted, see [Financial Order](#financial-order).<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanEarlyWithdraw` is true<br>- `isCanEarlyWithdraw = history.isCanEarlyWithdraw == null? product.isCanEarlyWithdraw: history.isCanEarlyWithdraw`| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
+|  withdrawReward  | `DemandDeposit` / <br>FinancialProduct | - Withdraw all interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `FinancialProduct.isCanWithdraw` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
+|  withdrawBonus  | - / FinancialBonus | - Withdraw bonus to given financial wallet.<br>- Performable when `FinancialBonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
 
 Below code snippet shows a pattern to use `callAbiFunctionTransaction()` for those operations.
  ```java
