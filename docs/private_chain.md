@@ -24,7 +24,7 @@
   - [Financial History](#financial-history)
   - [Financial Order](#financial-order)
   - [Financial Bonus](#financial-bonus)
-  - [Transaction Operation](#transaction-operations)
+  - [Transaction Operations](#transaction-operations)
 
 ## Models
 
