@@ -262,9 +262,9 @@ Wallets.getInstance().createTransaction(walletId,
 - After setup financial product on the admin panel, App can get financial product lists and perform transaction operation according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.    
 - Below is an example to show how a financial product may look like and related fields.   
 
-|  Product Setting (Admin Panel)   | | Example UI (App)  |
-|  ----  | ----  | ----  |
-|  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  || <img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |  
+|  Product Setting (Admin Panel)   | Example UI (App)  |
+|  ----  | ----  |
+|  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  |<img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |  
 
 
 |  Product Setting (Admin Panel)   | FinancialProduct Field  | Example UI (App)  |
@@ -317,7 +317,7 @@ Wallets.getInstance().getFinancialProducts(
                 //ex. Product: Demand Deposits (Hourly Interest), kind: DemandDeposit,
                 // Annualized Rate: 10%, Amount: 0.900000000000000000 HW-ETH,
                 // Maturity Interest: 0.064776852000000000 HW-ETH,
-                // Allow withdraw after: 03:29:00, Available
+                // Allow withdraw after: 00:03:07, Available
                 Log.d(TAG, String.format("Product: %s, kind: %s, Annualized Rate: %s%%, " +
                                 "Amount: %s %s, Maturity Interest: %s %s, " +
                                 "Allow withdraw after: %s, %s",
@@ -408,11 +408,19 @@ Wallets.getInstance().getFinancialHistory(
                     //Get FinancialProduct for this history in result.products
                     FinancialProduct product = result.products.get(history.productUuid);
 
+                    // Use FinancialHistory.isCan first, only use FinancialProduct's if FinancialHistory's is null
+                    boolean isNeedApprove = history.isNeedApprove == null? product.isNeedApprove: history.isNeedApprove;
+                    boolean isCanWithdraw = history.isCanWithdraw == null? product.isCanWithdraw: history.isCanWithdraw;
+                    boolean isCanEarlyWithdraw = history.isCanEarlyWithdraw == null? product.isCanEarlyWithdraw: history.isCanEarlyWithdraw;
+                    boolean isCanWithdrawReward = history.isCanWithdrawReward == null? product.isCanWithdrawReward: history.isCanWithdrawReward;
+                    boolean isCanDeposit = history.isCanDeposit == null? product.isCanDeposit: history.isCanDeposit;
+                    
                     //ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
                     // Deposit amount: 0.151400000000000000, Start date: 2021/11/03 23:44:00, Value date: , 
                     // Expiry date: 2022/12/03 23:44:00, Interest amount: 0.000001727474000000, Annual Interest Rate: 10%
                     Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
-                            "Start date: %s, Value date: %s, Expiry date: %s, " +
+                            "Start date: %s, Value date: %s, " +
+                                    "Expiry date: %s, " +// if kind is ListKind.Withdraw, should display as "Withdraw date"
                                     "Interest amount: %s, Annual Interest Rate: %s%%",
                             product.publicName, product.title.en, history.userDeposit,
                             product.startTimestamp == 0? "": DateFormat.format(format, product.startTimestamp * 1000),
@@ -443,10 +451,18 @@ Wallets.getInstance().getFinancialHistory(
                     SimpleDateFormat formatter = getCountDownFormat();
                     for(FinancialHistory history: result.histories){
                         FinancialProduct product = result.products.get(history.productUuid);
+
+                        // Use FinancialHistory.isCan first, only use FinancialProduct's if FinancialHistory's is null
+                        boolean isNeedApprove = history.isNeedApprove == null? product.isNeedApprove: history.isNeedApprove;
+                        boolean isCanWithdraw = history.isCanWithdraw == null? product.isCanWithdraw: history.isCanWithdraw;
+                        boolean isCanEarlyWithdraw = history.isCanEarlyWithdraw == null? product.isCanEarlyWithdraw: history.isCanEarlyWithdraw;
+                        boolean isCanWithdrawReward = history.isCanWithdrawReward == null? product.isCanWithdrawReward: history.isCanWithdrawReward;
+                        boolean isCanDeposit = history.isCanDeposit == null? product.isCanDeposit: history.isCanDeposit;
+
                         long msInFuture = getMsInFuture(history.userWaitToWithdraw);
-                        // ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days), 
-                        // Deposit amount: 225.005000, Start date: 2022/09/02 14:35:32, Value date: , 
-                        // Expiry date: 2022/09/12 14:35:32, Interest amount: 0.924678, 
+                        // ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days),
+                        // Deposit amount: 225.005000, Start date: 2022/09/02 14:35:32, Value date: ,
+                        // Expiry date: 2022/09/12 14:35:32, Interest amount: 0.924678,
                         // Annual Interest Rate: 15%, Allow withdraw after: 00:04:43
                         Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
                                         "Start date: %s, Value date: %s, Expiry date: %s, " +
@@ -457,7 +473,7 @@ Wallets.getInstance().getFinancialHistory(
                                 product.rewardTimestamp == 0? "": DateFormat.format(format, product.rewardTimestamp * 1000),
                                 product.endTimestamp == 0? "": DateFormat.format(format, product.endTimestamp * 1000),
                                 history.userReward, product.rate,
-                                msInFuture <= 0 || (!Boolean.TRUE.equals(history.isCanWithdraw) && !Boolean.TRUE.equals(history.isCanEarlyWithdraw))? "": formatter.format(msInFuture))
+                                msInFuture <= 0 || (!isCanWithdraw && !isCanEarlyWithdraw)? "": formatter.format(msInFuture))
                         );
                     }
                 }
