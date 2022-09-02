@@ -662,9 +662,9 @@ Wallets.getInstance().callAbiFunctionTransaction(
 - For `FixedDeposit`, you can display estimate reward when editing amount.  
 estimate reward = product.ratePercent * amount 
 ```java
- if(!product.isCanDeposit){
-    return;
- }
+if(!product.isCanDeposit){
+  return;
+}
 
 // Find wallet by currency and tokenAddress in giving list.
 Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
@@ -717,8 +717,7 @@ Wallets.getInstance().callAbiFunctionTransaction(
  [↑ Transaction Operations ↑](#transaction-operations)
 #### Withdraw - DemandDeposit
 ```java
-boolean isCanWithdraw = product.isCanWithdraw;
-if(!isCanWithdraw){
+if(!product.isCanWithdraw){
     return;
 }
 long msInFuture = getMsInFuture(product.userWaitToWithdraw);
@@ -773,8 +772,7 @@ Wallets.getInstance().callAbiFunctionTransaction(
  [↑ Transaction Operations ↑](#transaction-operations)
 #### withdrawReward
 ```java
-boolean isCanWithdrawReward = product.isCanWithdrawReward;
-if(!isCanWithdrawReward){
+if(!product.isCanWithdrawReward){
     return;
 }
 long msInFuture = getMsInFuture(product.userWaitToWithdraw);
