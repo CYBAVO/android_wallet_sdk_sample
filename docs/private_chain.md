@@ -277,7 +277,7 @@ Wallets.getInstance().createTransaction(walletId,
 |  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  |- `maxUsers` <= `userCount`, means sold out.<br>- `maxUsers` * `userPercent` >= `userCount`, means available<br>- `maxUsers` * `userPercent` < `userCount`, means about full.|
 |  Show Rate  | `rate`  |- Display it as annual interest rate<br>-`ratePercent` is `double` version of annual interest rate.|
 |  Campaign  | `GetFinancialProductsResult.campaign`  |- If Campaign is checked, this product will also exist in `GetFinancialProductsResult.campaign`.|
-|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  |- Display the deposit amount limit range,<br>ex. **Min 0.5 HW-ETH - 1000 HW-ETH**. |
+|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  |- Display the deposit amount limit range,<br>ex. Min 0.5 HW-ETH - 1000 HW-ETH. |
 |  InverseProfitSharingCurrency  | `kind`  |- enum: `FinancialProduct.Kind`<br>- If InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
 
  #### Get Financial Product Lists
@@ -414,11 +414,9 @@ Wallets.getInstance().getFinancialHistory(
                     FinancialProduct product = result.products.get(history.productUuid);
 
                     // Use FinancialHistory.isCan first, only use FinancialProduct's if FinancialHistory's is null
-                    boolean isNeedApprove = history.isNeedApprove == null? product.isNeedApprove: history.isNeedApprove;
                     boolean isCanWithdraw = history.isCanWithdraw == null? product.isCanWithdraw: history.isCanWithdraw;
                     boolean isCanEarlyWithdraw = history.isCanEarlyWithdraw == null? product.isCanEarlyWithdraw: history.isCanEarlyWithdraw;
                     boolean isCanWithdrawReward = history.isCanWithdrawReward == null? product.isCanWithdrawReward: history.isCanWithdrawReward;
-                    boolean isCanDeposit = history.isCanDeposit == null? product.isCanDeposit: history.isCanDeposit;
                     
                     //ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
                     // Deposit amount: 0.151400000000000000, Start date: 2021/11/03 23:44:00, Value date: , 
@@ -458,11 +456,9 @@ Wallets.getInstance().getFinancialHistory(
                         FinancialProduct product = result.products.get(history.productUuid);
 
                         // Use FinancialHistory.isCan first, only use FinancialProduct's if FinancialHistory's is null
-                        boolean isNeedApprove = history.isNeedApprove == null? product.isNeedApprove: history.isNeedApprove;
                         boolean isCanWithdraw = history.isCanWithdraw == null? product.isCanWithdraw: history.isCanWithdraw;
                         boolean isCanEarlyWithdraw = history.isCanEarlyWithdraw == null? product.isCanEarlyWithdraw: history.isCanEarlyWithdraw;
                         boolean isCanWithdrawReward = history.isCanWithdrawReward == null? product.isCanWithdrawReward: history.isCanWithdrawReward;
-                        boolean isCanDeposit = history.isCanDeposit == null? product.isCanDeposit: history.isCanDeposit;
 
                         long msInFuture = getMsInFuture(history.userWaitToWithdraw);
                         // ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days),
@@ -554,8 +550,8 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
 ```
 
 ### Transaction Operations 
-- There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `FinancialProduct.kind`.
-- After performed `callAbiFunctionTransaction()`, it'll take a while to change data, App may need to display a status for transition to prevent users execute the same operation again (press again the same button).
+- There are 6 operations for CPC financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `FinancialProduct.kind`.
+- ⚠️ After performed `callAbiFunctionTransaction()`, it'll take a while to change data, App may need to display a status for transition to prevent users execute the same operation again (press again the same button).
  
 |  ABI Method Name<br>`args[0]`   | `kind` /<br>Perform  to  | Note | `args` |
 |  :----:  | :----  | :----  | :---- |
@@ -617,6 +613,19 @@ required wallets are
 1. CPSC wallet (`currency`: 99999999995, `tokenAddress`: "").
 2. CPSC-ETH wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "").
 3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").
+
+#### Transaction Explain
+- Perform those operations may also create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` field with additional information, you can use `explain` to make the UI more clearer.
+```java
+if(item.explain.kind == TransactionExplain.Kind.Unknown.getValue()){
+    return;
+}
+if(!item.explain.isShowAmount){
+    //hide amount for 0 amount operation like approve
+}
+// ex. kind: WithdrawReward, product: Demand Deposits (Hourly Interest)
+Log.e("TAG", String.format("kind: %s, product: %s", TransactionExplain.Kind.getKind(item.explain.kind), item.explain.name.en));
+```
 
 #### Approve Activate
  ```java
