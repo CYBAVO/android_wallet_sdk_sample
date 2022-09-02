@@ -488,12 +488,19 @@ Wallets.getInstance().getFinancialHistory(
         });
 ```
 ### Financial Order
-- ⚠️ Financial order is only of fixed deposit product.
-- Before users perform `earlyWithdraw` operation, App can display a warning message with `earlyReward` and `userReward` which means deducted interest and the original receivable interest.  
-ex. "The fixed deposit is not yet due, interest will be deducted at this time, continue to withdrawing the principal and interest?  
-Receivable interest: 0.0000001 HW-XRP  
-(Origin receivable interest: 16.126252 HW-XRP)"
-- You can get financial order detail by `FinancialHistory.orderId`
+- ⚠️ Financial order is only of `FixedDeposit` product.
+- Every deposit will create an order.
+- The following image and table shows the mapping of order info on the admin panel and GetFinancialOrderResult fields.  
+
+  <img src="images/sdk_guideline/private_chain_order.png" alt="drawing" width="500"/>  
+
+  |  Order Column   | GetFinancialOrderResult Field  | Note |
+  |  ----  | ----  | ----  |
+  |  OrderID  | `uuid`  | |
+  |  Amount  | `userDeposit`| |
+  |  Reward  | `userReward`  | |
+  |  Penalty  | `earlyReward` | `earlyReward` = Reward - Penalty|
+
 ```java
 Wallets.getInstance().getFinancialOrder(
                 history.productUuid,
@@ -507,6 +514,12 @@ Wallets.getInstance().getFinancialOrder(
                     @Override
                     public void onResult(GetFinancialOrderResult result) {
                         // If the order is not exist, result.kind will be -1
+                        
+                        //ex. Receivable interest: 0.0000001 HW-XRP,
+                        //Origin receivable interest: 16.126252 HW-XRP"
+                        Log.d(TAG, String.format("Receivable interest: %s %s, Origin receivable interest: %s %s",
+                                result.earlyReward, product.publicName,
+                                result.userReward, product.publicName));
                     }
         });
 ```
