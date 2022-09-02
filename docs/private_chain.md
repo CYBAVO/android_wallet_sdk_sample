@@ -20,11 +20,11 @@
   - [Transactions - Inner Transfer](#3-inner-transfer)
   - [Transaction History](#transaction-history)
   - [CPC Financial Product](#cpc-financial-product)
-  - [Financial Product](#financial-product)
-  - [Financial History](#financial-history)
-  - [Financial Order](#financial-order)
-  - [Financial Bonus](#financial-bonus)
-  - [Transaction Operations](#transaction-operations)
+    - [Financial Product](#financial-product)
+    - [Financial History](#financial-history)
+    - [Financial Order](#financial-order)
+    - [Financial Bonus](#financial-bonus)
+    - [Transaction Operations](#transaction-operations)
 
 ## Models
 
