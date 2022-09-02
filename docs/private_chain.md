@@ -374,10 +374,10 @@ public static String getAvailableTag(FinancialProduct product){
 }
  ```
  ### Financial History
-- If users have deposited or withdrawn a financial product, related FinancialHistory will be created / removed.  
-- For depositing FinancialHistory, App can perform transaction operations according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.   
-
+- If users have deposited or withdrawn a financial product, related FinancialHistory will be created / removed. 
 #### Get Financial History List
+- There are 3 kind for FinancialHistory: Depositing(1), Withdraw(2), WithdrawReward(3), the following table shows the change after performed transaction operation.  
+
 |  Transaction Operation   | FinancialProduct.kind  | Changes in GetFinancialHistoryResult  |
 |  ----  | ----  | ----  |
 |  deposit  | `FixedDeposit`  | - Add one `Depositing` history. |
