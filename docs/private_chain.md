@@ -488,11 +488,11 @@ Wallets.getInstance().getFinancialHistory(
         });
 ```
 ### Financial Order
-- ⚠️ Financial order is only of `FixedDeposit` product.
+- ⚠️ Financial order is only for `FixedDeposit` product.
 - Every deposit will create an order.
 - The following image and table shows the mapping of order info on the admin panel and GetFinancialOrderResult fields.  
 
-  <img src="images/sdk_guideline/private_chain_order.png" alt="drawing" width="500"/>  
+  <img src="images/sdk_guideline/private_chain_order.png" alt="drawing" width="900"/>  
 
   |  Order Column   | GetFinancialOrderResult Field  | Note |
   |  ----  | ----  | ----  |
@@ -515,8 +515,8 @@ Wallets.getInstance().getFinancialOrder(
                     public void onResult(GetFinancialOrderResult result) {
                         // If the order is not exist, result.kind will be -1
                         
-                        //ex. Receivable interest: 0.0000001 HW-XRP,
-                        //Origin receivable interest: 16.126252 HW-XRP"
+                        // ex. Receivable interest: 0.000000 HW-XRP,
+                        // Origin receivable interest: 0.231169 HW-XRP"
                         Log.d(TAG, String.format("Receivable interest: %s %s, Origin receivable interest: %s %s",
                                 result.earlyReward, product.publicName,
                                 result.userReward, product.publicName));
