@@ -20,6 +20,11 @@
   - [Transactions - Inner Transfer](#3-inner-transfer)
   - [Transaction History](#transaction-history)
   - [CPC Financial Product](#cpc-financial-product)
+  - [Financial Product](#financial-product)
+  - [Financial History](#financial-history)
+  - [Financial Order](#financial-order)
+  - [Financial Bonus](#financial-bonus)
+  - [Transaction Operation](#transaction-operations)
 
 ## Models
 
@@ -256,32 +261,24 @@ Wallets.getInstance().createTransaction(walletId,
 
 ## CPC Financial Product
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
-- In this section, we will illustrate how to achieve this feature through related API.
+- In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.
 
-### Financial Product
-- After setup financial product on the admin panel, App can get financial product lists and perform transaction operation according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.    
-- Below is an example to show how a financial product may look like and related fields.   
+### Financial Product  
+- The following image and table shows the mapping of product settings on the admin panel and FinancialProduct fields. 
 
-|  Product Setting (Admin Panel)   | Example UI (App)  |
-|  ----  | ----  |
-|  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  |<img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |  
+<img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="700"/> 
 
 
-|  Product Setting (Admin Panel)   | FinancialProduct Field  | Example UI (App)  |
+|  Product Setting<br>(Admin Panel)   | FinancialProduct Field  | Note  |
 |  ----  | ----  | ----  |
 |  Contract Address  | `uuid`  | |
-|  StartAt  | `startTimestamp`  | If current time is earlier than `startTimestamp`, display **Not Start** tag.|
-|  Title:zh-tw <br>Title:zh-cn<br>Title:zh-en | `title.tw`<br>`title.cn`<br>`title.en`  | Display one of these as product name according to device locale.|
-|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  | If `maxUsers` <= `userCount`, display **Sold Out** tag.<br>If `maxUsers` * `userPercent` >= `userCount`, display **Available** tag, else  display **About Full** tag.|
-|  Show Rate  | `rate`  | Display it as annual interest rate, use `ratePercent` for calculation.|
-|  Campaign  | `GetFinancialProductsResult.campaign`  | If Campaign is checked, this product will also exist in `GetFinancialProductsResult.campaign`.|
-|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  | Display the deposit amount limit range,<br>ex.  **Min 0.5 HW-ETH - 1000 HW-ETH**. |
-|  InverseProfitSharingCurrency  | `kind`  | There are 2 types of financial product:<br>if InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
-|  | `isNeedApprove`  | Provide **Approve Activate** button only.|
-|  | `isCanWithdraw`  | `FixedDeposit`: provide **Withdraw All** button, which means withdraw principal and interest.<br>`DemandDeposit`: provide **Withdraw** button, which means withdraw principal.|
-|  | `isCanWithdrawReward`  | Provide **Harvest** button, only available for `DemandDeposit`.|
-|  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FixedDeposit`.|
-|  | `isCanDeposit`  | Provide **Deposit** button.|
+|  StartAt  | `startTimestamp`  | |
+|  Title:zh-tw <br>Title:zh-cn<br>Title:zh-en | `title.tw`<br>`title.cn`<br>`title.en`  |- Display one of these as product name according to device locale.|
+|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  |- `maxUsers` <= `userCount`, means sold out.<br>- `maxUsers` * `userPercent` >= `userCount`, means available<br>- `maxUsers` * `userPercent` < `userCount`, means about full.|
+|  Show Rate  | `rate`  |- Display it as annual interest rate<br>-`ratePercent` is `double` version of annual interest rate.|
+|  Campaign  | `GetFinancialProductsResult.campaign`  |- If Campaign is checked, this product will also exist in `GetFinancialProductsResult.campaign`.|
+|  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  |- Display the deposit amount limit range,<br>ex. **Min 0.5 HW-ETH - 1000 HW-ETH**. |
+|  InverseProfitSharingCurrency  | `kind`  |- enum: `FinancialProduct.Kind`<br>- If InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
 
  #### Get Financial Product Lists
 - You can get financial product list by `FinancialProduct.ListKind`:
@@ -494,7 +491,7 @@ Wallets.getInstance().getFinancialHistory(
 
   <img src="images/sdk_guideline/private_chain_order.png" alt="drawing" width="900"/>  
 
-  |  Order Column   | GetFinancialOrderResult Field  | Note |
+  |  Order Column <br>(Admin Panel)  | GetFinancialOrderResult Field  | Note |
   |  ----  | ----  | ----  |
   |  OrderID  | `uuid`  | |
   |  Amount  | `userDeposit`| |
@@ -557,7 +554,7 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
 ```
 
 ### Transaction Operations 
-- There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `kind`.
+- There are 6 operations for financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `FinancialProduct.kind`.
 - After performed `callAbiFunctionTransaction()`, it'll take a while to change data, App may need to display a status for transition to prevent users execute the same operation again (press again the same button).
  
 |  ABI Method Name<br>`args[0]`   | `kind` /<br>Perform  to  | Note | `args` |
@@ -659,6 +656,8 @@ Wallets.getInstance().callAbiFunctionTransaction(
  ```
  [↑ Transaction Operations ↑](#transaction-operations)
 #### Deposit
+- You can display `minDeposit` and `maxDeposit` as minimum / maximum deposit amount.  
+ex.  Min 0.5 HW-ETH - 1000 HW-ETH
 - For `FixedDeposit`, you can display estimate reward when editing amount.  
 estimate reward = product.ratePercent * amount 
 ```java
