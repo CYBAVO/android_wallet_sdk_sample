@@ -283,7 +283,7 @@ Wallets.getInstance().createTransaction(walletId,
 |  | `isCanEarlyWithdraw`  | Provide **Early Redeem** button, only available for `FixedDeposit`.|
 |  | `isCanDeposit`  | Provide **Deposit** button.|
 
- ### Get Financial Product Lists
+ #### Get Financial Product Lists
 - You can get financial product list by `FinancialProduct.ListKind`:
  ```java
 /** 
@@ -377,11 +377,19 @@ public static String getAvailableTag(FinancialProduct product){
 }
  ```
  ### Financial History
-- If users have deposited or withdrawn a financial product, related FinancialHistory will be created.  
+- If users have deposited or withdrawn a financial product, related FinancialHistory will be created / removed.  
 - For depositing FinancialHistory, App can perform transaction operations according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.   
- 
- ### Get Financial History List
- - You can get financial history list by `FinancialHistory.ListKind`:
+
+#### Get Financial History List
+|  Transaction Operation   | FinancialProduct.kind  | Changes in GetFinancialHistoryResult  |
+|  ----  | ----  | ----  |
+|  deposit  | `FixedDeposit`  | - Add one `Depositing` history. |
+|  deposit  | `DemandDeposit`  | - Add one `Depositing` history when there's no one for this product.<br>- Or update the existing `Depositing` history.|
+|  withdraw<br>earlyWithdraw  | `FixedDeposit`  | - Remove the `Depositing` history.<br>- Add one `Withdraw` history.<br>- Add one `WithdrawReward` history. |
+|  withdraw  | `DemandDeposit`  | - Add one `Withdraw` history.<br>- Remove the `Depositing` history if no `userDeposit` and `userReward` left.<br>- Or update the existing `Depositing` history. |
+|  withdrawReward  | `DemandDeposit`  | - Add one `WithdrawReward` history.<br>- Remove the `Depositing` history if no `userDeposit` and `userReward` left.<br>- Or update the existing `Depositing` history. |
+
+- You can get financial history list by `FinancialHistory.ListKind` or `FinancialProduct.uuid`. 
  ```java
 /**
   * Refers to FinancialHistory.ListKind:
@@ -431,7 +439,7 @@ Wallets.getInstance().getFinancialHistory(
             }
 });
  ```
-- Fixed deposit product may have more then one order (demand deposit product only has one depositing history), you can get depositing financial history by `FinancialProduct.uuid`:   
+- ⚠️ Get financial history list by `FinancialProduct.uuid` will only return `Depositing` history.
 ```java
 // Flag for paging: pass null, or nextPage or prevPage of GetFinancialHistoryResult
 String page = doRefresh? null: previousResult.nextPage
@@ -480,7 +488,7 @@ Wallets.getInstance().getFinancialHistory(
         });
 ```
 ### Financial Order
-- Financial order is only of fixed deposit product.
+- ⚠️ Financial order is only of fixed deposit product.
 - Before users perform `earlyWithdraw` operation, App can display a warning message with `earlyReward` and `userReward` which means deducted interest and the original receivable interest.  
 ex. "The fixed deposit is not yet due, interest will be deducted at this time, continue to withdrawing the principal and interest?  
 Receivable interest: 0.0000001 HW-XRP  
