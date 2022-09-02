@@ -615,7 +615,7 @@ required wallets are
 3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").
 
 #### Transaction Explain
-- Perform those operations may also create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` field with additional information, you can use `explain` to make the UI more clearer.
+- Perform those operations may create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` field with additional information, you can use `explain` to make the UI more clearer.
 ```java
 if(item.explain.kind == TransactionExplain.Kind.Unknown.getValue()){
     return;
@@ -624,7 +624,7 @@ if(!item.explain.isShowAmount){
     //hide amount for 0 amount operation like approve
 }
 // ex. kind: WithdrawReward, product: Demand Deposits (Hourly Interest)
-Log.e("TAG", String.format("kind: %s, product: %s", TransactionExplain.Kind.getKind(item.explain.kind), item.explain.name.en));
+Log.e(TAG, String.format("kind: %s, product: %s", TransactionExplain.Kind.getKind(item.explain.kind), item.explain.name.en));
 ```
 
 #### Approve Activate
