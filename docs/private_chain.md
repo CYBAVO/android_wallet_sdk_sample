@@ -260,11 +260,15 @@ Wallets.getInstance().createTransaction(walletId,
 
 ### Financial Product
 - After setup financial product on the admin panel, App can get financial product lists and perform transaction operation according to the field starting with `isCan`, see [Transaction Operations](#transaction-operations) for detailed usage.    
-- Below is an example to show how a financial product may look like and related fields. 
+- Below is an example to show how a financial product may look like and related fields.   
 
-|  Product Setting (Admin Panel)   | Model  | Example UI (App)  |
+|  Product Setting (Admin Panel)   | | Example UI (App)  |
 |  ----  | ----  | ----  |
-|  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  | <img src="images/sdk_guideline/private_chain_fp_model.png" alt="drawing" width="500"/> | <img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |
+|  <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="500"/>  || <img src="images/sdk_guideline/private_chain_fp_item.png" alt="drawing" width="500"/>  |  
+
+
+|  Product Setting (Admin Panel)   | FinancialProduct Field  | Example UI (App)  |
+|  ----  | ----  | ----  |
 |  Contract Address  | `uuid`  | |
 |  StartAt  | `startTimestamp`  | If current time is earlier than `startTimestamp`, display **Not Start** tag.|
 |  Title:zh-tw <br>Title:zh-cn<br>Title:zh-en | `title.tw`<br>`title.cn`<br>`title.en`  | Display one of these as product name according to device locale.|
@@ -300,13 +304,77 @@ Wallets.getInstance().getFinancialProducts(
         public void onResult(GetFinancialProductsResult result) {
             /**
               Financial product lists are categorized as following:
-              result.userDeposits
-              result.demandDeposits
-              result.fixedDeposits
-              result.campaign
+              result.userDeposits, result.demandDeposits,
+              result.fixedDeposits, result.campaign
               */
+
+            CharSequence format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat formatter = getCountDownFormat();
+
+            for(FinancialProduct product: result.demandDeposits){
+                long msInFuture = getMsInFuture(product.userWaitToWithdraw);
+                String tag = getAvailableTag(product);
+                //ex. Product: Demand Deposits (Hourly Interest), kind: DemandDeposit,
+                // Annualized Rate: 10%, Amount: 0.900000000000000000 HW-ETH,
+                // Maturity Interest: 0.064776852000000000 HW-ETH,
+                // Allow withdraw after: 03:29:00, Available
+                Log.d(TAG, String.format("Product: %s, kind: %s, Annualized Rate: %s%%, " +
+                                "Amount: %s %s, Maturity Interest: %s %s, " +
+                                "Allow withdraw after: %s, %s",
+                        product.title.en,
+                        FinancialProduct.Kind.getKind(product.kind),
+                        product.rate,
+                        product.userDeposit, product.publicName,
+                        product.userReward, product.publicName,
+                        msInFuture <= 0 || (!product.isCanWithdraw && !Boolean.TRUE.equals(product.isCanWithdrawReward))? "": formatter.format(msInFuture),
+                        tag));
+            }
+            for(FinancialProduct product: result.fixedDeposits){
+                //ex. Product: Time deposit (10 days), kind:FixedDeposit,
+                // Annualized Rate: 15%, Amount: 1.004613 HW-XRP,
+                // Maturity Interest: 0.004128 HW-XRP,
+                // Start date: 2022/09/02 12:48:11,
+                // Value date: ,
+                // Expiry date: 2022/09/12 12:48:11
+                Log.d(TAG, String.format("Product: %s, kind:%s, Annualized Rate: %s%%, " +
+                                "Amount: %s %s, Maturity Interest: %s %s, " +
+                                "Start date: %s, Value date: %s, Expiry date: %s",
+                        product.title.en,
+                        FinancialProduct.Kind.getKind(product.kind),
+                        product.rate,
+                        product.userDeposit, product.publicName,
+                        product.userReward, product.publicName,
+                        product.startTimestamp == 0? "": DateFormat.format(format, product.startTimestamp * 1000),
+                        product.rewardTimestamp == 0? "": DateFormat.format(format, product.rewardTimestamp * 1000),
+                        product.endTimestamp == 0? "": DateFormat.format(format, product.endTimestamp * 1000)));
+            }
         }
 });
+
+public static long getMsInFuture(long deadline){
+        return deadline == 0 ? 0: (deadline * 1000) - new Date().getTime();
+}
+
+public static SimpleDateFormat getCountDownFormat(){
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
+    return simpleDateFormat;
+}
+
+public static String getAvailableTag(FinancialProduct product){
+    long time = new Date().getTime() / 1000;
+    if(product.startTimestamp > time){
+        return "Not Start";
+    }
+    if(product.userCount >= product.maxUsers){
+        return "Sold Out";
+    }
+    if(product.maxUsers * product.userPercent >= product.userCount){
+        return "Available";
+    }else{
+        return "About Full";
+    }
+}
  ```
  ### Financial History
 - If users have deposited or withdrawn a financial product, related FinancialHistory will be created.  
@@ -335,11 +403,24 @@ Wallets.getInstance().getFinancialHistory(
 
           @Override
           public void onResult(GetFinancialHistoryResult result) {
-              for(FinancialHistory history: result.histories){
-                  //Get FinancialProduct for this history in result.products
-                  FinancialProduct product = result.products.get(history.productUuid);
-              }
-          }
+                CharSequence format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "yyyy-MM-dd HH:mm:ss");
+                for(FinancialHistory history: result.histories){
+                    //Get FinancialProduct for this history in result.products
+                    FinancialProduct product = result.products.get(history.productUuid);
+
+                    //ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
+                    // Deposit amount: 0.151400000000000000, Start date: 2021/11/03 23:44:00, Value date: , 
+                    // Expiry date: 2022/12/03 23:44:00, Interest amount: 0.000001727474000000, Annual Interest Rate: 10%
+                    Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
+                            "Start date: %s, Value date: %s, Expiry date: %s, " +
+                                    "Interest amount: %s, Annual Interest Rate: %s%%",
+                            product.publicName, product.title.en, history.userDeposit,
+                            product.startTimestamp == 0? "": DateFormat.format(format, product.startTimestamp * 1000),
+                            product.rewardTimestamp == 0? "": DateFormat.format(format, product.rewardTimestamp * 1000),
+                            product.endTimestamp == 0? "": DateFormat.format(format, product.endTimestamp * 1000),
+                            history.userReward, product.rate));
+                }
+            }
 });
  ```
 - Fixed deposit product may have more then one order (demand deposit product only has one depositing history), you can get depositing financial history by `FinancialProduct.uuid`:   
@@ -348,9 +429,39 @@ Wallets.getInstance().getFinancialHistory(
 String page = doRefresh? null: previousResult.nextPage
 
 Wallets.getInstance().getFinancialHistory(
-        financialProduct.uuid,
-        page, 
-        callback);
+                financialProduct.uuid,
+                page, // Flag for paging: pass null, or nextPage or prevPage of GetFinancialHistoryResult
+                new Callback<GetFinancialHistoryResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    error.printStackTrace();
+                }
+
+                @Override
+                public void onResult(GetFinancialHistoryResult result) {
+                    CharSequence format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat formatter = getCountDownFormat();
+                    for(FinancialHistory history: result.histories){
+                        FinancialProduct product = result.products.get(history.productUuid);
+                        long msInFuture = getMsInFuture(history.userWaitToWithdraw);
+                        // ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days), 
+                        // Deposit amount: 225.005000, Start date: 2022/09/02 14:35:32, Value date: , 
+                        // Expiry date: 2022/09/12 14:35:32, Interest amount: 0.924678, 
+                        // Annual Interest Rate: 15%, Allow withdraw after: 00:04:43
+                        Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
+                                        "Start date: %s, Value date: %s, Expiry date: %s, " +
+                                        "Interest amount: %s, Annual Interest Rate: %s%%, " +
+                                        "Allow withdraw after: %s",
+                                product.publicName, product.title.en, history.userDeposit,
+                                product.startTimestamp == 0? "": DateFormat.format(format, product.startTimestamp * 1000),
+                                product.rewardTimestamp == 0? "": DateFormat.format(format, product.rewardTimestamp * 1000),
+                                product.endTimestamp == 0? "": DateFormat.format(format, product.endTimestamp * 1000),
+                                history.userReward, product.rate,
+                                msInFuture <= 0 || (!Boolean.TRUE.equals(history.isCanWithdraw) && !Boolean.TRUE.equals(history.isCanEarlyWithdraw))? "": formatter.format(msInFuture))
+                        );
+                    }
+                }
+        });
 ```
 ### Financial Order
 - Financial order is only of fixed deposit product.
