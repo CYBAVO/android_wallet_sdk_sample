@@ -319,7 +319,7 @@ Wallets.getInstance().getFinancialProducts(
                                 "Amount: %s %s, Maturity Interest: %s %s, " +
                                 "Allow withdraw after: %s, %s",
                         product.title.en,
-                        FinancialProduct.Kind.getKind(product.kind),
+                        product.kind,
                         product.rate,
                         product.userDeposit, product.publicName,
                         product.userReward, product.publicName,
@@ -337,7 +337,7 @@ Wallets.getInstance().getFinancialProducts(
                                 "Amount: %s %s, Maturity Interest: %s %s, " +
                                 "Start date: %s, Value date: %s, Expiry date: %s",
                         product.title.en,
-                        FinancialProduct.Kind.getKind(product.kind),
+                        product.kind,
                         product.rate,
                         product.userDeposit, product.publicName,
                         product.userReward, product.publicName,
@@ -376,7 +376,7 @@ public static String getAvailableTag(FinancialProduct product){
  ### Financial History
 - If users have deposited or withdrawn a financial product, related FinancialHistory will be created / removed. 
 #### Get Financial History List
-- There are 3 kind for FinancialHistory: Depositing(1), Withdraw(2), WithdrawReward(3), the following table shows the change after performed transaction operation.  
+- There are 3 kind for FinancialHistory: `Depositing`(1), `Withdraw`(2), `WithdrawReward`(3), the following table shows the change after performed transaction operation.  
 
 |  Transaction Operation   | FinancialProduct.kind  | Changes in GetFinancialHistoryResult  |
 |  ----  | ----  | ----  |
@@ -540,7 +540,7 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
                     }
                     //ex. Bonus: SavingRebate, withdraw:false, total: 5.375417 HW-XRP
                     Log.d(TAG, String.format("Bonus: %s, withdraw:%b, total: %s %s",
-                            FinancialBonus.Kind.getKind(bonus.kind),
+                            bonus.kind,
                             bonus.isAlreadyWithdrawn,
                             totalPerBonus.stripTrailingZeros().toPlainString(),
                             bonus.publicName));
@@ -624,7 +624,7 @@ if(!item.explain.isShowAmount){
     //hide amount for 0 amount operation like approve
 }
 // ex. kind: WithdrawReward, product: Demand Deposits (Hourly Interest)
-Log.e(TAG, String.format("kind: %s, product: %s", TransactionExplain.Kind.getKind(item.explain.kind), item.explain.name.en));
+Log.d(TAG, String.format("kind: %s, product: %s", item.explain.kind, item.explain.name.en));
 ```
 
 #### Approve Activate
