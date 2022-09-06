@@ -524,9 +524,6 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
             public void onResult(GetFinancialBonusResult result) {
                 for (FinancialBonus bonus: result.bonusList){
                     BigDecimal totalPerBonus = BigDecimal.ZERO;
-                    if(bonus.rewards == null){
-                        continue;
-                    }
                     for (FinancialReward reward: bonus.rewards){
                         // If need to display total amount, accumulate reward.amount
                         BigDecimal amountValue = BigDecimal.valueOf(Double.parseDouble(reward.amount));
