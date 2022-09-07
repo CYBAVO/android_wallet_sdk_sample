@@ -260,7 +260,7 @@ Wallets.getInstance().createTransaction(walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-- ⚠️ Please use `com.cybavo.wallet:wallet-sdk-lib:1.2.4398` or later.
+- ⚠️ Please use `com.cybavo.wallet:wallet-sdk-lib:1.2.4457` or later.
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
