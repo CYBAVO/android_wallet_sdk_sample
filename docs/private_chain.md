@@ -260,7 +260,7 @@ Wallets.getInstance().createTransaction(walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-- ⚠️ Please use `com.cybavo.wallet:wallet-sdk-lib:1.2.4398` and above.
+- ⚠️ Please use `com.cybavo.wallet:wallet-sdk-lib:1.2.4398` or later.
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
@@ -312,7 +312,7 @@ Wallets.getInstance().getFinancialProducts(
             for(FinancialProduct product: result.demandDeposits){
                 long msInFuture = getMsInFuture(product.userWaitToWithdraw);
                 String tag = getAvailableTag(product);
-                //ex. Product: Demand Deposits (Hourly Interest), kind: DemandDeposit,
+                // ex. Product: Demand Deposits (Hourly Interest), kind: DemandDeposit,
                 // Annualized Rate: 10%, Amount: 0.900000000000000000 HW-ETH,
                 // Maturity Interest: 0.064776852000000000 HW-ETH,
                 // Allow withdraw after: 00:03:07, Available
@@ -328,7 +328,7 @@ Wallets.getInstance().getFinancialProducts(
                         tag));
             }
             for(FinancialProduct product: result.fixedDeposits){
-                //ex. Product: Time deposit (10 days), kind:FixedDeposit,
+                // ex. Product: Time deposit (10 days), kind:FixedDeposit,
                 // Annualized Rate: 15%, Amount: 1.004613 HW-XRP,
                 // Maturity Interest: 0.004128 HW-XRP,
                 // Start date: 2022/09/02 12:48:11,
@@ -411,10 +411,10 @@ Wallets.getInstance().getFinancialHistory(
           public void onResult(GetFinancialHistoryResult result) {
                 CharSequence format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "yyyy-MM-dd HH:mm:ss");
                 for(FinancialHistory history: result.histories){
-                    //Get FinancialProduct for this history in result.products
+                    // Get FinancialProduct for this history in result.products
                     FinancialProduct product = result.products.get(history.productUuid);
                     
-                    //ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
+                    // ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
                     // Deposit amount: 0.151400000000000000, Start date: 2021/11/03 23:44:00, Value date: , 
                     // Expiry date: 2022/12/03 23:44:00, Interest amount: 0.000001727474000000, Annual Interest Rate: 10%
                     Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
@@ -530,7 +530,7 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
                         BigDecimal amountValue = BigDecimal.valueOf(Double.parseDouble(reward.amount));
                         totalPerBonus = totalPerBonus.add(amountValue);
                     }
-                    //ex. Bonus: SavingRebate, withdraw: false, total: 5.375417 HW-XRP
+                    // ex. Bonus: SavingRebate, withdraw: false, total: 5.375417 HW-XRP
                     Log.d(TAG, String.format("Bonus: %s, withdraw: %b, total: %s %s",
                             bonus.kind,
                             bonus.isAlreadyWithdrawn,
@@ -566,9 +566,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId, 
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -613,7 +613,7 @@ if(item.explain.kind == TransactionExplain.Kind.Unknown){
     return;
 }
 if(!item.explain.isShowAmount){
-    //hide amount for 0 amount operation like approve
+    // Hide amount for 0 amount operation like approve
 }
 // ex. kind: WithdrawReward, product: Demand Deposits (Hourly Interest)
 Log.d(TAG, String.format("kind: %s, product: %s", item.explain.kind, item.explain.name.en));
@@ -634,9 +634,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId, 
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -678,9 +678,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId, 
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -706,9 +706,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId,
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -733,9 +733,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId,
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -753,7 +753,7 @@ if(msInFuture <= 0){
     return;
 }
 Object[] args = new Object[]{
-        "earlyWithdraw", // ABI method name: fixed to "earlyWithdraw"
+        "earlyWithdraw",   ABI method name: fixed to "earlyWithdraw"
         product.uuid,
         "0", // amount: fixed to "0"
         history.orderId 
@@ -761,9 +761,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId,
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -788,9 +788,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId,
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
@@ -810,9 +810,9 @@ Object[] args = new Object[]{
 
 Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId,
-        "financial", //name: fixed to "financial"
+        "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", //abiJson: fixed to ""
+        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
