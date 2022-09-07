@@ -512,7 +512,7 @@ Wallets.getInstance().getFinancialOrder(
         });
 ```
 ### Financial Bonus
-- CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his/her financial list.
+- CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his / her financial list.
 - User can perform `withdrawBonus` with `uuid` if `isAlreadyWithdrawn` is false.
 ```java
 Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult>() {
