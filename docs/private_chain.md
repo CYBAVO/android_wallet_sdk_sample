@@ -504,7 +504,7 @@ Wallets.getInstance().getFinancialOrder(
                         // If the order is not exist, result.kind will be FinancialProduct.Kind.Unknown(-1)
                         
                         // ex. Receivable interest: 0.000000 HW-XRP,
-                        // Origin receivable interest: 0.231169 HW-XRP"
+                        // Origin receivable interest: 0.231169 HW-XRP
                         Log.d(TAG, String.format("Receivable interest: %s %s, Origin receivable interest: %s %s",
                                 result.earlyReward, product.publicName,
                                 result.userReward, product.publicName));
@@ -812,7 +812,6 @@ Wallets.getInstance().callAbiFunctionTransaction(
         wallet.walletId,
         "financial", // name: fixed to "financial"
         wallet.tokenAddress,
-        "", // abiJson: fixed to ""
         args,
         "0", // transactionFee: fixed to "0"
         pinSecret,
