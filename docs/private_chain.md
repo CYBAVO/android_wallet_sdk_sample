@@ -465,9 +465,9 @@ Wallets.getInstance().getFinancialHistory(
                                         "Interest amount: %s, Annual Interest Rate: %s%%, " +
                                         "Allow withdraw after: %s",
                                 product.publicName, product.title.en, history.userDeposit,
-                                product.startTimestamp == 0? "": DateFormat.format(format, product.startTimestamp * 1000),
-                                product.rewardTimestamp == 0? "": DateFormat.format(format, product.rewardTimestamp * 1000),
-                                product.endTimestamp == 0? "": DateFormat.format(format, product.endTimestamp * 1000),
+                                history.startTimestamp == 0? "": DateFormat.format(format, history.startTimestamp * 1000),
+                                history.rewardTimestamp == 0? "": DateFormat.format(format, history.rewardTimestamp * 1000),
+                                history.endTimestamp == 0? "": DateFormat.format(format, history.endTimestamp * 1000),
                                 history.userReward, product.rate,
                                 msInFuture <= 0 || (!isCanWithdraw && !isCanEarlyWithdraw)? "": formatter.format(msInFuture))
                         );
@@ -530,8 +530,8 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
                         BigDecimal amountValue = BigDecimal.valueOf(Double.parseDouble(reward.amount));
                         totalPerBonus = totalPerBonus.add(amountValue);
                     }
-                    //ex. Bonus: SavingRebate, withdraw:false, total: 5.375417 HW-XRP
-                    Log.d(TAG, String.format("Bonus: %s, withdraw:%b, total: %s %s",
+                    //ex. Bonus: SavingRebate, withdraw: false, total: 5.375417 HW-XRP
+                    Log.d(TAG, String.format("Bonus: %s, withdraw: %b, total: %s %s",
                             bonus.kind,
                             bonus.isAlreadyWithdrawn,
                             totalPerBonus.stripTrailingZeros().toPlainString(),
