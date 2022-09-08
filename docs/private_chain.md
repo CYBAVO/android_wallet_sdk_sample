@@ -422,9 +422,9 @@ Wallets.getInstance().getFinancialHistory(
                                     "Expiry date: %s, " +// if kind is ListKind.Withdraw, should display as "Withdraw date"
                                     "Interest amount: %s, Annual Interest Rate: %s%%",
                             product.publicName, product.title.en, history.userDeposit,
-                            product.startTimestamp == 0? "": DateFormat.format(format, product.startTimestamp * 1000),
-                            product.rewardTimestamp == 0? "": DateFormat.format(format, product.rewardTimestamp * 1000),
-                            product.endTimestamp == 0? "": DateFormat.format(format, product.endTimestamp * 1000),
+                            history.startTimestamp == 0? "": DateFormat.format(format, history.startTimestamp * 1000),
+                            history.rewardTimestamp == 0? "": DateFormat.format(format, history.rewardTimestamp * 1000),
+                            history.endTimestamp == 0? "": DateFormat.format(format, history.endTimestamp * 1000),
                             history.userReward, product.rate));
                 }
             }
