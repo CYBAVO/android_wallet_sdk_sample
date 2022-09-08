@@ -260,7 +260,7 @@ Wallets.getInstance().createTransaction(walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-- ⚠️ Please use `com.cybavo.wallet:wallet-sdk-lib:1.2.4457` or later.
+- ⚠️ Please use `com.cybavo.wallet:wallet-sdk-lib:1.2.4461` or later.
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
@@ -609,14 +609,14 @@ required wallets are
 #### Transaction Explain
 - Perform those operations may create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` field with additional information, you can use `explain` to make the UI more clearer.
 ```java
-if(item.explain.kind == TransactionExplain.Kind.Unknown){
+if(item.explain.kind == TransactionExplain.Kind.Unknown.getValue()){
     return;
 }
 if(!item.explain.isShowAmount){
     // Hide amount for 0 amount operation like approve
 }
 // ex. kind: WithdrawReward, product: Demand Deposits (Hourly Interest)
-Log.d(TAG, String.format("kind: %s, product: %s", item.explain.kind, item.explain.name.en));
+Log.d(TAG, String.format("kind: %s, product: %s", TransactionExplain.Kind.getKind(item.explain.kind), item.explain.name.en));
 ```
 
 #### Approve Activate
