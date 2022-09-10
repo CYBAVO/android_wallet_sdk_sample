@@ -410,22 +410,34 @@ Wallets.getInstance().getFinancialHistory(
           @Override
           public void onResult(GetFinancialHistoryResult result) {
                 CharSequence format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat formatter = getCountDownFormat();
                 for(FinancialHistory history: result.histories){
                     // Get FinancialProduct for this history in result.products
                     FinancialProduct product = result.products.get(history.productUuid);
-                    
-                    // ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
-                    // Deposit amount: 0.151400000000000000, Start date: 2021/11/03 23:44:00, Value date: , 
-                    // Expiry date: 2022/12/03 23:44:00, Interest amount: 0.000001727474000000, Annual Interest Rate: 10%
+
+                    // Use FinancialHistory.isCan || FinancialProduct.isCan
+                    boolean isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw;
+                    boolean isCanEarlyWithdraw = history.isCanEarlyWithdraw  || product.isCanEarlyWithdraw;
+                    boolean isCanWithdrawReward = history.isCanWithdrawReward  || product.isCanWithdrawReward;
+
+                    long msInFuture = getMsInFuture(history.userWaitToWithdraw)
+                    /**
+                        ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), 
+                        Deposit amount: 0.151400000000000000, Start date: 2021/11/03 23:44:00, Value date: , 
+                        Expiry date: 2022/12/03 23:44:00, Interest amount: 0.000001727474000000, 
+                        Annual Interest Rate: 10%, Allow withdraw after: 00:01:27
+                     */
                     Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
                             "Start date: %s, Value date: %s, " +
                                     "Expiry date: %s, " +// if kind is ListKind.Withdraw, should display as "Withdraw date"
-                                    "Interest amount: %s, Annual Interest Rate: %s%%",
+                                    "Interest amount: %s, Annual Interest Rate: %s%%, Allow withdraw after: %s",
                             product.publicName, product.title.en, history.userDeposit,
                             history.startTimestamp == 0? "": DateFormat.format(format, history.startTimestamp * 1000),
                             history.rewardTimestamp == 0? "": DateFormat.format(format, history.rewardTimestamp * 1000),
                             history.endTimestamp == 0? "": DateFormat.format(format, history.endTimestamp * 1000),
-                            history.userReward, product.rate));
+                            history.userReward, product.rate,
+                            msInFuture <= 0 || (!isCanWithdraw && !isCanEarlyWithdraw && !isCanWithdrawReward)? "": formatter.format(msInFuture))
+                        );
                 }
             }
 });
@@ -454,12 +466,15 @@ Wallets.getInstance().getFinancialHistory(
                         // Use FinancialHistory.isCan || FinancialProduct.isCan
                         boolean isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw;
                         boolean isCanEarlyWithdraw = history.isCanEarlyWithdraw  || product.isCanEarlyWithdraw;
+                        boolean isCanWithdrawReward = history.isCanWithdrawReward  || product.isCanWithdrawReward;
 
-                        long msInFuture = getMsInFuture(history.userWaitToWithdraw);
-                        // ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days),
-                        // Deposit amount: 225.005000, Start date: 2022/09/02 14:35:32, Value date: ,
-                        // Expiry date: 2022/09/12 14:35:32, Interest amount: 0.924678,
-                        // Annual Interest Rate: 15%, Allow withdraw after: 00:04:43
+                        long msInFuture = getMsInFuture(history.userWaitToWithdraw)
+                        /**
+                            ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days),
+                            Deposit amount: 225.005000, Start date: 2022/09/02 14:35:32, Value date: ,
+                            Expiry date: 2022/09/12 14:35:32, Interest amount: 0.924678,
+                            Annual Interest Rate: 15%, Allow withdraw after: 00:04:43
+                        */
                         Log.d(TAG, String.format("Currency: %s, Subscribe item: %s, Deposit amount: %s, " +
                                         "Start date: %s, Value date: %s, Expiry date: %s, " +
                                         "Interest amount: %s, Annual Interest Rate: %s%%, " +
@@ -469,7 +484,7 @@ Wallets.getInstance().getFinancialHistory(
                                 history.rewardTimestamp == 0? "": DateFormat.format(format, history.rewardTimestamp * 1000),
                                 history.endTimestamp == 0? "": DateFormat.format(format, history.endTimestamp * 1000),
                                 history.userReward, product.rate,
-                                msInFuture <= 0 || (!isCanWithdraw && !isCanEarlyWithdraw)? "": formatter.format(msInFuture))
+                                msInFuture <= 0 || (!isCanWithdraw && !isCanEarlyWithdraw && !isCanWithdrawReward)? "": formatter.format(msInFuture))
                         );
                     }
                 }
@@ -547,13 +562,13 @@ Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult
  
 |  ABI Method Name<br>`args[0]`   | `kind` /<br>Perform  to  | Note | `args` |
 |  :----:  | :----  | :----  | :---- |
-|  [approve](#approve-activate)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct | - Approve to activate the product.<br>- Required and cannot perform other operations if `FinancialProduct.isNeedApprove` is true | ["approve", product.uuid] |
-|  [deposit](#deposit)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct  | - Deposit to the product.<br>- Performable when `FinancialProduct.isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
-|  [withdraw](#withdraw---fixeddeposit)  | `FixedDeposit` / <br>Order which linked to FinancialHistory| - Withdraw all principal and interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true<br>- `isCanWithdraw = history.isCanWithdraw \|\| history.isCanWithdraw`| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
-|  [withdraw](#withdraw---demanddeposit)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw a certain amount of principal to given financial wallet.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `FinancialProduct.isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
-|  [earlyWithdraw](#earlywithdraw)  | `FixedDeposit` / <br>Order which linked to FinancialHistory | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted, see [Financial Order](#financial-order).<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanEarlyWithdraw` is true<br>- `isCanEarlyWithdraw = history.isCanEarlyWithdraw \|\| product.isCanEarlyWithdraw`| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
-|  [withdrawReward](#withdrawreward)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw all interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `FinancialProduct.isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
-|  [withdrawBonus](#withdrawbonus)  | - / FinancialBonus | - Withdraw bonus to given financial wallet.<br>- Performable when `FinancialBonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
+|  [approve](#approve-activate)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct | - Approve to activate the product.<br>- Required and cannot perform other operations if `isNeedApprove` is true.<br>- `isNeedApprove = history.isNeedApprove \|\| product.isNeedApprove` | ["approve", product.uuid] |
+|  [deposit](#deposit)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct  | - Deposit to the product.<br>- Performable when `isCanDeposit` is true.<br>- `isCanDeposit = history.isCanDeposit \|\| product.isCanDeposit`| ["deposit",<br>product.uuid,<br>amount, <br>""] |
+|  [withdraw](#withdraw---fixeddeposit)  | `FixedDeposit` / <br>Order which linked to FinancialHistory| - Withdraw all principal and interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true.<br>- `isCanWithdraw = history.isCanWithdraw \|\| product.isCanWithdraw`| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
+|  [withdraw](#withdraw---demanddeposit)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw a certain amount of principal to given financial wallet.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true.<br>- `isCanWithdraw = history.isCanWithdraw \|\| product.isCanWithdraw`| ["withdraw", product.uuid,<br>amount,<br>""] |
+|  [earlyWithdraw](#earlywithdraw)  | `FixedDeposit` / <br>Order which linked to FinancialHistory | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted, see [Financial Order](#financial-order).<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanEarlyWithdraw` is true.<br>- `isCanEarlyWithdraw = history.isCanEarlyWithdraw \|\| product.isCanEarlyWithdraw`| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
+|  [withdrawReward](#withdrawreward)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw all interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `isCanWithdrawReward` is true.<br>- `isCanWithdrawReward = history.isCanWithdrawReward \|\| product.isCanWithdrawReward`| ["withdrawReward", product.uuid,<br>"0",<br>""] |
+|  [withdrawBonus](#withdrawbonus)  | - / FinancialBonus | - Withdraw bonus to given financial wallet.<br>- Performable when `FinancialBonus.isAlreadyWithdrawn` is false.| ["withdrawBonus", bonus.uuid,<br>"0"] |
 
 Below code snippet shows a pattern to use `callAbiFunctionTransaction()` for those operations.
  ```java
@@ -574,17 +589,17 @@ Wallets.getInstance().callAbiFunctionTransaction(
         pinSecret,
         callback);
 
-   // Find wallet by currency and tokenAddress in giving list.
-   public Wallet findWallet(ArrayList<Wallet> wallets, long currency, String tokenAddress){
-        Wallet targetWallet = null;
-        for(Wallet w: wallets){
-            if(currency == w.currency && tokenAddress.equals(w.tokenAddress)){
-                targetWallet = w;
-                break;
-            }
+// Find wallet by currency and tokenAddress in giving list.
+public Wallet findWallet(ArrayList<Wallet> wallets, long currency, String tokenAddress){
+    Wallet targetWallet = null;
+    for(Wallet w: wallets){
+        if(currency == w.currency && tokenAddress.equals(w.tokenAddress)){
+            targetWallet = w;
+            break;
         }
-        return targetWallet;
     }
+    return targetWallet;
+}
  ```
 #### Check and Create Wallet
 Before performing those operations, you should check if required wallets are created and create for the user if needed.  
@@ -621,11 +636,11 @@ Log.d(TAG, String.format("kind: %s, product: %s", TransactionExplain.Kind.getKin
 
 #### Approve Activate
  ```java
- if(!product.isNeedApprove){
+boolean isNeedApprove = history.isNeedApprove || product.isNeedApprove;
+if(!isNeedApprove){
     return;
- }
+}
 
- // Find wallet by currency and tokenAddress in giving list.
 Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
 
 Object[] args = new Object[]{
@@ -662,11 +677,11 @@ ex.  Min 0.5 HW-ETH - 1000 HW-ETH
 - For `FixedDeposit`, you can display estimate reward when editing amount.  
 estimate reward = product.ratePercent * amount 
 ```java
-if(!product.isCanDeposit){
-  return;
+boolean isCanDeposit = history.isCanDeposit || product.isCanDeposit;
+if(!isCanDeposit){
+    return;
 }
 
-// Find wallet by currency and tokenAddress in giving list.
 Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
 
 Object[] args = new Object[]{
@@ -697,6 +712,8 @@ long msInFuture = getMsInFuture(history.userWaitToWithdraw);
 if(msInFuture <= 0){
     return;
 }
+Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
+
 Object[] args = new Object[]{
         "withdraw", // ABI method name: fixed to "withdraw"
         product.uuid,
@@ -717,13 +734,16 @@ Wallets.getInstance().callAbiFunctionTransaction(
  [↑ Transaction Operations ↑](#transaction-operations)
 #### Withdraw - DemandDeposit
 ```java
-if(!product.isCanWithdraw){
+boolean isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw;
+if(!isCanWithdraw){
     return;
 }
 long msInFuture = getMsInFuture(product.userWaitToWithdraw);
 if(msInFuture <= 0){
     return;
 }
+Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
+
 Object[] args = new Object[]{
         "withdraw", // ABI method name: fixed to "withdraw"
         product.uuid,
@@ -752,6 +772,8 @@ long msInFuture = getMsInFuture(history.userWaitToWithdraw);
 if(msInFuture <= 0){
     return;
 }
+Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
+
 Object[] args = new Object[]{
         "earlyWithdraw", // ABI method name: fixed to "earlyWithdraw"
         product.uuid,
@@ -772,13 +794,16 @@ Wallets.getInstance().callAbiFunctionTransaction(
  [↑ Transaction Operations ↑](#transaction-operations)
 #### withdrawReward
 ```java
-if(!product.isCanWithdrawReward){
+boolean isCanWithdrawReward = history.isCanWithdrawReward || product.isCanWithdrawReward;
+if(!isCanWithdrawReward){
     return;
 }
 long msInFuture = getMsInFuture(product.userWaitToWithdraw);
 if(msInFuture <= 0){
     return;
 }
+Wallet wallet = findWallet(privateWallets, product.currency, product.tokenAddress);
+
 Object[] args = new Object[]{
         "withdrawReward", // ABI method name: fixed to "withdrawReward"
         product.uuid,
@@ -802,6 +827,7 @@ Wallets.getInstance().callAbiFunctionTransaction(
 if(bonus.isAlreadyWithdrawn){
     return;
 }
+Wallet wallet = findWallet(privateWallets, bonus.currency, bonus.tokenAddress);
 Object[] args = new Object[]{
         "withdrawBonus", // ABI method name: fixed to "withdrawBonus"
         bouns.uuid,
