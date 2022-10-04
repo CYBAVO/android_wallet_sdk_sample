@@ -282,6 +282,9 @@ Wallets.getInstance().createTransaction(walletId,
 |  InverseProfitSharingCurrency  | `kind`  |- enum: `FinancialProduct.Kind`<br>- If InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
 
  #### Get Financial Product Lists
+- Following chart shows the flow of processing `FinancialProduct`.
+<img src="images/sdk_guideline/financial_product_flow.png" alt="drawing" width="1400"/> 
+
 - You can get financial product list by `FinancialProduct.ListKind`:
  ```java
 /** 
