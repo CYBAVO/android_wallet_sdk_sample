@@ -282,8 +282,8 @@ Wallets.getInstance().createTransaction(walletId,
 |  InverseProfitSharingCurrency  | `kind`  |- enum: `FinancialProduct.Kind`<br>- If InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
 
  #### Get Financial Product Lists
-- Following chart shows the flow of processing `FinancialProduct`.
-<img src="images/sdk_guideline/financial_product_flow.png" alt="drawing" width="1400"/> 
+- Following chart shows the flow of processing FinancialProduct.
+<img src="images/sdk_guideline/financial_product_flow.png" alt="drawing"/> 
 
 - You can get financial product list by `FinancialProduct.ListKind`:
  ```java
@@ -379,6 +379,8 @@ public static String getAvailableTag(FinancialProduct product){
  ```
  ### Financial History
 - If users have deposited or withdrawn a financial product, related FinancialHistory will be created / removed. 
+- Following chart shows the flow of processing FinancialHistory.
+<img src="images/sdk_guideline/financial_history_flow.png" alt="drawing"/> 
 #### Get Financial History List
 - There are 3 kind for FinancialHistory: `Depositing`(1), `Withdraw`(2), `WithdrawReward`(3), the following table shows the change after performed transaction operation.  
 
