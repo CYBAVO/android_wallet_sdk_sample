@@ -630,9 +630,10 @@ For another example, for a HW-USDT financial product
 required wallets are
 1. CPSC wallet (`currency`: 99999999995, `tokenAddress`: "").
 2. CPSC-ETH wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "").
-3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").
+3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").  
 
-- Following chart shows the flow of checking wallets.
+Following chart shows the flow of checking wallets.
+
 <img src="images/sdk_guideline/financial_product_check_wallet_flow.png" alt="drawing"/>
 
 #### Transaction Explain
