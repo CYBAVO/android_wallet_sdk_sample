@@ -379,8 +379,7 @@ public static String getAvailableTag(FinancialProduct product){
  ```
  ### Financial History
 - If users have deposited or withdrawn a financial product, related FinancialHistory will be created / removed. 
-- Following chart shows the flow of processing FinancialHistory.
-<img src="images/sdk_guideline/financial_history_flow.png" alt="drawing"/> 
+
 #### Get Financial History List
 - There are 3 kind for FinancialHistory: `Depositing`(1), `Withdraw`(2), `WithdrawReward`(3), the following table shows the change after performed transaction operation.  
 
@@ -391,6 +390,9 @@ public static String getAvailableTag(FinancialProduct product){
 |  withdraw<br>earlyWithdraw  | `FixedDeposit`  | - Remove the `Depositing` history.<br>- Add one `Withdraw` history.<br>- Add one `WithdrawReward` history. |
 |  withdraw  | `DemandDeposit`  | - Add one `Withdraw` history.<br>- Remove the `Depositing` history if no `userDeposit` and `userReward` left.<br>- Or update the existing `Depositing` history. |
 |  withdrawReward  | `DemandDeposit`  | - Add one `WithdrawReward` history.<br>- Remove the `Depositing` history if no `userDeposit` and `userReward` left.<br>- Or update the existing `Depositing` history. |
+
+- Following chart shows the flow of processing FinancialHistory.
+<img src="images/sdk_guideline/financial_history_flow.png" alt="drawing"/> 
 
 - You can get financial history list by `FinancialHistory.ListKind` or `FinancialProduct.uuid`. 
  ```java
@@ -534,6 +536,10 @@ Wallets.getInstance().getFinancialOrder(
 ### Financial Bonus
 - CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his / her financial list.
 - User can perform `withdrawBonus` with `uuid` if `isAlreadyWithdrawn` is false.
+
+- Following chart shows the flow of processing FinancialBonus.
+<img src="images/sdk_guideline/financial_bonus_flow.png" alt="drawing"/> 
+
 ```java
 Wallets.getInstance().getFinancialBonusList(new Callback<GetFinancialBonusResult>() {
             @Override
