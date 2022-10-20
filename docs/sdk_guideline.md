@@ -485,13 +485,13 @@ The error codes are defined in class `com.cybavo.wallet.service.api.Error.Code` 
 
 | Constant Field  | Value | Description |
 | ----  | ----  | ---- |
-|	ErrUserCancel	|	-7	| 	User cancel operation	| 
-|	ErrBiometricUnsupported	|	-6	| 	Biometric Unsupported	| 
-|	ErrInvalidPinSecret	|	-5	| 	PIN secret not valid	| 
-|	ErrConcurrentExecution	|	-4	| 	Concurrent execution	| 
-|	ErrInvalidPinCode	|	-3	| 	Invalid PIN code	| 
-|	ErrNotSignedIn	|	-2	| 	Not signed in	| 
 |	ErrUnknown	|	-1	| 	Unknown error	| 
+|	ErrNotSignedIn	|	-2	| 	Not signed in	| 
+|	ErrInvalidPinCode	|	-3	| 	Invalid PIN code	| 
+|	ErrConcurrentExecution	|	-4	| 	Concurrent execution	| 
+|	ErrInvalidPinSecret	|	-5	| 	PIN secret not valid	| 
+|	ErrBiometricUnsupported	|	-6	| 	Biometric Unsupported	| 
+|	ErrUserCancel	|	-7	| 	User cancel operation	| 
 |	ErrDisableAdmin	|	101	| 	Admin cannot disable	| 
 |	ErrUserOrPasswordIncorrect	|	102	| 	The Email address or password provided is not correct	| 
 |	ErrUserExist	|	103	| 	Account already exists	| 
