@@ -481,7 +481,7 @@ Auth.getInstance().signIn(token, identityProvider, new Callback<SignInResult>() 
         });
 ```
 ### Error Code
-The error codes are defined in class `com.cybavo.wallet.service.api.Error.Code`as constant int fields.
+The error codes are defined in class `com.cybavo.wallet.service.api.Error.Code` as constant int fields.
 
 | Constant Field  | Value | Description |
 | ----  | ----  | ---- |
