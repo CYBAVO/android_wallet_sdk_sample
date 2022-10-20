@@ -480,6 +480,293 @@ Auth.getInstance().signIn(token, identityProvider, new Callback<SignInResult>() 
             }
         });
 ```
+### Error Code
+The error codes are defined in class `com.cybavo.wallet.service.api.Error.Code`as constant int fields.
+
+| Constant Field  | Value | Description |
+| ----  | ----  | ---- |
+|	ErrUserCancel	|	-7	| 	User cancel operation	| 
+|	ErrBiometricUnsupported	|	-6	| 	Biometric Unsupported	| 
+|	ErrInvalidPinSecret	|	-5	| 	PIN secret not valid	| 
+|	ErrConcurrentExecution	|	-4	| 	Concurrent execution	| 
+|	ErrInvalidPinCode	|	-3	| 	Invalid PIN code	| 
+|	ErrNotSignedIn	|	-2	| 	Not signed in	| 
+|	ErrUnknown	|	-1	| 	Unknown error	| 
+|	ErrDisableAdmin	|	101	| 	Admin cannot disable	| 
+|	ErrUserOrPasswordIncorrect	|	102	| 	The Email address or password provided is not correct	| 
+|	ErrUserExist	|	103	| 	Account already exists	| 
+|	ErrUserDisabled	|	104	| 	Account was banned by admin	| 
+|	ErrUserEmailEmpty	|	105	| 	Email cannot be empty	| 
+|	ErrUserEmailExist	|	106	| 	Email has been used	| 
+|	ErrUserEmailFormatError	|	107	| 	Email format is incorrect	| 
+|	ErrUserPasswordFormatError	|	108	| 	Password should be 8-18 chars	| 
+|	ErrUserAccountFormatError	|	109	| 	Account can only be english char and 3-50 chars	| 
+|	ErrUserRoleError	|	110	| 	Permission is incorrect	| 
+|	ErrorUserPasswordError	|	111	| 	Old password is incorrect	| 
+|	ErrInvalidParameter	|	112	| 	Invalid parameter	| 
+|	ErrPermissionDenied	|	113	| 	Permission denied	| 
+|	ErrNotAuthByPIN	|	114	| 	Need user setup PIN before do this	| 
+|	ErrNotAuthByOTP	|	115	| 	Need user bind OTP before do this	| 
+|	ErrUserInvalidPasswordToken	|	116	| 	Token is Invalid	| 
+|	ErrUserReject	|	117	| 	Reject by User	| 
+|	ErrNotImplemented	|	118	| 	Not Implemented	| 
+|	ErrEncryptFailed	|	119	| 	Error Encrypt failed	| 
+|	ErrUserAuthMethodInvalid	|	120	| 	Not support this kind of authorization	| 
+|	ErrUserUnactivated	|	125	| 	Unactivated user	| 
+|	ErrUserInvalid	|	126	| 	invalid user	| 
+|	ErrUserAlreadyActivated	|	127	| 	User already activated	| 
+|	ErrUserRequireOTPSetup	|	128	| 	Need to setup OTP for auth before operation this action	| 
+|	ErrOnlyAdminCanBeAdded	|	129	| 	Only admin can be added from web	| 
+|	ErrUserGetInfoFailed	|	130	| 	Get user info failed	| 
+|	ErrUserNoPIN	|	131	| 	User does not set pin yet	| 
+|	ErrAddUserDuplicate	|	132	| 	User already exist	| 
+|	ErrAddUserFailed	|	133	| 	Add User failed	| 
+|	ErrUserUnauthorized	|	134	| 	User unauthorized	| 
+|	ErrUserIncorrectPIN	|	135	| 	Incorrect user PIN	| 
+|	ErrClientVersion	|	136	| 	Unknown client version	| 
+|	ErrAppMustUpdate	|	137	| 	Please update you CYBAVO Vault to access to the latest features!	| 
+|	ErrInvalidDeviceToken	|	138	| 	Invalid device token	| 
+|	ErrUserIncorrectPINMaxRetry	|	139	| 	Incorrect user PIN. Retry limit exceeded	| 
+|	ErrShutdownInProgress	|	140	| 	Shutdown in progress	| 
+|	ErrUserDeactivated	|	141	| 	User has been deactivated	| 
+|	ErrUserNameEmpty	|	142	| 	User name is empty	| 
+|	ErrMappedWallet	|	143	| 	Create mapped wallet fail	| 
+|	ErrNotTokenWallet	|	144	| 	Only Token can create mapped wallet	| 
+|	ErrNotCreateMultiMappedToSameAddr	|	145	| 	Cannot create 2 mapped wallet to 1 wallet address	| 
+|	ErrMappedWalletOnly	|	146	| 	Only Mapped Wallet can use Mapped ID	| 
+|	ErrConnectCCServer	|	147	| 	Failed to connect CC server	| 
+|	ErrUserIsLocked	|	148	| 	User is locked	| 
+|	ErrUnlockCodeExpired	|	149	| 	Unlock link expired	| 
+|	ErrOperationTooFrequent	|	150	| 	Operation too frequent	| 
+|	ErrUpdateKeyInProgress	|	151	| 	Update key in progress	| 
+|	ErrInvalidQRCode	|	152	| 	Invalid QR Code	| 
+|	ErrForgotPINNotReady	|	153	| 	Not able to restore PIN yet. Please contact admin to initial this process	| 
+|	ErrInvalidRestoreCode	|	154	| 	Invalid restore code	| 
+|	ErrNoRecoveryCode	|	155	| 	No wallet recovery data for user	| 
+|	ErrRegisterFail	|	156	| 	Register fail	| 
+|	ErrRegistrationRequired	|	157	| 	Registration required	| 
+|	ErrDisableSelf	|	158	| 	Unable to disable yourself	| 
+|	ErrForgotPINInvalid	|	159	| 	User did not request to recovery PIN	| 
+|	ErrForgotPINExpired	|	160	| 	Forgot PIN expired. Please ask user to submit again	| 
+|	ErrUnableChangeRole	|	161	| 	Unable to change role	| 
+|	ErrForgotPINHandled	|	162	| 	Already handle by other admin	| 
+|	ErrForgotPINNotApprove	|	163	| 	Not approve by admin	| 
+|	ErrAdminInfoNotFound	|	164	| 	Admin info not found	| 
+|	ErrInvalidAdminPerm	|	165	| 	User permission was changed by others	| 
+|	ErrUserIncorrectPINLock	|	166	| 	The account is temporarily blocked because you entered the wrong PIN too many times	| 
+|	ErrUserIsUnlocked	|	167	| 	User was unlocked	| 
+|	ErrUserIncorrectSQLock	|	168	| 	The account is temporarily blocked because you entered the wrong answer too many times	| 
+|	ErrUserPINAlreadySet	|	169	| 	User already set PIN	| 
+|	ErrUserSecureTokenNotReady	|	170	| 	Secure token not ready	| 
+|	ErrUserSecurityQuestionsNotReady	|	171	| 	User has not setup security questions yet	| 
+|	ErrInvalidUnlockToken	|	172	| 	Invalid Unlock token	| 
+|	ErrInvalidHashLength	|	173	| 	Hash is required to be exactly 32 bytes	| 
+|	ErrInvalidAbiFunction	|	174	| 	Invalid ABI function	| 
+|	ErrOperationTooFrequentShortly	|	175	| 	Frequent operation, please try again after 1 sec	| 
+|	ErrUserPhoneNumUnverified	|	180	| 	User phone number not verified, need register phone number	| 
+|	ErrActionTokenInvalid	|	181	| 	Action token invalid	| 
+|	ErrOTPCodeInvalid	|	182	| 	OTP code(SMS code) invalid	| 
+|	ErrRequireTooFrequent	|	183	| 	Require too frequent	| 
+|	ErrInvalidSignature	|	184	| 	Invalid Signature	| 
+|	ErrBiometricsNotFound	|	185	| 	Biometrics setting not found, need updateDeviceInfo	| 
+|	ErrDeviceOtpUnverified	|	186	| 	Device otp(SMS code) unverified, need getLoginSms then verifyOtp	| 
+|	ErrOverSMSLimit	|	187	| 	Exceed daily SMS limit	| 
+|	ErrUserSkipSMSVerify	|	188	| 	Skip user SMS/Biometrics verify	| 
+|	ErrUserSMSVerifed	|	189	| 	User phone has been verified	| 
+|	ErrUserReferralAlreadySet	|	190	| 	User referral code has been set	| 
+|	ErrUserReferralNotSetSelf	|	191	| 	User referral code can not be yourself	| 
+|	ErrReferralUserIdGreaterThenSelf	|	192	| 	Referral user should register earlier then yourself	| 
+|	ErrDepartmentInvalid	|	193	| 	Invalid department	| 
+|	ErrDepartmentTransactionNotFound	|	194	| 	Cannot find any transaction in this department	| 
+|	ErrKeywordForSearchTooShort	|	195	| 	The keyword for search user is too short	| 
+|	ErrInputStringTooLong	|	196	| 	The input string is too long	| 
+|	ErrUserRevoked	|	197	| 	Account is revoked	| 
+|	ErrWalletCreateFailed	|	301	| 	Wallet Create Failed	| 
+|	ErrWalletAddressInvalid	|	302	| 	Invalid Address, please make sure your address format is correct	| 
+|	ErrWalletCurrencyInvalid	|	303	| 	Invalid currency	| 
+|	ErrWalletIDInvalid	|	304	| 	Wallet ID invalid	| 
+|	ErrWalletPolicyParseFailed	|	305	| 	Parse SetWalletPolicyRequest failed	| 
+|	ErrWalletPolicySetFailed	|	306	| 	Set SetWalletPolicyRequest failed	| 
+|	ErrWalletPolicyGetFailed	|	307	| 	Get SetWalletPolicyRequest failed	| 
+|	ErrPolicySignFail	|	308	| 	Policy Sign fail	| 
+|	ErrPolicySignInvalid	|	309	| 	Policy Sign invalid	| 
+|	ErrPolicyState	|	310	| 	Policy state error	| 
+|	ErrPolicyTransFail	|	311	| 	Policy transfer fail	| 
+|	ErrPolicyNotFound	|	312	| 	Policy not found	| 
+|	ErrPolicyNotPass	|	313	| 	Not pass policy enforcement	| 
+|	ErrPolicyApprover	|	314	| 	Invalid policy approver	| 
+|	ErrPolicyWalletNotFound	|	315	| 	Policy: wallet not found	| 
+|	ErrPolicyCurrencyNotMatch	|	316	| 	Policy: currency not match	| 
+|	ErrPolicyCurrencyNotSupport	|	317	| 	Policy: currency not support	| 
+|	ErrPolicyNotWalletCreator	|	318	| 	Policy: not wallet creator	| 
+|	ErrPolicyWalletAddressDiff	|	319	| 	Policy: wallet address is incorrect	| 
+|	ErrPolicyWalletHeaderTrans	|	320	| 	Policy: the transaction count of wallet should be greater than zero	| 
+|	ErrPolicyAmountTransferFail	|	321	| 	Policy: amount trans to value fail	| 
+|	ErrPolicyWalletHeaderAmount	|	322	| 	Policy: the transaction amount of wallet should greater than zero	| 
+|	ErrPolicyOutgoingAddressNull	|	323	| 	Policy: no outgoing address	| 
+|	ErrPolicyOutgoingAddressQFail	|	324	| 	Policy: outgoing address incorrect	| 
+|	ErrPolicyOutgoingAddressInconsistent	|	325	| 	Policy: outgoing address inconsistent	| 
+|	ErrPolicyAuditorDuplicateOrder	|	326	| 	Policy: auditor duplicate order	| 
+|	ErrPolicyAuditorDuplicateUser	|	327	| 	Policy: auditor duplicated user	| 
+|	ErrPolicyApproverDuplicateOrder	|	328	| 	Policy: approver duplicate order	| 
+|	ErrPolicyApproverDuplicateUser	|	329	| 	Policy: approver duplicate user	| 
+|	ErrPolicyOperatorDuplicateOrder	|	330	| 	Policy: operator duplicate order	| 
+|	ErrPolicyOperatorDuplicateUser	|	331	| 	Policy: operator duplicate user	| 
+|	ErrPolicyOperatorAmountTransFail	|	332	| 	Policy: operator amount trans fail	| 
+|	ErrPolicyOperatorAmountUnderZero	|	333	| 	Policy: the amount of operator should be greater than zero	| 
+|	ErrPolicyOperatorTransUnderZero	|	334	| 	Policy: the transaction count of operator should be greater than zero	| 
+|	ErrPolicyOperatorAmountOverMax	|	335	| 	Policy: the amount of wallet should be greater than the amount of operator	| 
+|	ErrPolicyOperatorTransOverMax	|	336	| 	Policy: the transaction count of wallet should be greater than the transaction count of operator	| 
+|	ErrPolicyApproverAmountTransFail	|	337	| 	Policy: approver amount trans fail	| 
+|	ErrPolicyApproverAmountUnderZero	|	338	| 	Policy: the amount of approver should be greater than zero	| 
+|	ErrPolicyMaxAppOverMaxOp	|	339	| 	Policy: the maximum operator amount should be greater than the minimum approver amount	| 
+|	ErrPolicyNoOperator	|	340	| 	Policy: No operator	| 
+|	ErrPolicyPINNotSet	|	341	| 	Policy: some user has not set pin	| 
+|	ErrPolicyUserNotExist	|	342	| 	Policy: some user not exist	| 
+|	ErrPolicyApproverNotCosigner	|	343	| 	Policy: approver is not cosigner	| 
+|	ErrPolicyAllCosignersNotApprover	|	344	| 	Policy: cosigners not approvers	| 
+|	ErrPolicyApproverConfigureIncorrectly	|	345	| 	Policy: approver configure incorrectly	| 
+|	ErrPolicyLevelIncorrect	|	346	| 	Policy: level incorrect	| 
+|	ErrPolicyOwnerIncorrect	|	347	| 	Policy: Owner count incorrect	| 
+|	ErrWalletNotOperation	|	348	| 	Not wallet operator	| 
+|	ErrScheduleWithdrawNotFound	|	349	| 	Invalid schedule withdraw	| 
+|	ErrScheduleWithdrawNotCreator	|	350	| 	Permission denied. Only creator can delete schedule withdraw	| 
+|	ErrNoWalletToBackup	|	351	| 	No wallet to backup	| 
+|	ErrInvalidBackupAnswer	|	352	| 	Invalid backup answer	| 
+|	ErrWalletMnemonicDuplicate	|	353	| 	Another activated user with same mnemonic	| 
+|	ErrScheduleWithdrawExceedPolicyAmount	|	354	| 	Exceed Operator Allow Amount	| 
+|	ErrScheduleWithdrawNotOperator	|	355	| 	Not Operator in WalletPolicy	| 
+|	ErrScheduleWithdrawNotOutgoing	|	356	| 	Not Outgoing in WalletPolicy	| 
+|	ErrScheduleWithdrawCheckBalanceFailed	|	357	| 	Check balance failed	| 
+|	ErrScheduleWithdrawInvalid	|	358	| 	Schedule withdraw invalid	| 
+|	ErrGetTransactionFeeError	|	359	| 	Fail to get transaction fee	| 
+|	ErrNotPendingNow	|	360	| 	Policy changed, unlock again if needed	| 
+|	ErrInvalidFeeLevel	|	361	| 	Invalid fee level	| 
+|	ErrSignBatchTransactionFailed	|	362	| 	Fail to sign batch transaction	| 
+|	ErrWalletKeyNotReady	|	363	| 	Wallet not ready to withdraw	| 
+|	ErrNotBatchWallet	|	364	| 	Not batch wallet	| 
+|	ErrNotBatchTransaction	|	365	| 	Not batch transaction	| 
+|	ErrExceedMaxBatchAmount	|	366	| 	Exceed max batch amount	| 
+|	ErrOngoingBatchTransaction	|	367	| 	Doing batch transaction	| 
+|	ErrTxIDNotFound	|	368	| 	Transaction id not found	| 
+|	ErrNotWalletOwner	|	369	| 	Not wallet owner	| 
+|	ErrNotAdmin	|	370	| 	Not Admin	| 
+|	ErrInvalidWalletId	|	371	| 	Invalid wallet	| 
+|	ErrWalletAlreadyCreated	|	372	| 	Wallet already created	| 
+|	ErrTransactionSameAddress	|	373	| 	Cannot send amount to yourself address	| 
+|	ErrDestinationNotInOutgoingAddress	|	374	| 	Destination address must in outgoing address	| 
+|	ErrApiSecretExpired	|	384	| 	API Secret expired	| 
+|	ErrAPISecretNotValid	|	385	| 	API Secret not valid	| 
+|	ErrExpiredTx	|	386	| 	Transaction is expired	| 
+|	ErrCPUUsageExceeded	|	387	| 	CPU usage exceeded, please delegate CPU for usage	| 
+|	ErrNetUsageExceeded	|	388	| 	NET usage exceeded, please delegate NET for usage	| 
+|	ErrRAMUsageExceeded	|	389	| 	RAM usage exceeded, please purchase RAM for usage	| 
+|	ErrorInsufficientStakedCPU	|	390	| 	Insufficient staked CPU bandwidth, please delegate CPU for usage	| 
+|	ErrorInsufficientStakedNet	|	391	| 	Insufficient staked NET bandwidth, please delegate NET for usage	| 
+|	ErrorInsufficientQuota	|	392	| 	Insufficient RAM quota, please purchase RAM for usage	| 
+|	ErrTransactionNotReplaceable	|	393	| 	Transaction is not replaceable	| 
+|	ErrBalanceUpperTransFail	|	401	| 	Balance: upper bound value transfer fail	| 
+|	ErrBalanceLowerTransFail	|	402	| 	Balance: lower bound value transfer fail	| 
+|	ErrBalanceLOverU	|	403	| 	Balance: lower bound >= upper bound	| 
+|	ErrBalanceIntervalIncorrect	|	404	| 	Balance: Interval should between 1800 (30 minutes) ~ 86400 (1 day)	| 
+|	ErrBalanceDBNotFound	|	405	| 	Balance: Not found item in DB	| 
+|	ErrBalanceItemNotMatch	|	406	| 	Balance: Item not match	| 
+|	ErrBalanceIdInvalid	|	407	| 	Invalid ID	| 
+|	ErrNoContractCode	|	408	| 	No contract code at given address	| 
+|	ErrInvalidLedgerConfig	|	432	| 	Invalid ledger server config	| 
+|	ErrExpiredToken	|	500	| 	Expired Token	| 
+|	ErrVerifyFail	|	501	| 	Verify fail, incorrect number	| 
+|	ErrVerifyExceed	|	502	| 	Exceed maximum retry counts, please resend the verify number again	| 
+|	ErrParameterNoToken	|	701	| 	No token present	| 
+|	ErrParameterInvalidOperation	|	702	| 	Unknown operation	| 
+|	ErrOperationFailed	|	703	| 	Operation failed	| 
+|	ErrSKUInfoFailed	|	704	| 	Failed to get SKU info	| 
+|	ErrSKUUserLimit	|	705	| 	Exceed max allow user limitation, Upgrade your SKU to get more users	| 
+|	ErrSKUWalletLimit	|	706	| 	Exceed max allow wallet limitation, Upgrade your SKU to get more wallets	| 
+|	ErrSKUOutgoingLimit	|	707	| 	Exceed max allow outgoing address limitation, Upgrade your SKU to get more outgoing address	| 
+|	ErrTransactionInsufficientFund	|	801	| 	Insufficient fund	| 
+|	ErrTransactionUTXOInsufficientFund	|	802	| 	UTXO Temporarily Not Available	| 
+|	ErrUTXOTemporarilyNotAvailable	|	803	| 	Full nodes' syncing now, wait a few minutes to do the transaction	| 
+|	ErrFullNodeSyncing	|	804	| 	Duplicate outgoing address	| 
+|	ErrOutgoingAddressDuplicate	|	901	| 	Invalid outgoing address ID	| 
+|	ErrOutgoingAddressIdInvalid	|	902	| 	Invalid outgoing address ID	| 
+|	ErrKMSNotReady	|	903	| 	KMS out of service. Please try again later.	| 
+|	ErrInvalidApiCode	|	904	| 	Invalid Api Code	| 
+|	ErrDuplicateApp	|	905	| 	Duplicate entry	| 
+|	ErrSDKOutdated	|	906	| 	WalletSDK is outdated. Please upgrade your SDK	| 
+|	ErrorFeeLowerBound	|	907	| 	Inner Fee less than lower bound	| 
+|	ErrorFeeUpperBound	|	908	| 	Inner Fee higher than upper bound	| 
+|	ErrorInnerFeeAmount	|	909	| 	Inner fee configuration incorrect	| 
+|	ErrorTransferAmountFail	|	910	| 	Inner fee transfer amount fail	| 
+|	ErrFailToGetFee	|	911	| 	Inner fee fail to check fee	| 
+|	ErrFeeTooHigh	|	912	| 	Inner fee higher than amount	| 
+|	ErrParseTransactionFail	|	913	| 	Parse transaction fail	| 
+|	ErrNotSupportInnerFee	|	914	| 	Batch transaction not support inner fee now, please contact CYBAVO for next step	| 
+|	ErrorFeeOverUpper	|	915	| 	Transaction fee over upper bound	| 
+|	ErrorInnerFeeAddress	|	916	| 	Inner Fee address incorrect	| 
+|	ErrNoTRONForEnergy	|	917	| 	Need at least 1 TRX in wallet for energy usage.	| 
+|	ErrorInsufficientBandWidth	|	918	| 	Insufficient bandwidth, need to delegate bandwidth or Tron	| 
+|	ErrorDestNotExist	|	919	| 	Destination not create. Too little XRP(< 20) sent to create it	| 
+|	ErrTransactionInsufficientBTCFee	|	920	| 	BTC is not enough to pay for transaction fee	| 
+|	ErrTransactionInsufficientETHFee	|	921	| 	ETH is not enough to pay for transaction fee	| 
+|	ErrTransactionInsufficientBTCUTXOFee	|	922	| 	BTC UTXOs is not enough to pay for transaction fee	| 
+|	ErrDustFail	|	923	| 	Transfer amount is too small and considered as dust by blockchain	| 
+|	ErrUTXOExceedMax	|	924	| 	The number of UTXO set exceed max allow number (2500)	| 
+|	ErrUTXONotEnough	|	925	| 	BTC UTXOs are not enough to pay for platform fee	| 
+|	ErrInsufficientFundBNB	|	926	| 	Insufficient fund, you must leave 0.000625 BNB for transaction fee	| 
+|	ErrorTxNoResult	|	927	| 	No Result from BNB full node	| 
+|	ErrorSendTxFail	|	928	| 	Send Tx to BNB full node fail	| 
+|	ErrorIllegalFormat	|	929	| 	Illegal transaction format	| 
+|	ErrorAccountNotCreate	|	930	| 	Account was not created, please send at least 1 TRX to this address for account creation	| 
+|	ErrorIncorrectTag	|	931	| 	Destination Tag must be integer	| 
+|	ErrInvalidEOSFormat	|	932	| 	Invalid EOS Account format	| 
+|	ErrInvalidAppId	|	933	| 	Invalid App ID	| 
+|	ErrInvalidPinpointAppId	|	934	| 	Invalid AWS Pinpoint App ID	| 
+|	ErrEOSAccountExisted	|	935	| 	This EOS Account already existed	| 
+|	ErrReferralCodeIncorrect	|	936	| 	User account not exist, referral code incorrect	| 
+|	ErrGoogleAuthError	|	1001	| 	Google Auth erro	| 
+|	ErrWechatAuthError	|	1002	| 	WeChat Auth error	| 
+|	ErrFacebookAuthError	|	1003	| 	Facebook Auth error	| 
+|	ErrLineAuthError	|	1004	| 	LINE Auth error	| 
+|	ErrInvalidPINToken	|	10001	| 	PIN token expired, need to sign in again to recover	| 
+|	ErrorRamOperationMinAmount	|	10301	| 	RAM operation bytes smaller than minimal amounts	| 
+|	ErrOutgoingAddressNotMatch	|	10302	| 	Outgoing address is not matched with raw transaction	| 
+|	ErrWalletInnerFeeIncorrect	|	10303	| 	Wallet inner fee calculate incorrectly	| 
+|	ErrWalletCreateInnerTxFail	|	10304	| 	Create Tx with inner fee failed	| 
+|	ErrNoTranslation	|	10936	| 	Translation not ready	| 
+|	ErrTransactionInsufficientLTCFee	|	10937	| 	LTC is not enough to pay for transaction fee	| 
+|	ErrTransactionInsufficientLTCUTXOFee	|	10938	| 	LTC UTXOs is not enough to pay for transaction fee	| 
+|	ErrTransactionInsufficientBCHFee	|	10939	| 	BCH is not enough to pay for transaction fee	| 
+|	ErrTransactionInsufficientBCHUTXOFee	|	10940	| 	BCH UTXOs is not enough to pay for transaction fee	| 
+|	ErrOverPersonalCurrencyLimit	|	10941	| 	Over personal currency limit	| 
+|	ErrKycNotCreated	|	10942	| 	Not createKyc before getApplicantStatus	| 
+|	ErrKycSettingsNotFound	|	10943	| 	KYC setting not exist when getApplicantStatus	| 
+|	ErrSmartChainInvalidMemoFormat	|	12001	| 	Invalid memo format, only allow numbers	| 
+|	ErrSmartChainInvalidAmountFormat	|	12002	| 	Invalid amount format	| 
+|	ErrSmartChainBalanceCheckFailed	|	12003	| 	Amount or balance format invalid	| 
+|	ErrSmartChainDepositMinCheckFailed	|	12004	| 	Deposit amount smaller than the minimum limit	| 
+|	ErrSmartChainDepositMaxCheckFailed	|	12005	| 	Deposit amount greater than the maximum limit	| 
+|	ErrSmartChainProductIsOutOfStock	|	12006	| 	Smart chain product is out of stock	| 
+|	ErrSmartChainOperationFailed	|	12007	| 	Smart chain operation failed	| 
+|	ErrSmartchainBalanceSmallerThanMinWithdraw	|	12008	| 	Balance smaller than the minimum withdraw amount and the platform fee	| 
+|	ErrSmartchainCallAmountExceedsBalance	|	12101	| 	Smart chain amount exceeds balance	| 
+|	ErrSmartchainCallAmountExceedsAllowance	|	12102	| 	Smart chain amount exceeds allowance	| 
+|	ErrSmartchainCallZeroAddr	|	12103	| 	Smart chain zero address	| 
+|	ErrSmartchainCallDepositStop	|	12104	| 	Smart chain deposit should not stop	| 
+|	ErrSmartchainCallWithdrawStop	|	12105	| 	Smart chain withdraw should not stop	| 
+|	ErrSmartchainCallRateLimit	|	12106	| 	Smart chain rate limiting	| 
+|	ErrSmartchainCallWithdrawLimit	|	12107	| 	Smart chain exceed withdraw limit	| 
+|	ErrSmartchainCallMaxUserLimit	|	12108	| 	Smart chain exceed max user limit	| 
+|	ErrSmartchainCallMaxUserOrderLimit	|	12109	| 	Smart chain exceed max user orders limit	| 
+|	ErrSmartchainCallMaxDepositAmountLimit	|	12110	| 	Smart chain exceed max deposit amount limit	| 
+|	ErrSmartchainCallAmountNotMatch	|	12111	| 	Smart chain amount not match	| 
+|	ErrSmartchainCallOrderNotExist	|	12112	| 	Smart chain order not exist	| 
+|	ErrSmartchainCallOrderExist	|	12113	| 	Smart chain order already exist	| 
+|	ErrSmartchainCallNoProfitSharing	|	12114	| 	Smart chain no profit sharing	| 
+|	ErrSmartchainCallAmountSmallThenZero	|	12115	| 	Smart chain amount should grater than 0	| 
+|	ErrSmartchainCallNotAllowWithdraw	|	12116	| 	Smart chain payee is not allowed to withdraw	| 
+|	ErrSmartchainCallNotAllowEarlyWithdraw	|	12117	| 	Smart chain should do withdraw directly	| 
+|	ErrSmartchainCallTransferSmallThenZero	|	12118	| 	Smart chain transferAmount is smaller than zero	| 
 
 ## Sandbox Environment
 
