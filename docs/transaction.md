@@ -214,7 +214,7 @@ public abstract void getHistory(long currency, String tokenAddress, String walle
 - If the Tx's final state is `Success` or `Pending`, you could call `getTransactionInfo` to check the information about this Tx on the blockchain.
 
 ### getUserHistory
-- ⚠️ `getUserHistory()` and `Transaction.Type` are only available on version `com.cybavo.wallet:wallet-sdk-lib:1.2.4579` and later.
+- ⚠️ `getUserHistory()` and `Transaction.Type` are only available on `com.cybavo.wallet:wallet-sdk-lib:1.2.4579` and later.
 - You can also use `getUserHistory()` to retrive all transaction histories of the user.
 ```java
 /// Get transaction history of the user
