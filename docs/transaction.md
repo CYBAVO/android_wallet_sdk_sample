@@ -89,14 +89,14 @@ public abstract void estimateTransaction(long currency, String tokenAddress, Str
 
     ```java
     public final class EstimateTransactionResult {
-
-        public String tranasctionAmout; // Estimated total amount to transaction
-
-        public String platformFee; // Estimated platform fee of transaction
-
-        public String blockchainFee; // Estimated blockchain fee of transaction
-
-        public String withdrawMin; // Minimum transfer amount for private chain
+        /* Estimated total amount to transaction. */
+        public String tranasctionAmout; 
+        /* Estimated platform fee of transaction. */
+        public String platformFee;
+        /* Estimated blockchain fee of transaction. */
+        public String blockchainFee;
+        /* Minimum transfer amount for private chain. */
+        public String withdrawMin; 
     }
     ```
 
@@ -194,16 +194,16 @@ public abstract void getHistory(long currency, String tokenAddress, String walle
 
     ```java
     public final class Transaction {
-
-        public String txid = ""; // transaction ID
+        /* transaction ID. */
+        public String txid = ""; 
 
         public boolean pending = false;
 
         public boolean success = false;
-
-        public boolean dropped = false; // Is transaction dropped by the blockchain
-
-        public boolean replaced; // Is transaction replaced by another transaction
+        /* Is transaction dropped by the blockchain. */
+        public boolean dropped = false; 
+        /* Is transaction replaced by another transaction. */
+        public boolean replaced; 
     
         ...
     }
@@ -269,7 +269,7 @@ public abstract void getUserHistory(long currency, String tokenAddress, String w
 
 | Modifier and Type  | Method | Description |
 | ----  | ----  | ---- |
-|	static Transaction.Type	|	getType(int value)	| 	Returns the enum constant of this type with the specified value,<br>return `Unknow` if cannot find a matched enum.	|
+|	static Transaction.Type	|	getType(int value)	| 	Returns the enum constant of this type with the specified value,<br>return `Unknown` if cannot find a matched enum.	|
 |	int	|	getValue()	| Get int value of the enum.	|
 
 ### getTransactionInfo
@@ -299,17 +299,16 @@ The user needs to create another Tx with higher Tx fee and the same nonce to rep
 
   ```java
   public final class Transaction {
-
+    
       public String txid = "";
-      
-      public boolean replaceable; // Is transaction replaceable
-
-      public boolean replaced; // Is transaction replaced by another transaction
-
-      public String replaceTxid; // TXID of replacement of this transaction if {@link #replaced} == true
-
-      public int nonce; // Nonce of transaction, only valid on ETH, same nonce means replacements
-      
+      /* Is transaction replaceable. */
+      public boolean replaceable;
+      /* Is transaction replaced by another transaction. */
+      public boolean replaced;
+      /* TXID of replacement of this transaction if replaced == true */
+      public String replaceTxid;
+      /* Nonce of transaction, only valid on ETH, same nonce means replacements. */
+      public int nonce;
       ...
   }
   ```
