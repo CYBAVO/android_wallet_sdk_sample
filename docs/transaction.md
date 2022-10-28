@@ -54,8 +54,8 @@ public abstract void getCurrencyTraits(long currency, String tokenAddress, long 
 
     ```java
     public final class GetCurrencyTraitsResult {
-
-        public String granularity = ""; // EPI-777: withdraw must be multiples of granularity
+        /* EPI-777: withdraw must be multiples of granularity */
+        public String granularity = ""; // 
 
         public String existentialDeposit = ""; // The minimum balance after transaction (ALGO, DOT, KSM)
 
