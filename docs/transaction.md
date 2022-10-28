@@ -160,11 +160,11 @@ public abstract void createTransaction(long fromWalletId, String toAddress, Stri
 
 ## Transaction Detail
 
-- There are two APIs for retriving transaction history.
+- There are two APIs for retriving transaction histories: `getHistory()` and `getUserHistory()`.
 
 ### getHistory
 
-- You can use `getHistory()` to get transaction history of a certern wallet.
+- You can use `getHistory()` to get transaction histories of a certern wallet.
 
 ```java
 /// Get transaction history from
