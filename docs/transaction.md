@@ -54,12 +54,12 @@ public abstract void getCurrencyTraits(long currency, String tokenAddress, long 
 
     ```java
     public final class GetCurrencyTraitsResult {
-        /* EPI-777: withdraw must be multiples of granularity */
-        public String granularity = ""; // 
-
-        public String existentialDeposit = ""; // The minimum balance after transaction (ALGO, DOT, KSM)
-
-        public String minimumAccountBalance = ""; // The minimum balance after transaction (XLM, FLOW)
+        /* EPI-777: withdraw must be multiples of granularity. */
+        public String granularity = "";
+        /*The minimum balance after transaction (ALGO, DOT, KSM). */
+        public String existentialDeposit = "";
+        /* The minimum balance after transaction (XLM, FLOW) */
+        public String minimumAccountBalance = "";
     }
     ```
 
@@ -234,19 +234,19 @@ public abstract void getUserHistory(long currency, String tokenAddress, String w
 ```
 - Since the result may include transactions from public chain, private chain and different currency. For the returned `Transaction`, there are three fields you can refer to.
 ```java
-    public final class Transaction {
-        /* Currency of the transaction. */
-        public long currency; 
-        /* Token contract address of the transaction. */
-        public String tokenAddress;
-        /**
-           Type of the transaction.
-           Only available in the result of getUserHistory()
-           Please refer to Transaction.Type for the definition.
-        */
-        public Type type;
-        ...
-    }
+  public final class Transaction {
+      /* Currency of the transaction. */
+      public long currency; 
+      /* Token contract address of the transaction. */
+      public String tokenAddress;
+      /**
+          Type of the transaction.
+          Only available in the result of getUserHistory()
+          Please refer to Transaction.Type for the definition.
+      */
+      public Type type;
+      ...
+  }
 ```
 ### Enum - Transaction.Type
 
