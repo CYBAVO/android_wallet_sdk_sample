@@ -54,12 +54,12 @@ public abstract void getCurrencyTraits(long currency, String tokenAddress, long 
 
     ```java
     public final class GetCurrencyTraitsResult {
-
-        public String granularity = ""; // EPI-777: withdraw must be multiples of granularity
-
-        public String existentialDeposit = ""; // The minimum balance after transaction (ALGO, DOT, KSM)
-
-        public String minimumAccountBalance = ""; // The minimum balance after transaction (XLM, FLOW)
+        /* EPI-777: withdraw must be multiples of granularity. */
+        public String granularity = "";
+        /*The minimum balance after transaction (ALGO, DOT, KSM). */
+        public String existentialDeposit = "";
+        /* The minimum balance after transaction (XLM, FLOW) */
+        public String minimumAccountBalance = "";
     }
     ```
 
@@ -89,14 +89,14 @@ public abstract void estimateTransaction(long currency, String tokenAddress, Str
 
     ```java
     public final class EstimateTransactionResult {
-
-        public String tranasctionAmout; // Estimated total amount to transaction
-
-        public String platformFee; // Estimated platform fee of transaction
-
-        public String blockchainFee; // Estimated blockchain fee of transaction
-
-        public String withdrawMin; // Minimum transfer amount for private chain
+        /* Estimated total amount to transaction. */
+        public String tranasctionAmout; 
+        /* Estimated platform fee of transaction. */
+        public String platformFee;
+        /* Estimated blockchain fee of transaction. */
+        public String blockchainFee;
+        /* Minimum transfer amount for private chain. */
+        public String withdrawMin; 
     }
     ```
 
@@ -160,9 +160,11 @@ public abstract void createTransaction(long fromWalletId, String toAddress, Stri
 
 ## Transaction Detail
 
+- There are two APIs for retriving transaction histories: `getHistory()` and `getUserHistory()`.
+
 ### getHistory
 
-- Call this API to get the transaction history.
+- You can use `getHistory()` to get transaction histories of a certern wallet.
 
 ```java
 /// Get transaction history from
@@ -192,16 +194,16 @@ public abstract void getHistory(long currency, String tokenAddress, String walle
 
     ```java
     public final class Transaction {
-
-        public String txid = ""; // transaction ID
+        /* transaction ID. */
+        public String txid = ""; 
 
         public boolean pending = false;
 
         public boolean success = false;
-
-        public boolean dropped = false; // Is transaction dropped by the blockchain
-
-        public boolean replaced; // Is transaction replaced by another transaction
+        /* Is transaction dropped by the blockchain. */
+        public boolean dropped = false; 
+        /* Is transaction replaced by another transaction. */
+        public boolean replaced; 
     
         ...
     }
@@ -210,6 +212,65 @@ public abstract void getHistory(long currency, String tokenAddress, String walle
     <img src="images/sdk_guideline/transaction_state.jpg" alt="drawing" width="600"/>
 
 - If the Tx's final state is `Success` or `Pending`, you could call `getTransactionInfo` to check the information about this Tx on the blockchain.
+
+### getUserHistory
+- ⚠️ `getUserHistory()` and `Transaction.Type` are only available on `com.cybavo.wallet:wallet-sdk-lib:1.2.4579` and later.
+- You can also use `getUserHistory()` to retrive all transaction histories of the user.
+```java
+/// Get transaction history of the user
+/// - Parameters:
+///   - start: Query start offset
+///   - count: Query count returned
+///   - filters: Filter parameters:
+///     - type {Transaction.Type}, {Transaction type[]} - Transaction type
+///     - pending {Boolean} - Pending state of transactions
+///     - success {Boolean} - Success state of transactions
+///     - start_time {Long} - Start of time period to query, in Unix timestamp
+///     - end_time {Long} - End of time period to query, in Unix timestamp
+///     - currency {Long}, {Integer} - Currency of the transaction
+///     - token_address {String} - Token Contract Address of the transaction
+///   - callback: asynchronous callback
+public abstract void getUserHistory(long currency, String tokenAddress, String walletAddress, int start, int count, int crosschain, Map<String, Object> filters, Callback<GetHistoryResult> callback);
+```
+- Since the result may include transactions from public chain, private chain and different currency. For the returned `Transaction`, there are three fields you can refer to.
+```java
+  public final class Transaction {
+      /* Currency of the transaction. */
+      public long currency; 
+      /* Token contract address of the transaction. */
+      public String tokenAddress;
+      /**
+          Type of the transaction.
+          Only available in the result of getUserHistory()
+          Please refer to Transaction.Type for the definition.
+      */
+      public Type type;
+      ...
+  }
+```
+### Enum - Transaction.Type
+
+- Enum Constant Summary
+
+| Enum Constant  | Value | Description |
+| ----  | ----  | ---- |
+|	Unknown	|	0	| 	Default value when no data available.	|
+|	MainDeposit	|	1	| Deposit on public chain.		| 
+|	MainWithdraw	|	2	| Withdraw on public chain.		| 
+|	PrivDeposit	|	3	| Deposit on private chain, including inner transfer and deposit to private chain (mint).		| 
+|	PrivWithdraw	|	4	| Withdraw on private chain, including inner transfer and withdraw to public chain (burn).		| 
+|	PrivOuterDeposit	|	5	| When deposit from public chain to private chain, the history of public chain.		| 
+|	PrivOuterWithdraw	|	6	| When withdraw from private chain to public chain, the history of private chain.		| 
+|	PrivProductDeposit	|	7	| Deposit financial product.		| 
+|	PrivProductWithdraw	|	8	| Withdraw, earlyWithdraw financial product.		| 
+|	PrivProductReward	|	9	| WithdrawReward financial product.		| 
+
+- Method Summary
+
+| Modifier and Type  | Method | Description |
+| ----  | ----  | ---- |
+|	static Transaction.Type	|	getType(int value)	| 	Returns the enum constant of this type with the specified value,<br>return `Unknown` if cannot find a matched enum.	|
+|	int	|	getValue()	| Get int value of the enum.	|
 
 ### getTransactionInfo
 
@@ -238,17 +299,16 @@ The user needs to create another Tx with higher Tx fee and the same nonce to rep
 
   ```java
   public final class Transaction {
-
+    
       public String txid = "";
-      
-      public boolean replaceable; // Is transaction replaceable
-
-      public boolean replaced; // Is transaction replaced by another transaction
-
-      public String replaceTxid; // TXID of replacement of this transaction if {@link #replaced} == true
-
-      public int nonce; // Nonce of transaction, only valid on ETH, same nonce means replacements
-      
+      /* Is transaction replaceable. */
+      public boolean replaceable;
+      /* Is transaction replaced by another transaction. */
+      public boolean replaced;
+      /* TXID of replacement of this transaction if replaced == true */
+      public String replaceTxid;
+      /* Nonce of transaction, only valid on ETH, same nonce means replacements. */
+      public int nonce;
       ...
   }
   ```
