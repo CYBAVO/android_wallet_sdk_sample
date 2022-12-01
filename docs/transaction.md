@@ -526,7 +526,7 @@ Wallets.getInstance().setSolTokenAccountTransaction(wallet.walletId, pinSecret, 
 
   @Override
   public void onResult(SetSolTokenAccountTransactionResult result) {
-      Log.d(TAG, String.format("TXID: %e", result.txid));
+      Log.d(TAG, String.format("TXID: %s", result.txid));
   }
 });
 ```
