@@ -6,6 +6,9 @@
   - [Transaction Detail](#transaction-detail)
   - [Transaction Replacement](#transaction-replacement)
   - [Interact with Smart Contract](#interact-with-smart-contract)
+  - [Specific Usage](#spcific-usage)
+    - [Solana SignMessage](#solana-signmessage)
+    - [Solana Token, ATA](#solana-token-ata)
 
 ## Deposit
 
@@ -460,4 +463,72 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
     See [this](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/app/src/main/java/com/cybavo/example/wallet/detail/WithdrawFragment.java#L282-L295) for complete example.  
     
     See [Withdraw to Public Chain](https://github.com/CYBAVO/android_wallet_sdk_sample/blob/master/docs/private_chain.md#perform-withdraw) for another specific usage in private chain.
+
+## Spcific Usage
+There are specific API usages for some scenarios which related to transaction, you can find them in this section.
+### Solana SignMessage
+Since `signMessage()` of Solana can be used to sign a raw transaction, in order to help the caller be more cautious before signing, it required to get an action token then pass to `signMessage()` to verify.
+```java
+/**
+ * 1. Get action token for signMessage, 
+ * the "message" of getSignMessageActionToken() and signMessage() should be the same.
+ */
+Wallets.getInstance().getSignMessageActionToken(message, new Callback<GetActionTokenResult>() {
+    @Override
+    public void onError(Throwable error) {
+        error.printStackTrace();
+    }
+
+    @Override
+    public void onResult(GetActionTokenResult result) {
+      
+        // 2. Put it in a map and pass to signMessage().
+        Map<String,Object> extraAttributes = new HashMap<>();
+        extraAttributes.put("confirmed_action_token", result.actionToken);
+
+        Wallets.getInstance().signMessage(wallet.walletId, message, pinSecret, extraAttributes, new Callback<SignMessageResult>() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onResult(SignMessageResult result) {
+                Log.d(TAG, String.format("signedMessage: %s", result.signedMessage));
+                
+            }
+        });
+    }
+});
+```
+### Solana Token, ATA
+You can create Solana ATA (associated token account) through `createTransaction()` with extras or `setSolTokenAccountTransaction()`.
+- Call `createTransaction()` with `force_send` in extras:
+```java
+Map<String, Object> extras = new HashMap<>();
+// For SOL transaction, "force_send" true means create ATA account for receiver.
+if(wallet.currency == CurrencyHelper.Coin.SOL && !TextUtils.isEmpty(wallet.tokenAddress)){
+    extras.put("force_send", true);
+}
+Wallets.getInstance().createTransaction(wallet.walletId, toAddress, transactionAmount, fee, desc, pinSecret, extras, callback);
+```
+- Call `setSolTokenAccountTransaction()` directly:
+```java
+/**
+* Note 1: The SOL token wallet must have SOL for transaction fee, otherwise, the API will return empty TXID
+* Note 2: If the SOL token wallet have created token account, the API will also return empty TXID
+* */
+Wallets.getInstance().setSolTokenAccountTransaction(wallet.walletId, pinSecret, new Callback<SetSolTokenAccountTransactionResult>() {
+  @Override
+  public void onError(Throwable error) {
+      error.printStackTrace();
+  }
+
+  @Override
+  public void onResult(SetSolTokenAccountTransactionResult result) {
+      Log.d(TAG, String.format("TXID: %e", result.txid));
+  }
+});
+```
+
 
