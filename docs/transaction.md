@@ -8,7 +8,7 @@
   - [Interact with Smart Contract](#interact-with-smart-contract)
   - [Specific Usage](#specific-usage)
     - [Solana SignMessage](#solana-signmessage)
-    - [Solana Token, ATA](#solana-token-ata)
+    - [Solana ATA](#solana-ata)
 
 ## Deposit
 
@@ -501,7 +501,7 @@ Wallets.getInstance().getSignMessageActionToken(message, new Callback<GetActionT
     }
 });
 ```
-### Solana Token, ATA
+### Solana ATA
 You can create Solana ATA (associated token account) through `createTransaction()` with extras or `setSolTokenAccountTransaction()`.
 - Call `createTransaction()` with `force_send` in extras:
 ```java
