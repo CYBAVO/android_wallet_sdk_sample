@@ -6,6 +6,9 @@
   - [Deposit](#deposit)
   - [Withdraw](#withdraw)
   - [Transaction Detail](#transaction-detail)
+  - [Specific Usage](#specific-usage)
+    - [Solana NFT Tokens](#solana-nft-tokens)
+    - [Withdraw Solana NFT Tokens](#withdrawing-solana-nft-tokens)
 
 ## NFT Wallet Creation
 
@@ -43,7 +46,7 @@ Take CryptoKitties for example, you can find its contract address on Etherscan
 
 ## Balance
 
-refer to [Balance](wallets.md#getbalances)
+Refer to [Balance](wallets.md#getbalances)
 
 ```java
 public final class Balance {
@@ -56,8 +59,9 @@ public final class Balance {
 }
 ```
 
-- if ERC-721 (NFT), use `tokens`
-- if ERC-1155 (NFT), use `tokenIdAmounts`
+- For ERC-721 (NFT), use `tokens`
+- For ERC-1155 (NFT), use `tokenIdAmounts`
+- For Solana, see [Solana NFT Tokens](#solana-nft-tokens)
 
 - In order to present images, call `getMultipleTokenUri` to get token urls.
   
@@ -73,7 +77,7 @@ public final class Balance {
 
 ### Error Handling
 
-- for ERC-1155
+- For ERC-1155
 
   ```java
   /// If ERC-1155 token didn't show in wallet's balance, register token ID manually make them in track
@@ -94,9 +98,40 @@ public final class Balance {
 
 - The steps are similar to normal transactions. Refer to [Withdraw](transaction.md#withdraw)
 - when `createTransaction()`
-  - for [EIP-721](https://eips.ethereum.org/EIPS/eip-721) , set parameter `amount = tokenId`
-  - for [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155) , set parameter `amount = tokenIdAmount` and `extras.put("token_id", tokenId)`
+  - For [EIP-721](https://eips.ethereum.org/EIPS/eip-721) , set parameter `amount = tokenId`
+  - For [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155) , set parameter `amount = tokenIdAmount` and `extras.put("token_id", tokenId)`
+- For Solana, see [Withdraw Solana NFT Tokens](#withdrawing-solana-nft-tokens)
 
 ## Transaction Detail
 
 - The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory)
+
+## Specific Usage
+There are specific API usages for some scenarios which related to NFT, you can find them in this section.
+
+### Solana NFT Tokens
+For retriving Solana NFT tokens, please use `getSolNftTokens()`.
+```java
+Wallets.getInstance().getSolNftTokens(walletId, new Callback<GetSolNftTokensResult>() {
+                @Override
+                public void onError(Throwable error) {
+                    error.printStackTrace();
+                }
+
+                @Override
+                public void onResult(GetSolNftTokensResult result) {
+                    for(TokenMeta tokenMeta: result.tokens){
+                        // ex. tokenAddress: E3LybqvWfLus2KWyrYKYieLVeT6ENpE4znqkMZ9CTrPH, balance: 17, supply: 100, tokenStandard: Unknown
+                        Log.d(TAG, String.format("tokenAddress: %s, balance: %s, supply: %s, tokenStandard: %s",
+                                tokenMeta.tokenAddress, tokenMeta.balance, tokenMeta.supply, tokenMeta.tokenStandard));
+                    }
+                }
+            });
+```
+### Withdrawing Solana NFT Tokens
+For withdrawing Solana NFT tokens, put the selected `TokenMeta.tokenAddress` in extras `sol_token_id` then pass to `createTransaction()`.
+```java
+Map<String, Object> extras = new HashMap<>();
+extras.put("sol_token_id", selectedToken.tokenAddress);
+Wallets.getInstance().createTransaction(wallet.walletId, toAddress, transactionAmount, fee, desc, pinSecret, extras, callback);
+```
