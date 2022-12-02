@@ -135,3 +135,4 @@ Map<String, Object> extras = new HashMap<>();
 extras.put("sol_token_id", selectedToken.tokenAddress);
 Wallets.getInstance().createTransaction(wallet.walletId, toAddress, transactionAmount, fee, desc, pinSecret, extras, callback);
 ```
+- For Solana NFT transactions, the `Transaction.tokenId` is the token address, for fungible asset transaction, this field will be empty.
