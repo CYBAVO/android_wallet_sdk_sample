@@ -30,7 +30,7 @@ public abstract void addContractCurrencies(long[] currency, String[] contractAdd
 
 - How to get a contract address?  
 You can find it on blockchain explorer.  
-Take CryptoKitties for example, you can find its contract address on Etherscan
+Take CryptoKitties for example, you can find its contract address on Etherscan:
 
   ![img](images/sdk_guideline/nft_etherscan_1.png)
 
@@ -40,13 +40,13 @@ Take CryptoKitties for example, you can find its contract address on Etherscan
 
 - Same way as we mentioned in [Wallet Information](wallets.md#wallet-information)
 - Conditions:
-  - `Wallet.isPrivate == false` ➜ it is on public chain
-  - `TextUtils.isEmpty(tokenAddress) == false` ➜ it is a mapped wallet (NFT wallet is also mapped wallet)
-  - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet
+  - `Wallet.isPrivate == false` ➜ it is on public chain.
+  - `TextUtils.isEmpty(tokenAddress) == false` ➜ it is a mapped wallet (NFT wallet is also mapped wallet).
+  - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet.
 
 ## Balance
 
-Refer to [Balance](wallets.md#getbalances)
+Refer to [Balance](wallets.md#getbalances).
 
 ```java
 public final class Balance {
@@ -59,9 +59,9 @@ public final class Balance {
 }
 ```
 
-- For ERC-721 (NFT), use `tokens`
-- For ERC-1155 (NFT), use `tokenIdAmounts`
-- For Solana, see [Solana NFT Tokens](#solana-nft-tokens)
+- For ERC-721 (NFT), use `tokens`.
+- For ERC-1155 (NFT), use `tokenIdAmounts`.
+- For Solana, see [Solana NFT Tokens](#solana-nft-tokens).
 
 - In order to present images, call `getMultipleTokenUri` to get token urls.
   
@@ -91,20 +91,20 @@ public final class Balance {
 ## Deposit
 
 - Select a wallet address, create a new one if needed.
-- Generate QR code
+- Generate QR code.
 - Present the QR code for deposit.
 
 ## Withdraw
 
 - The steps are similar to normal transactions. Refer to [Withdraw](transaction.md#withdraw)
 - when `createTransaction()`
-  - For [EIP-721](https://eips.ethereum.org/EIPS/eip-721) , set parameter `amount = tokenId`
-  - For [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155) , set parameter `amount = tokenIdAmount` and `extras.put("token_id", tokenId)`
-  - For Solana, see [Withdrawing Solana NFT Tokens](#withdrawing-solana-nft-tokens)
+  - For [EIP-721](https://eips.ethereum.org/EIPS/eip-721) , set parameter `amount = tokenId`.
+  - For [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155) , set parameter `amount = tokenIdAmount` and `extras.put("token_id", tokenId)`.
+  - For Solana, see [Withdrawing Solana NFT Tokens](#withdrawing-solana-nft-tokens).
 
 ## Transaction Detail
 
-- The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory)
+- The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory).
 
 ## Specific Usage
 - There are specific API usages for some scenarios which related to NFT, you can find them in this section.
