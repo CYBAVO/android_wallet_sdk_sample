@@ -515,8 +515,8 @@ Wallets.getInstance().createTransaction(wallet.walletId, toAddress, transactionA
 - Call `setSolTokenAccountTransaction()` directly:
 ```java
 /**
-* Note 1: The SOL token wallet must have SOL for transaction fee, otherwise, the API will return empty TXID
-* Note 2: If the SOL token wallet have created token account, the API will also return empty TXID
+* Note 1: The SOL token wallet must have SOL for transaction fee, otherwise, the API will return empty TXID.
+* Note 2: If the SOL token wallet have created token account, the API will also return empty TXID.
 * */
 Wallets.getInstance().setSolTokenAccountTransaction(wallet.walletId, pinSecret, new Callback<SetSolTokenAccountTransactionResult>() {
   @Override
