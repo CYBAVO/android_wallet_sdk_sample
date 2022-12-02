@@ -77,7 +77,7 @@ public final class Balance {
 
 ### Error Handling
 
-- For ERC-1155
+- For ERC-1155:
 
   ```java
   /// If ERC-1155 token didn't show in wallet's balance, register token ID manually make them in track
