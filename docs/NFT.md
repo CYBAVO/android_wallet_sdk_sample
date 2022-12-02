@@ -113,20 +113,20 @@ public final class Balance {
 - For retriving Solana NFT tokens, please use `getSolNftTokens()`.
 ```java
 Wallets.getInstance().getSolNftTokens(walletId, new Callback<GetSolNftTokensResult>() {
-                @Override
-                public void onError(Throwable error) {
-                    error.printStackTrace();
-                }
+    @Override
+    public void onError(Throwable error) {
+        error.printStackTrace();
+    }
 
-                @Override
-                public void onResult(GetSolNftTokensResult result) {
-                    for(TokenMeta tokenMeta: result.tokens){
-                        // ex. tokenAddress: E3LybqvWfLus2KWyrYKYieLVeT6ENpE4znqkMZ9CTrPH, balance: 17, supply: 100, tokenStandard: Unknown
-                        Log.d(TAG, String.format("tokenAddress: %s, balance: %s, supply: %s, tokenStandard: %s",
-                                tokenMeta.tokenAddress, tokenMeta.balance, tokenMeta.supply, tokenMeta.tokenStandard));
-                    }
-                }
-            });
+    @Override
+    public void onResult(GetSolNftTokensResult result) {
+        for(TokenMeta tokenMeta: result.tokens){
+            // ex. tokenAddress: E3LybqvWfLus2KWyrYKYieLVeT6ENpE4znqkMZ9CTrPH, balance: 17, supply: 100, tokenStandard: Unknown
+            Log.d(TAG, String.format("tokenAddress: %s, balance: %s, supply: %s, tokenStandard: %s",
+                    tokenMeta.tokenAddress, tokenMeta.balance, tokenMeta.supply, tokenMeta.tokenStandard));
+        }
+    }
+});
 ```
 ### Withdrawing Solana NFT Tokens
 - For withdrawing Solana NFT tokens, put the selected `TokenMeta.tokenAddress` in extras `sol_token_id` then pass to `createTransaction()`.
