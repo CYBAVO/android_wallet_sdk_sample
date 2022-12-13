@@ -65,12 +65,17 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 Please refer to "Google Login - Setup with Firebase" section in CYBAVO Wallet SDK Admin Panel User Manual.
 3. Edit `values/config.xml` ➜ `wechat_sign_in_app_id` to your WeChat app id.  
 Please refer to "Wechat Login Setup" section in CYBAVO Wallet SDK Admin Panel User Manual.
-4. Edit `values/config.xml` ➜ `default_endpoint` to point to your Wallet Service endpoont.  
-For example, set `default_endpoint` = https://mvault.sandbox.cybavo.com/v1/mw/ for test environemnt
+4. Edit `values/config.xml` ➜ `default_endpoint` to point to your Wallet Service endpoint.
+    - Test environment:
+        - On-Premises: set `default_endpoint` = https://mvault.sandbox.cybavo.com/v1/mw/
+        - SaaS: set `default_endpoint` = https://mvault.sandbox.cybavo.com/v1/mw/
+    - Production environment:
+        - On-Premises: set `default_endpoint` = https://`<Your management portal URL>`/v1/mw/
+        - SaaS: set `default_endpoint` = https://appvault.cybavo.com/v1/mw/
 5. Register your app on CYBAVO WALLET MANAGEMENT system web > Administration > System settings, input `package name` and `Signature keystore SHA1 fingerprint`, follow the instruction to retrieve an `API Code`.  
 Please refer to "Setup in Android" section in CYBAVO Wallet SDK Admin Panel User Manual.
-6. Edit `values/config.xml` ➜ `default_api_code` to fill in yout `API Code`
-7. If you want to provide push notification feature, setup project to integrate [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) (FCM) service, refer to [official document](https://firebase.google.com/docs/cloud-messaging/android/client) for details.  
+6. Edit `values/config.xml` ➜ `default_api_code` to fill in your `API Code`
+7. If you want to provide push notification features, setup project to integrate [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) (FCM) service, refer to [official document](https://firebase.google.com/docs/cloud-messaging/android/client) for details.  
 Please refer to "Google Firebase" section in CYBAVO Wallet SDK Admin Panel User Manual.
 9. Now you can run it on your device!
 
