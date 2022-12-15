@@ -7,7 +7,7 @@
   - [Transaction Replacement](#transaction-replacement)
   - [Interact with Smart Contract](#interact-with-smart-contract)
   - [Specific Usage](#specific-usage)
-    - [Solana SignMessage](#solana-signmessage)
+    - [Get Action Token for Sign Message](#get-action-token-for-sign-message)
     - [Solana ATA](#solana-ata)
 
 ## Deposit
@@ -466,11 +466,15 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
 
 ## Specific Usage
 There are specific API usages for some scenarios which related to transaction, you can find them in this section.
-### Solana SignMessage
-Since `signMessage()` of Solana can be used to sign a raw transaction, in order to help the caller be more cautious before signing, it required to get an action token then pass to `signMessage()` to verify.
+### Get Action Token for Sign Message
+In below two cases, `signMessage()` and `walletConnectSignMessage()` can also be used to sign a raw transaction: 
+- Solana Sign Message
+- Legacy Sign Message for EVM Compatible Currency  
+
+In order to help the caller be more cautious before signing, it required to get an action token then pass to `signMessage()` to verify.
 ```java
 /**
- * 1. Get action token for signMessage, 
+ * 1. Get action token for signMessage(), 
  * the "message" of getSignMessageActionToken() and signMessage() should be the same.
  */
 Wallets.getInstance().getSignMessageActionToken(message, new Callback<GetActionTokenResult>() {
@@ -482,11 +486,49 @@ Wallets.getInstance().getSignMessageActionToken(message, new Callback<GetActionT
     @Override
     public void onResult(GetActionTokenResult result) {
       
-        // 2. Put it in a map and pass to signMessage().
         Map<String,Object> extraAttributes = new HashMap<>();
+        // Put "legacy" true means legacy sign.
+        extraAttributes.put("legacy", true);
+        // 2. Put it in a map and pass to signMessage().
         extraAttributes.put("confirmed_action_token", result.actionToken);
 
         Wallets.getInstance().signMessage(wallet.walletId, message, pinSecret, extraAttributes, new Callback<SignMessageResult>() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onResult(SignMessageResult result) {
+                Log.d(TAG, String.format("signedMessage: %s", result.signedMessage));
+                
+            }
+        });
+    }
+});
+```
+For `walletConnectSignMessage()`, it is very similar to `signMessage()`.
+```java
+/**
+ * 1. Get action token for walletConnectSignMessage(), 
+ * the "message" of getSignMessageActionToken() and walletConnectSignMessage() should be the same.
+ */
+Wallets.getInstance().getSignMessageActionToken(message, new Callback<GetActionTokenResult>() {
+    @Override
+    public void onError(Throwable error) {
+        error.printStackTrace();
+    }
+
+    @Override
+    public void onResult(GetActionTokenResult result) {
+      
+        Map<String,Object> extraAttributes = new HashMap<>();
+        // Put "legacy" true means legacy sign.
+        extraAttributes.put("legacy", true);
+        // 2. Put it in a map and pass to walletConnectSignMessage().
+        extraAttributes.put("confirmed_action_token", result.actionToken);
+
+        Wallets.getInstance().walletConnectSignMessage(wallet.walletId, message, pinSecret, extraAttributes, new Callback<SignMessageResult>() {
             @Override
             public void onError(Throwable error) {
                 error.printStackTrace();
