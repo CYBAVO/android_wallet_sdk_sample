@@ -471,7 +471,7 @@ In below two cases, `signMessage()` and `walletConnectSignMessage()` can also be
 - Solana Sign Message
 - Legacy Sign Message for EVM Compatible Currency  
 
-In order to help the caller be more cautious before signing, it required to get an action token then pass to sign message API to verify.  
+In order to help the caller be more cautious before signing, it is required to get an action token then pass to sign message API to verify.  
 - The sample code snippet for `signMessage()`:
 ```java
 /**
