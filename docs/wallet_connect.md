@@ -46,7 +46,7 @@
 - ### [personal_sign](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#personal_sign)
 
   - Use `walletConnectSignMessage()` to sign a message. ➜ Response to WalletConnect
-  - Suggestion: `extras.put("is_hex", true)` to avoid encode / decode issues which lead to invalid signatures.
+  - Suggestion: `extraAttributes.put("is_hex", true)` to avoid encode / decode issues which lead to invalid signatures.
   - For extraAttribute `legacy` and `confirmed_action_token`, please check [Get Action Token for Sign Message](transaction.md#get-action-token-for-sign-message) for more detail.
 
     ```java
@@ -61,7 +61,7 @@
     ///   - message: message to sign
     ///   - pinSecret: PIN secret retrieved via PinCodeInputView
     ///   - extraAttributes: Extra attributes for specific currencies, pass null if unspecified.
-    ///       - Supported extras:
+    ///       - Supported extra attributes:
     ///           - eip155 (Boolean) = true - Use EIP 155 format to sign message
     ///           - is_hex (Boolean) = true - Send Hex as message
     ///           - legacy (Boolean) = true - Use legacy sign and suggest send hex as message(is_hex set true), please also check confirmed_action_token for EVM compatible currency
