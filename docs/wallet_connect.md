@@ -47,7 +47,7 @@
 
   - Use `walletConnectSignMessage()` to sign a message. ➜ Response to WalletConnect
   - Suggestion: `extraAttributes.put("is_hex", true)` to avoid encode / decode issues which lead to invalid signatures.
-  - For extraAttribute `legacy` and `confirmed_action_token`, please check [Get Action Token for Sign Message](transaction.md#get-action-token-for-sign-message) for more detail.
+  - For extraAttributes `legacy` and `confirmed_action_token`, please check [Get Action Token for Sign Message](transaction.md#get-action-token-for-sign-message) for more detail.
 
     ```java
     /// Sign message by wallet private key(eth_sign, personal_sign) via WalletConnect
