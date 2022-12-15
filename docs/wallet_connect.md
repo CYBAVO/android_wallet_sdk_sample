@@ -71,7 +71,7 @@
     ///   - callback: asynchronous callback of signedMessage
     public abstract void walletConnectSignMessage(long walletId, String message, PinSecret pinSecret, Map<String,Object> extraAttributes, Callback<SignMessageResult> callback);
     ```
-  - For `legacy` and `confirmed_action_token` please check [Get Action Token for Sign Message](transaction.md#get-action-token-for-sign-message) for more detail.
+  - For extraAttribute `legacy` and `confirmed_action_token`, please check [Get Action Token for Sign Message](transaction.md#get-action-token-for-sign-message) for more detail.
 
   - Use different functions for biometrics & SMS Verification: see [this](bio_n_sms.md#biometrics--sms-verification-for-transaction-and-sign-operation)
 
