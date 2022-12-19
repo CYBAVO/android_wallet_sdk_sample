@@ -46,7 +46,8 @@
 - ### [personal_sign](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#personal_sign)
 
   - Use `walletConnectSignMessage()` to sign a message. ➜ Response to WalletConnect
-  - Suggestion: `extras.put("is_hex", true)` to avoid encode / decode issues which lead to invalid signatures.
+  - Suggestion: `extraAttributes.put("is_hex", true)` to avoid encode / decode issues which lead to invalid signatures.
+  - For extraAttributes `legacy` and `confirmed_action_token`, please check [Get Action Token for Sign Message](transaction.md#get-action-token-for-sign-message) for more detail.
 
     ```java
     /// Sign message by wallet private key(eth_sign, personal_sign) via WalletConnect
@@ -60,15 +61,18 @@
     ///   - message: message to sign
     ///   - pinSecret: PIN secret retrieved via PinCodeInputView
     ///   - extraAttributes: Extra attributes for specific currencies, pass null if unspecified.
-    ///       - Supported extras:
+    ///       - Supported extra attributes:
     ///           - eip155 (Boolean) = true - Use EIP 155 format to sign message
     ///           - is_hex (Boolean) = true - Send Hex as message
-    ///           - legacy (Boolean) = true - Use legacy sign and suggest send hex as message(is_hex set true)
+    ///           - legacy (Boolean) = true - Use legacy sign and suggest send hex as message(is_hex set true), please also check confirmed_action_token for EVM compatible currency
+    ///           - confirmed_action_token (String) - It's required for these 2 cases:
+    ///             - SOL
+    ///             - EVM compatible currency and legacy is true
+    ///             Get the action token from getSignMessageActionToken(), otherwise, the API will return Error.Code.ErrActionTokenInvalid error code
     ///   - callback: asynchronous callback of signedMessage
     public abstract void walletConnectSignMessage(long walletId, String message, PinSecret pinSecret, Map<String,Object> extraAttributes, Callback<SignMessageResult> callback);
     ```
-
-    - Use different functions for biometrics & SMS Verification: see [this](bio_n_sms.md#biometrics--sms-verification-for-transaction-and-sign-operation)
+  - Use different functions for biometrics & SMS Verification: see [this](bio_n_sms.md#biometrics--sms-verification-for-transaction-and-sign-operation)
 
 - ### [eth_sign](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sign)
 
