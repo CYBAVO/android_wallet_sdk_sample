@@ -464,7 +464,7 @@ public abstract class Error extends Throwable {
     public String getMessage();
 
     abstract public String getDetailMessage(); // Return the detailed error message.
-    
+
     ...
 }
 ```
@@ -474,9 +474,9 @@ Auth.getInstance().signIn(token, identityProvider, new Callback<SignInResult>() 
             @Override
             public void onError(Throwable error) {
                 if (error instanceof Error && ((Error)error).getCode() == Error.Code.ErrRegistrationRequired) { 
-                    // registration required
+                    // Registration required.
                     registerWithToken(token, identityProvider, identity);
-                } else { // sign in failed
+                } else { // Sign in failed.
                     onSignInFailed(error);
                 }
             }
