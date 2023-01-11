@@ -464,6 +464,7 @@ public abstract class Error extends Throwable {
     public String getMessage();
 
     abstract public String getDetailMessage(); // Return the detailed error message.
+    
     ...
 }
 ```
