@@ -450,7 +450,6 @@ There are 2 types of push notification: Transacion and Announcement.
 ---
 
 # Others
-
 ## Error Handling - com.cybavo.wallet.service.api.Error
 
 > **⚠️ WARNING** : Please properly handle the Error we provided in the API response.
@@ -458,11 +457,14 @@ There are 2 types of push notification: Transacion and Announcement.
 ```java
 public abstract class Error extends Throwable {
 
-    public static final class Code { … } // some error codes we defined
+    public static final class Code { … } // Some error codes we defined.
     
     abstract public int getCode();
 
-    public String getMessage()
+    public String getMessage();
+
+    abstract public String getDetailMessage(); // Return the detailed error message.
+
     ...
 }
 ```
@@ -472,9 +474,9 @@ Auth.getInstance().signIn(token, identityProvider, new Callback<SignInResult>() 
             @Override
             public void onError(Throwable error) {
                 if (error instanceof Error && ((Error)error).getCode() == Error.Code.ErrRegistrationRequired) { 
-                    // registration required
+                    // Registration required.
                     registerWithToken(token, identityProvider, identity);
-                } else { // sign in failed
+                } else { // Sign in failed.
                     onSignInFailed(error);
                 }
             }
