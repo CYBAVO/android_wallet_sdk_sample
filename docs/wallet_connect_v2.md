@@ -4,9 +4,9 @@
 >
 > &emsp;WalletConnect Sign is a remote protocol designed for secure peer-to-peer communication between Dapps (web3 applications) and wallets. WalletSDK provides corresponding APIs which help you to get the results to return to Dapp.  
 >
-> &emsp;In later sections, we'll illustrate how to establish the WalletConnect Sign client and how to use APIs to respond to session proposals and the JSON-RPC session requests we support.  
+> &emsp;In later sections, we'll illustrate how to use APIs to respond to session proposals and the JSON-RPC session requests we support.  
 >
-> Wallet clients integration on Android: [Web3Wallet](https://docs.walletconnect.com/2.0/android/web3wallet/installation)  
+> WalletConnect Android integration: [Web3Wallet](https://docs.walletconnect.com/2.0/android/web3wallet/installation)  
 > WalletConnect Introduction: [WalletConnect v2.0](https://docs.walletconnect.com/2.0/)
 
 
@@ -379,14 +379,14 @@
 
     
     ```java
-        /// Create transaction by signed transaction(eth_sendTransaction) via WalletConnect, this call will be logged as ApiHistoryItem with API name: eth_sendRawTransaction
-        /// - Parameters:
-        ///   - walletId: wallet ID
-        ///   - signedTx: signed transaction
-        ///   - callback: asynchronous callback of SendSignedTxResult
-        public abstract void walletConnectSendSignedTransaction(long walletId, String signedTx, Callback<SendSignedTxResult> callback);
+    /// Create transaction by signed transaction(eth_sendTransaction) via WalletConnect, this call will be logged as ApiHistoryItem with API name: eth_sendRawTransaction
+    /// - Parameters:
+    ///   - walletId: wallet ID
+    ///   - signedTx: signed transaction
+    ///   - callback: asynchronous callback of SendSignedTxResult
+    public abstract void walletConnectSendSignedTransaction(long walletId, String signedTx, Callback<SendSignedTxResult> callback);
     ```
-    
+
 - ### [eth_sendTransaction](https://docs.walletconnect.com/2.0/advanced/rpc-reference/ethereum-rpc#eth_sendtransaction)
   ![img](images/sdk_guideline/wc_v2_send_transaction.png)
     <details>
