@@ -21,7 +21,7 @@
     - [eth_signTypedData](#eth_signtypeddata)
     - [eth_signTransaction](#eth_signtransaction)
     - [eth_sendRawTransaction](#eth_sendrawtransaction)
-    - [solana_signTransaction]()
+    - [solana_signTransaction](#solana_signtransaction)
   - [API History](#api-history)
   - [Cancel a Transaction](#cancel-a-transaction)
 
@@ -171,7 +171,7 @@
   ```
 </details>
 
-3. &emsp; Next, call `getWalletsByCaip2ChainIds() ` to get available wallets. 
+3. &emsp; Next, call `getWalletsByCaip2ChainIds()` to get available wallets. 
     ```java
     /// Get wallet list by CAIP-2 chain IDs of signed in user. chainId of returned wallet is not available.
     /// - Parameters:
@@ -185,14 +185,14 @@
     /// Get supported chain as a map for WalletConnect. The map key is CAIP-2 chain ID.
     /// - Parameters:
     ///   - callback: asynchronous callback of WalletConnectGetSupportedChainResult
-    public abstract void getWalletsByCaip2ChainIds(String[] caip2ChainIds, Callback<GetWalletsResult> callback);
+    public abstract void walletConnectGetSupportedChain(Callback<WalletConnectGetSupportedChainResult> callback);
     ```
 4. Approve session proposal with proposer's public key and namespaces, see [Session Approval](https://docs.walletconnect.com/2.0/android/web3wallet/wallet-usage#session-approval).
 
 
 ## Session Request
 ![img](images/sdk_guideline/wc_v2_session_request.png)
- &emsp; Here is the general flow for handling session request. When a session request is coming, you may need to identify the wallet by address from request parameters and chain ID from the request then get corresponding result and approve.    
+ &emsp; Here is the general flow for handling session requests. When a session request is coming, you may need to identify the wallet by address from request parameters and chain ID from the request then get corresponding result and approve.    
 
 ### Sign Message
 ![img](images/sdk_guideline/wc_v2_sign_request.png)
